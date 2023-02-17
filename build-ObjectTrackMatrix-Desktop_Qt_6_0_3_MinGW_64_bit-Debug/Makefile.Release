@@ -537,7 +537,27 @@ release/MainWindow.o: ../ObjectTrackMatrix/MainWindow.cpp ../ObjectTrackMatrix/M
 		../../../Qt/6.0.3/mingw81_64/include/QtGui/QTransform \
 		../../../Qt/6.0.3/mingw81_64/include/QtWidgets/qtabwidget.h \
 		../../../Qt/6.0.3/mingw81_64/include/QtGui/qicon.h \
-		ui_MainWindow.h
+		ui_MainWindow.h \
+		../../../Qt/6.0.3/mingw81_64/include/QtCore/QVariant \
+		../../../Qt/6.0.3/mingw81_64/include/QtWidgets/QApplication \
+		../../../Qt/6.0.3/mingw81_64/include/QtWidgets/qapplication.h \
+		../../../Qt/6.0.3/mingw81_64/include/QtCore/qcoreapplication.h \
+		../../../Qt/6.0.3/mingw81_64/include/QtCore/qeventloop.h \
+		../../../Qt/6.0.3/mingw81_64/include/QtGui/qguiapplication.h \
+		../../../Qt/6.0.3/mingw81_64/include/QtGui/qinputmethod.h \
+		../../../Qt/6.0.3/mingw81_64/include/QtCore/qlocale.h \
+		../../../Qt/6.0.3/mingw81_64/include/QtWidgets/QGridLayout \
+		../../../Qt/6.0.3/mingw81_64/include/QtWidgets/qgridlayout.h \
+		../../../Qt/6.0.3/mingw81_64/include/QtWidgets/qlayout.h \
+		../../../Qt/6.0.3/mingw81_64/include/QtWidgets/qlayoutitem.h \
+		../../../Qt/6.0.3/mingw81_64/include/QtWidgets/qboxlayout.h \
+		../../../Qt/6.0.3/mingw81_64/include/QtWidgets/QMenuBar \
+		../../../Qt/6.0.3/mingw81_64/include/QtWidgets/qmenubar.h \
+		../../../Qt/6.0.3/mingw81_64/include/QtWidgets/qmenu.h \
+		../../../Qt/6.0.3/mingw81_64/include/QtGui/qaction.h \
+		../../../Qt/6.0.3/mingw81_64/include/QtWidgets/QStatusBar \
+		../../../Qt/6.0.3/mingw81_64/include/QtWidgets/qstatusbar.h \
+		../../../Qt/6.0.3/mingw81_64/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o release\MainWindow.o ..\ObjectTrackMatrix\MainWindow.cpp
 
 release/moc_MainWindow.o: release/moc_MainWindow.cpp 
