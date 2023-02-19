@@ -16,6 +16,51 @@
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
     <layout class="QGridLayout" name="gridLayout">
+     <item row="2" column="1">
+      <widget class="QPlainTextEdit" name="plainTextEdit_sequence"/>
+     </item>
+     <item row="1" column="0">
+      <widget class="QLabel" name="label_timeBetweenTrials">
+       <property name="text">
+        <string>Time between trials:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="2">
+      <widget class="QLabel" name="label_nTrials">
+       <property name="text">
+        <string>Number of trials:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="1">
+      <widget class="QDoubleSpinBox" name="doubleSpinBox_timeBetweenTrials">
+       <property name="minimum">
+        <double>0.010000000000000</double>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="label_secBetweenTrials">
+       <property name="text">
+        <string>seconds</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="0">
+      <widget class="QLabel" name="label_trialDuration">
+       <property name="text">
+        <string>Trial duration:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="3" column="1">
+      <widget class="QPushButton" name="pushButton_generateRandomSequence">
+       <property name="text">
+        <string>Generate Random</string>
+       </property>
+      </widget>
+     </item>
      <item row="2" column="2">
       <layout class="QVBoxLayout" name="verticalLayout_2">
        <item alignment="Qt::AlignTop">
@@ -33,50 +78,8 @@
        </item>
       </layout>
      </item>
-     <item row="1" column="1">
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_timeBetweenTrials">
-       <property name="minimum">
-        <double>0.010000000000000</double>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="1">
-      <widget class="QDoubleSpinBox" name="doubleSpinBox_trialDuration">
-       <property name="minimum">
-        <double>0.010000000000000</double>
-       </property>
-      </widget>
-     </item>
      <item row="0" column="2">
       <widget class="QLabel" name="label_secDuration">
-       <property name="text">
-        <string>seconds</string>
-       </property>
-      </widget>
-     </item>
-     <item row="0" column="0">
-      <widget class="QLabel" name="label_trialDuration">
-       <property name="text">
-        <string>Trial duration:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QSpinBox" name="spinBox_nTrials">
-       <property name="minimum">
-        <number>1</number>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="0">
-      <widget class="QLabel" name="label_timeBetweenTrials">
-       <property name="text">
-        <string>Time between trials:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="1" column="2">
-      <widget class="QLabel" name="label_secBetweenTrials">
        <property name="text">
         <string>seconds</string>
        </property>
@@ -89,20 +92,17 @@
        </property>
       </widget>
      </item>
-     <item row="2" column="1">
-      <widget class="QPlainTextEdit" name="plainTextEdit_sequence"/>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_nTrials">
-       <property name="text">
-        <string>Number of trials:</string>
+     <item row="0" column="1">
+      <widget class="QDoubleSpinBox" name="doubleSpinBox_trialDuration">
+       <property name="minimum">
+        <double>0.010000000000000</double>
        </property>
       </widget>
      </item>
-     <item row="3" column="1">
-      <widget class="QPushButton" name="pushButton_generateRandomSequence">
-       <property name="text">
-        <string>Generate Random</string>
+     <item row="3" column="3">
+      <widget class="QSpinBox" name="spinBox_nTrials">
+       <property name="minimum">
+        <number>1</number>
        </property>
       </widget>
      </item>

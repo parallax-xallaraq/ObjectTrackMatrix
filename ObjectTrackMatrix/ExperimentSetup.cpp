@@ -2,6 +2,7 @@
 #include "ui_ExperimentSetup.h"
 
 #include <QStringList>
+#include <QRandomGenerator>
 
 // ====================================
 // Created by: Thresa Kelly
@@ -47,7 +48,7 @@ bool ExperimentSetup::CheckRequiredInputs()
         int val = sequenceList[i].toInt(&ok);
 
         // value must be int between 1-12. if not, show error
-        if(!ok || (val < 1 || val > 12) )
+        if(!ok || (val < 1 || val > numberOfObjects) )
         {
             ui->label_errSequence->setVisible(true);
             return(false);
@@ -56,4 +57,23 @@ bool ExperimentSetup::CheckRequiredInputs()
     // else, everything is good!
     ui->label_errSequence->setVisible(false);
     return(true);
+}
+
+void ExperimentSetup::on_pushButton_generateRandomSequence_clicked()
+{
+    // initialize sequence string
+    QString seq = "";
+    // generate n random integers between 1-numberOfObjects
+    int nTrials = ui->spinBox_nTrials->value();
+    for (int i=0; i<nTrials; i++)
+    {
+        int val =  QRandomGenerator::global()->bounded(1, numberOfObjects+1);
+        seq = seq + QString::number(val);
+        if(i!=nTrials-1)
+        {
+            seq = seq + ",";
+        }
+    }
+    // write sequence to textbox
+    ui->plainTextEdit_sequence->setPlainText(seq);
 }

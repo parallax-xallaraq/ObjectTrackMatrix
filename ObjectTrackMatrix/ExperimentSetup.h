@@ -25,8 +25,13 @@ public:
     bool CheckRequiredInputs();
 
 
+private slots:
+    void on_pushButton_generateRandomSequence_clicked();
+
 private:
     Ui::ExperimentSetup *ui;
+
+    int numberOfObjects = 12;
 };
 
 #endif // EXPERIMENTSETUP_H
