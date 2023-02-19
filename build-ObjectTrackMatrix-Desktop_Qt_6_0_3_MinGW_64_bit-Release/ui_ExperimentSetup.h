@@ -67,7 +67,7 @@ public:
 
         doubleSpinBox_timeBetweenTrials = new QDoubleSpinBox(ExperimentSetup);
         doubleSpinBox_timeBetweenTrials->setObjectName(QString::fromUtf8("doubleSpinBox_timeBetweenTrials"));
-        doubleSpinBox_timeBetweenTrials->setMinimum(0.010000000000000);
+        doubleSpinBox_timeBetweenTrials->setMinimum(1.000000000000000);
 
         gridLayout->addWidget(doubleSpinBox_timeBetweenTrials, 1, 1, 1, 1);
 
@@ -111,7 +111,7 @@ public:
 
         doubleSpinBox_trialDuration = new QDoubleSpinBox(ExperimentSetup);
         doubleSpinBox_trialDuration->setObjectName(QString::fromUtf8("doubleSpinBox_trialDuration"));
-        doubleSpinBox_trialDuration->setMinimum(0.010000000000000);
+        doubleSpinBox_trialDuration->setMinimum(1.000000000000000);
 
         gridLayout->addWidget(doubleSpinBox_trialDuration, 0, 1, 1, 1);
 

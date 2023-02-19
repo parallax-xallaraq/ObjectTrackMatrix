@@ -2,6 +2,7 @@
 #define EXPERIMENTSETUP_H
 
 #include <QWidget>
+#include <QList>
 
 // ====================================
 // Created by: Thresa Kelly
@@ -20,10 +21,19 @@ class ExperimentSetup : public QWidget
 public:
     explicit ExperimentSetup(QWidget *parent = nullptr);
     ~ExperimentSetup();
+
     // input validation
     void EnableInputs(bool lock);
     bool CheckRequiredInputs();
 
+    // getters
+    double GetTrialDuration();
+    double GetTimeBetweenTrials();
+    int GetNumberOfTrials();
+    QList<int> GetTrialSequence();
+
+    // setters
+    void SetNumberOfObjects(int n);
 
 private slots:
     void on_pushButton_generateRandomSequence_clicked();
@@ -31,7 +41,11 @@ private slots:
 private:
     Ui::ExperimentSetup *ui;
 
-    int numberOfObjects = 12;
+    // variables
+    int numberOfObjects;
+
+    // input validation
+    bool IsSequenceValid();
 };
 
 #endif // EXPERIMENTSETUP_H

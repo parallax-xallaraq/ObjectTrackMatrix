@@ -16,6 +16,9 @@ ExperimentSetup::ExperimentSetup(QWidget *parent) :
 {
     ui->setupUi(this);
 
+    // initialize variables
+    SetNumberOfObjects(12);
+
     // hide errors
     ui->label_errSequence->setVisible(false);
 }
@@ -37,26 +40,60 @@ void ExperimentSetup::EnableInputs(bool lock)
 
 bool ExperimentSetup::CheckRequiredInputs()
 {
-    // sequence must be properly formatted:
-    //  #, #, #, # --where each number is 1-12
+    if(IsSequenceValid())
+    {
+        ui->label_errSequence->setVisible(false);
+        return(true);
+    }
+    else
+    {
+        ui->label_errSequence->setVisible(true);
+        return(false);
+    }
+}
 
-    // split sequence text at each comma and check each item
+double ExperimentSetup::GetTrialDuration()
+{
+    return(ui->doubleSpinBox_trialDuration->value());
+}
+
+double ExperimentSetup::GetTimeBetweenTrials()
+{
+    return(ui->doubleSpinBox_timeBetweenTrials->value());
+}
+
+int ExperimentSetup::GetNumberOfTrials()
+{
+    // verify valid sequence
+    if(!IsSequenceValid()) throw "Sequence is Invalid";
+
+    // return length of sequence
+    QStringList sequenceList = ui->plainTextEdit_sequence->toPlainText().split(",");
+    int len = sequenceList.length();
+    return(len);
+}
+
+QList<int> ExperimentSetup::GetTrialSequence()
+{
+    // verify valid sequence
+    if(!IsSequenceValid()) throw "Sequence is Invalid";
+
+    // initialize list
+    QList<int> seq;
+    // iterate through each sequence item
     QStringList sequenceList = ui->plainTextEdit_sequence->toPlainText().split(",");
     for (int i=0; i < sequenceList.length(); i++ )
     {
-        bool ok; // true when conversion to int is successful
-        int val = sequenceList[i].toInt(&ok);
-
-        // value must be int between 1-12. if not, show error
-        if(!ok || (val < 1 || val > numberOfObjects) )
-        {
-            ui->label_errSequence->setVisible(true);
-            return(false);
-        }
+        // convert item to int and append to sequence
+        seq.append(sequenceList[i].toInt());
     }
-    // else, everything is good!
-    ui->label_errSequence->setVisible(false);
-    return(true);
+    // return sequence list
+    return(seq);
+}
+
+void ExperimentSetup::SetNumberOfObjects(int n)
+{
+    numberOfObjects = n;
 }
 
 void ExperimentSetup::on_pushButton_generateRandomSequence_clicked()
@@ -76,4 +113,26 @@ void ExperimentSetup::on_pushButton_generateRandomSequence_clicked()
     }
     // write sequence to textbox
     ui->plainTextEdit_sequence->setPlainText(seq);
+}
+
+bool ExperimentSetup::IsSequenceValid()
+{
+    // sequence must be properly formatted:
+    //  #, #, #, # --where each number is 1-12
+
+    // split sequence text at each comma and check each item
+    QStringList sequenceList = ui->plainTextEdit_sequence->toPlainText().split(",");
+    for (int i=0; i < sequenceList.length(); i++ )
+    {
+        bool ok; // true when conversion to int is successful
+        int val = sequenceList[i].toInt(&ok);
+
+        // value must be int between 1-12. if not, show error
+        if(!ok || (val < 1 || val > numberOfObjects) )
+        {
+            return(false);
+        }
+    }
+    // else, everything is good!
+    return(true);
 }
