@@ -36,7 +36,7 @@
      <item row="1" column="1">
       <widget class="QDoubleSpinBox" name="doubleSpinBox_timeBetweenTrials">
        <property name="minimum">
-        <double>0.010000000000000</double>
+        <double>1.000000000000000</double>
        </property>
       </widget>
      </item>
@@ -95,7 +95,7 @@
      <item row="0" column="1">
       <widget class="QDoubleSpinBox" name="doubleSpinBox_trialDuration">
        <property name="minimum">
-        <double>0.010000000000000</double>
+        <double>1.000000000000000</double>
        </property>
       </widget>
      </item>
