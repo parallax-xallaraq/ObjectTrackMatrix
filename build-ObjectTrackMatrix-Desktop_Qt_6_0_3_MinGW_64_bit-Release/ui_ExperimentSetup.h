@@ -28,6 +28,7 @@ public:
     QVBoxLayout *verticalLayout;
     QGridLayout *gridLayout;
     QVBoxLayout *verticalLayout_2;
+    QLabel *label_errSequence;
     QDoubleSpinBox *doubleSpinBox_timeBetweenTrials;
     QDoubleSpinBox *doubleSpinBox_trialDuration;
     QLabel *label_secDuration;
@@ -51,16 +52,26 @@ public:
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
+        label_errSequence = new QLabel(ExperimentSetup);
+        label_errSequence->setObjectName(QString::fromUtf8("label_errSequence"));
+        QFont font;
+        font.setBold(true);
+        label_errSequence->setFont(font);
+
+        verticalLayout_2->addWidget(label_errSequence, 0, Qt::AlignTop);
+
 
         gridLayout->addLayout(verticalLayout_2, 2, 2, 1, 1);
 
         doubleSpinBox_timeBetweenTrials = new QDoubleSpinBox(ExperimentSetup);
         doubleSpinBox_timeBetweenTrials->setObjectName(QString::fromUtf8("doubleSpinBox_timeBetweenTrials"));
+        doubleSpinBox_timeBetweenTrials->setMinimum(0.010000000000000);
 
         gridLayout->addWidget(doubleSpinBox_timeBetweenTrials, 1, 1, 1, 1);
 
         doubleSpinBox_trialDuration = new QDoubleSpinBox(ExperimentSetup);
         doubleSpinBox_trialDuration->setObjectName(QString::fromUtf8("doubleSpinBox_trialDuration"));
+        doubleSpinBox_trialDuration->setMinimum(0.010000000000000);
 
         gridLayout->addWidget(doubleSpinBox_trialDuration, 0, 1, 1, 1);
 
@@ -76,6 +87,7 @@ public:
 
         spinBox_nTrials = new QSpinBox(ExperimentSetup);
         spinBox_nTrials->setObjectName(QString::fromUtf8("spinBox_nTrials"));
+        spinBox_nTrials->setMinimum(1);
 
         gridLayout->addWidget(spinBox_nTrials, 4, 1, 1, 1);
 
@@ -121,6 +133,7 @@ public:
     void retranslateUi(QWidget *ExperimentSetup)
     {
         ExperimentSetup->setWindowTitle(QCoreApplication::translate("ExperimentSetup", "Form", nullptr));
+        label_errSequence->setText(QCoreApplication::translate("ExperimentSetup", "[!!!]", nullptr));
         label_secDuration->setText(QCoreApplication::translate("ExperimentSetup", "seconds", nullptr));
         label_trialDuration->setText(QCoreApplication::translate("ExperimentSetup", "Trial duration:", nullptr));
         label_timeBetweenTrials->setText(QCoreApplication::translate("ExperimentSetup", "Time between trials:", nullptr));

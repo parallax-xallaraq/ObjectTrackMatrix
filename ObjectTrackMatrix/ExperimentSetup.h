@@ -20,8 +20,9 @@ class ExperimentSetup : public QWidget
 public:
     explicit ExperimentSetup(QWidget *parent = nullptr);
     ~ExperimentSetup();
-
+    // input validation
     void EnableInputs(bool lock);
+    bool CheckRequiredInputs();
 
 
 private:
