@@ -33,7 +33,6 @@ public:
     QString GetNotes();
     QDate GetExperimentDate();
 
-
 private:
     Ui::GetUserInfo *ui;
     // input validation

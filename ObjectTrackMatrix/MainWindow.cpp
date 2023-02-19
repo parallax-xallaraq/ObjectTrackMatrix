@@ -22,7 +22,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
 void MainWindow::on_pushButton_newExperiment_clicked()
 {
     // toggle visible groupboxes
@@ -45,7 +44,4 @@ void MainWindow::on_pushButton_experimentSubmit_clicked()
         // disable submit button
         ui->pushButton_experimentSubmit->setVisible(false);
     }
-
-
-
 }
