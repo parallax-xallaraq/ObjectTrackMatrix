@@ -11,21 +11,18 @@ CONFIG += c++11
 SOURCES += \
     ExperimentSetup.cpp \
     GetUserInfo.cpp \
-    NewUser.cpp \
     main.cpp \
     MainWindow.cpp
 
 HEADERS += \
     ExperimentSetup.h \
     GetUserInfo.h \
-    MainWindow.h \
-    NewUser.h
+    MainWindow.h
 
 FORMS += \
     ExperimentSetup.ui \
     GetUserInfo.ui \
-    MainWindow.ui \
-    NewUser.ui
+    MainWindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

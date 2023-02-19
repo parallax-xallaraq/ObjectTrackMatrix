@@ -14,6 +14,7 @@
 #include <QtWidgets/QGridLayout>
 #include <QtWidgets/QGroupBox>
 #include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
@@ -23,7 +24,6 @@
 #include <QtWidgets/QWidget>
 #include "ExperimentSetup.h"
 #include "GetUserInfo.h"
-#include "NewUser.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -32,9 +32,6 @@ class Ui_MainWindow
 public:
     QWidget *centralwidget;
     QGridLayout *gridLayout;
-    QGroupBox *groupBox_NewUser;
-    QVBoxLayout *verticalLayout;
-    NewUser *widget_newUser;
     QGroupBox *groupBox_experimentDetails;
     QVBoxLayout *verticalLayout_4;
     QHBoxLayout *horizontalLayout_3;
@@ -49,6 +46,15 @@ public:
     QPushButton *pushButton_edit;
     QPushButton *pushButton_submit;
     QSpacerItem *horizontalSpacer_2;
+    QGroupBox *groupBox_NewUser;
+    QVBoxLayout *verticalLayout;
+    QLabel *label;
+    QLabel *label_2;
+    QHBoxLayout *horizontalLayout_2;
+    QSpacerItem *horizontalSpacer_3;
+    QPushButton *pushButton_newExperiment;
+    QSpacerItem *horizontalSpacer_4;
+    QSpacerItem *verticalSpacer;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -61,18 +67,6 @@ public:
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         gridLayout = new QGridLayout(centralwidget);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        groupBox_NewUser = new QGroupBox(centralwidget);
-        groupBox_NewUser->setObjectName(QString::fromUtf8("groupBox_NewUser"));
-        verticalLayout = new QVBoxLayout(groupBox_NewUser);
-        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
-        widget_newUser = new NewUser(groupBox_NewUser);
-        widget_newUser->setObjectName(QString::fromUtf8("widget_newUser"));
-
-        verticalLayout->addWidget(widget_newUser);
-
-
-        gridLayout->addWidget(groupBox_NewUser, 0, 0, 1, 1);
-
         groupBox_experimentDetails = new QGroupBox(centralwidget);
         groupBox_experimentDetails->setObjectName(QString::fromUtf8("groupBox_experimentDetails"));
         verticalLayout_4 = new QVBoxLayout(groupBox_experimentDetails);
@@ -132,6 +126,45 @@ public:
 
         gridLayout->addWidget(groupBox_experimentDetails, 1, 0, 1, 1);
 
+        groupBox_NewUser = new QGroupBox(centralwidget);
+        groupBox_NewUser->setObjectName(QString::fromUtf8("groupBox_NewUser"));
+        verticalLayout = new QVBoxLayout(groupBox_NewUser);
+        verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
+        label = new QLabel(groupBox_NewUser);
+        label->setObjectName(QString::fromUtf8("label"));
+
+        verticalLayout->addWidget(label, 0, Qt::AlignHCenter);
+
+        label_2 = new QLabel(groupBox_NewUser);
+        label_2->setObjectName(QString::fromUtf8("label_2"));
+
+        verticalLayout->addWidget(label_2, 0, Qt::AlignHCenter);
+
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        horizontalSpacer_3 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_2->addItem(horizontalSpacer_3);
+
+        pushButton_newExperiment = new QPushButton(groupBox_NewUser);
+        pushButton_newExperiment->setObjectName(QString::fromUtf8("pushButton_newExperiment"));
+
+        horizontalLayout_2->addWidget(pushButton_newExperiment);
+
+        horizontalSpacer_4 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_2->addItem(horizontalSpacer_4);
+
+
+        verticalLayout->addLayout(horizontalLayout_2);
+
+
+        gridLayout->addWidget(groupBox_NewUser, 0, 0, 1, 1);
+
+        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        gridLayout->addItem(verticalSpacer, 2, 0, 1, 1);
+
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName(QString::fromUtf8("menubar"));
@@ -149,12 +182,15 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
-        groupBox_NewUser->setTitle(QCoreApplication::translate("MainWindow", "New User", nullptr));
         groupBox_experimentDetails->setTitle(QCoreApplication::translate("MainWindow", "Experiment Details", nullptr));
         groupBox_userInfo->setTitle(QCoreApplication::translate("MainWindow", "User Information", nullptr));
         groupBox_experimentSetup->setTitle(QCoreApplication::translate("MainWindow", "Experiment Setup", nullptr));
         pushButton_edit->setText(QCoreApplication::translate("MainWindow", "Edit", nullptr));
         pushButton_submit->setText(QCoreApplication::translate("MainWindow", "Submit", nullptr));
+        groupBox_NewUser->setTitle(QCoreApplication::translate("MainWindow", "New User", nullptr));
+        label->setText(QCoreApplication::translate("MainWindow", "Welcome!", nullptr));
+        label_2->setText(QCoreApplication::translate("MainWindow", "Click the button below to setup a new experiment.", nullptr));
+        pushButton_newExperiment->setText(QCoreApplication::translate("MainWindow", "New Experiment", nullptr));
     } // retranslateUi
 
 };
