@@ -18,6 +18,8 @@ public:
 private slots:
     void on_pushButton_newExperiment_clicked();
 
+    void on_pushButton_experimentSubmit_clicked();
+
 private:
     Ui::MainWindow *ui;
 };

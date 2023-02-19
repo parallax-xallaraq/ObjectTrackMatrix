@@ -65,14 +65,7 @@
           </spacer>
          </item>
          <item>
-          <widget class="QPushButton" name="pushButton_edit">
-           <property name="text">
-            <string>Edit</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QPushButton" name="pushButton_submit">
+          <widget class="QPushButton" name="pushButton_experimentSubmit">
            <property name="text">
             <string>Submit</string>
            </property>

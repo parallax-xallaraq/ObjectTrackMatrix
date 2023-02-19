@@ -15,6 +15,9 @@ public:
     explicit ExperimentSetup(QWidget *parent = nullptr);
     ~ExperimentSetup();
 
+    void EnableInputs(bool lock);
+
+
 private:
     Ui::ExperimentSetup *ui;
 };

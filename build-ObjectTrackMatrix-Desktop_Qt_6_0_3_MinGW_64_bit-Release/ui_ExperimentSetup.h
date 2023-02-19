@@ -28,23 +28,23 @@ public:
     QVBoxLayout *verticalLayout;
     QGridLayout *gridLayout;
     QVBoxLayout *verticalLayout_2;
-    QDoubleSpinBox *doubleSpinBox_2;
-    QDoubleSpinBox *doubleSpinBox;
-    QLabel *label_5;
-    QLabel *label_3;
-    QSpinBox *spinBox;
-    QLabel *label_4;
-    QLabel *label_6;
-    QLabel *label;
-    QPlainTextEdit *plainTextEdit;
-    QLabel *label_7;
-    QPushButton *pushButton;
+    QDoubleSpinBox *doubleSpinBox_timeBetweenTrials;
+    QDoubleSpinBox *doubleSpinBox_trialDuration;
+    QLabel *label_secDuration;
+    QLabel *label_trialDuration;
+    QSpinBox *spinBox_nTrials;
+    QLabel *label_timeBetweenTrials;
+    QLabel *label_secBetweenTrials;
+    QLabel *label_sequence;
+    QPlainTextEdit *plainTextEdit_sequence;
+    QLabel *label_nTrials;
+    QPushButton *pushButton_generateRandomSequence;
 
     void setupUi(QWidget *ExperimentSetup)
     {
         if (ExperimentSetup->objectName().isEmpty())
             ExperimentSetup->setObjectName(QString::fromUtf8("ExperimentSetup"));
-        ExperimentSetup->resize(400, 226);
+        ExperimentSetup->resize(400, 233);
         verticalLayout = new QVBoxLayout(ExperimentSetup);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         gridLayout = new QGridLayout();
@@ -54,60 +54,60 @@ public:
 
         gridLayout->addLayout(verticalLayout_2, 2, 2, 1, 1);
 
-        doubleSpinBox_2 = new QDoubleSpinBox(ExperimentSetup);
-        doubleSpinBox_2->setObjectName(QString::fromUtf8("doubleSpinBox_2"));
+        doubleSpinBox_timeBetweenTrials = new QDoubleSpinBox(ExperimentSetup);
+        doubleSpinBox_timeBetweenTrials->setObjectName(QString::fromUtf8("doubleSpinBox_timeBetweenTrials"));
 
-        gridLayout->addWidget(doubleSpinBox_2, 1, 1, 1, 1);
+        gridLayout->addWidget(doubleSpinBox_timeBetweenTrials, 1, 1, 1, 1);
 
-        doubleSpinBox = new QDoubleSpinBox(ExperimentSetup);
-        doubleSpinBox->setObjectName(QString::fromUtf8("doubleSpinBox"));
+        doubleSpinBox_trialDuration = new QDoubleSpinBox(ExperimentSetup);
+        doubleSpinBox_trialDuration->setObjectName(QString::fromUtf8("doubleSpinBox_trialDuration"));
 
-        gridLayout->addWidget(doubleSpinBox, 0, 1, 1, 1);
+        gridLayout->addWidget(doubleSpinBox_trialDuration, 0, 1, 1, 1);
 
-        label_5 = new QLabel(ExperimentSetup);
-        label_5->setObjectName(QString::fromUtf8("label_5"));
+        label_secDuration = new QLabel(ExperimentSetup);
+        label_secDuration->setObjectName(QString::fromUtf8("label_secDuration"));
 
-        gridLayout->addWidget(label_5, 0, 2, 1, 1);
+        gridLayout->addWidget(label_secDuration, 0, 2, 1, 1);
 
-        label_3 = new QLabel(ExperimentSetup);
-        label_3->setObjectName(QString::fromUtf8("label_3"));
+        label_trialDuration = new QLabel(ExperimentSetup);
+        label_trialDuration->setObjectName(QString::fromUtf8("label_trialDuration"));
 
-        gridLayout->addWidget(label_3, 0, 0, 1, 1);
+        gridLayout->addWidget(label_trialDuration, 0, 0, 1, 1);
 
-        spinBox = new QSpinBox(ExperimentSetup);
-        spinBox->setObjectName(QString::fromUtf8("spinBox"));
+        spinBox_nTrials = new QSpinBox(ExperimentSetup);
+        spinBox_nTrials->setObjectName(QString::fromUtf8("spinBox_nTrials"));
 
-        gridLayout->addWidget(spinBox, 4, 1, 1, 1);
+        gridLayout->addWidget(spinBox_nTrials, 4, 1, 1, 1);
 
-        label_4 = new QLabel(ExperimentSetup);
-        label_4->setObjectName(QString::fromUtf8("label_4"));
+        label_timeBetweenTrials = new QLabel(ExperimentSetup);
+        label_timeBetweenTrials->setObjectName(QString::fromUtf8("label_timeBetweenTrials"));
 
-        gridLayout->addWidget(label_4, 1, 0, 1, 1);
+        gridLayout->addWidget(label_timeBetweenTrials, 1, 0, 1, 1);
 
-        label_6 = new QLabel(ExperimentSetup);
-        label_6->setObjectName(QString::fromUtf8("label_6"));
+        label_secBetweenTrials = new QLabel(ExperimentSetup);
+        label_secBetweenTrials->setObjectName(QString::fromUtf8("label_secBetweenTrials"));
 
-        gridLayout->addWidget(label_6, 1, 2, 1, 1);
+        gridLayout->addWidget(label_secBetweenTrials, 1, 2, 1, 1);
 
-        label = new QLabel(ExperimentSetup);
-        label->setObjectName(QString::fromUtf8("label"));
+        label_sequence = new QLabel(ExperimentSetup);
+        label_sequence->setObjectName(QString::fromUtf8("label_sequence"));
 
-        gridLayout->addWidget(label, 2, 0, 1, 1, Qt::AlignTop);
+        gridLayout->addWidget(label_sequence, 2, 0, 1, 1, Qt::AlignTop);
 
-        plainTextEdit = new QPlainTextEdit(ExperimentSetup);
-        plainTextEdit->setObjectName(QString::fromUtf8("plainTextEdit"));
+        plainTextEdit_sequence = new QPlainTextEdit(ExperimentSetup);
+        plainTextEdit_sequence->setObjectName(QString::fromUtf8("plainTextEdit_sequence"));
 
-        gridLayout->addWidget(plainTextEdit, 2, 1, 1, 1);
+        gridLayout->addWidget(plainTextEdit_sequence, 2, 1, 1, 1);
 
-        label_7 = new QLabel(ExperimentSetup);
-        label_7->setObjectName(QString::fromUtf8("label_7"));
+        label_nTrials = new QLabel(ExperimentSetup);
+        label_nTrials->setObjectName(QString::fromUtf8("label_nTrials"));
 
-        gridLayout->addWidget(label_7, 4, 0, 1, 1);
+        gridLayout->addWidget(label_nTrials, 4, 0, 1, 1);
 
-        pushButton = new QPushButton(ExperimentSetup);
-        pushButton->setObjectName(QString::fromUtf8("pushButton"));
+        pushButton_generateRandomSequence = new QPushButton(ExperimentSetup);
+        pushButton_generateRandomSequence->setObjectName(QString::fromUtf8("pushButton_generateRandomSequence"));
 
-        gridLayout->addWidget(pushButton, 3, 1, 1, 1);
+        gridLayout->addWidget(pushButton_generateRandomSequence, 3, 1, 1, 1);
 
 
         verticalLayout->addLayout(gridLayout);
@@ -121,13 +121,13 @@ public:
     void retranslateUi(QWidget *ExperimentSetup)
     {
         ExperimentSetup->setWindowTitle(QCoreApplication::translate("ExperimentSetup", "Form", nullptr));
-        label_5->setText(QCoreApplication::translate("ExperimentSetup", "seconds", nullptr));
-        label_3->setText(QCoreApplication::translate("ExperimentSetup", "Trial duration:", nullptr));
-        label_4->setText(QCoreApplication::translate("ExperimentSetup", "Time between trials:", nullptr));
-        label_6->setText(QCoreApplication::translate("ExperimentSetup", "seconds", nullptr));
-        label->setText(QCoreApplication::translate("ExperimentSetup", "Sequence:", nullptr));
-        label_7->setText(QCoreApplication::translate("ExperimentSetup", "Number of trials:", nullptr));
-        pushButton->setText(QCoreApplication::translate("ExperimentSetup", "Generate Random", nullptr));
+        label_secDuration->setText(QCoreApplication::translate("ExperimentSetup", "seconds", nullptr));
+        label_trialDuration->setText(QCoreApplication::translate("ExperimentSetup", "Trial duration:", nullptr));
+        label_timeBetweenTrials->setText(QCoreApplication::translate("ExperimentSetup", "Time between trials:", nullptr));
+        label_secBetweenTrials->setText(QCoreApplication::translate("ExperimentSetup", "seconds", nullptr));
+        label_sequence->setText(QCoreApplication::translate("ExperimentSetup", "Sequence:", nullptr));
+        label_nTrials->setText(QCoreApplication::translate("ExperimentSetup", "Number of trials:", nullptr));
+        pushButton_generateRandomSequence->setText(QCoreApplication::translate("ExperimentSetup", "Generate Random", nullptr));
     } // retranslateUi
 
 };

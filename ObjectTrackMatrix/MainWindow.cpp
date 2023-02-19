@@ -23,3 +23,17 @@ void MainWindow::on_pushButton_newExperiment_clicked()
     ui->groupBox_NewUser->setVisible(false);
     ui->groupBox_experimentDetails->setVisible(true);
 }
+
+void MainWindow::on_pushButton_experimentSubmit_clicked()
+{
+    // check that all required inputs are valid
+    bool isUserGood = ui->widget_userInfo->CheckRequiredInputs();
+
+    // if all inputs are valid, disable fields
+    if(isUserGood)
+    {
+        ui->widget_userInfo->EnableInputs(false);
+        ui->widget_experimentSetup->EnableInputs(false);
+    }
+
+}

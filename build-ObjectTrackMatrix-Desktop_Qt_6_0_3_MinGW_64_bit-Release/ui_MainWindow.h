@@ -43,8 +43,7 @@ public:
     ExperimentSetup *widget_experimentSetup;
     QHBoxLayout *horizontalLayout;
     QSpacerItem *horizontalSpacer;
-    QPushButton *pushButton_edit;
-    QPushButton *pushButton_submit;
+    QPushButton *pushButton_experimentSubmit;
     QSpacerItem *horizontalSpacer_2;
     QGroupBox *groupBox_NewUser;
     QVBoxLayout *verticalLayout;
@@ -106,15 +105,10 @@ public:
 
         horizontalLayout->addItem(horizontalSpacer);
 
-        pushButton_edit = new QPushButton(groupBox_experimentDetails);
-        pushButton_edit->setObjectName(QString::fromUtf8("pushButton_edit"));
+        pushButton_experimentSubmit = new QPushButton(groupBox_experimentDetails);
+        pushButton_experimentSubmit->setObjectName(QString::fromUtf8("pushButton_experimentSubmit"));
 
-        horizontalLayout->addWidget(pushButton_edit);
-
-        pushButton_submit = new QPushButton(groupBox_experimentDetails);
-        pushButton_submit->setObjectName(QString::fromUtf8("pushButton_submit"));
-
-        horizontalLayout->addWidget(pushButton_submit);
+        horizontalLayout->addWidget(pushButton_experimentSubmit);
 
         horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
@@ -185,8 +179,7 @@ public:
         groupBox_experimentDetails->setTitle(QCoreApplication::translate("MainWindow", "Experiment Details", nullptr));
         groupBox_userInfo->setTitle(QCoreApplication::translate("MainWindow", "User Information", nullptr));
         groupBox_experimentSetup->setTitle(QCoreApplication::translate("MainWindow", "Experiment Setup", nullptr));
-        pushButton_edit->setText(QCoreApplication::translate("MainWindow", "Edit", nullptr));
-        pushButton_submit->setText(QCoreApplication::translate("MainWindow", "Submit", nullptr));
+        pushButton_experimentSubmit->setText(QCoreApplication::translate("MainWindow", "Submit", nullptr));
         groupBox_NewUser->setTitle(QCoreApplication::translate("MainWindow", "New User", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "Welcome!", nullptr));
         label_2->setText(QCoreApplication::translate("MainWindow", "Click the button below to setup a new experiment.", nullptr));

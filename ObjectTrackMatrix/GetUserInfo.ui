@@ -15,46 +15,19 @@
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
-    <layout class="QFormLayout" name="formLayout">
+    <layout class="QGridLayout" name="gridLayout">
+     <item row="2" column="1">
+      <widget class="QLineEdit" name="lineEdit_subjectName"/>
+     </item>
+     <item row="3" column="1">
+      <widget class="QDateEdit" name="dateEdit_experimentDate"/>
+     </item>
      <item row="1" column="0">
       <widget class="QLabel" name="label_experimenterName">
        <property name="text">
         <string>Experimenter name:</string>
        </property>
       </widget>
-     </item>
-     <item row="1" column="1">
-      <widget class="QLineEdit" name="lineEdit_experimenterName"/>
-     </item>
-     <item row="2" column="0">
-      <widget class="QLabel" name="label_subjectName">
-       <property name="text">
-        <string>Subject name:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="2" column="1">
-      <widget class="QLineEdit" name="lineEdit_subjectName"/>
-     </item>
-     <item row="3" column="0">
-      <widget class="QLabel" name="label_date">
-       <property name="text">
-        <string>Date: </string>
-       </property>
-      </widget>
-     </item>
-     <item row="3" column="1">
-      <widget class="QDateEdit" name="dateEdit_todayDate"/>
-     </item>
-     <item row="4" column="0">
-      <widget class="QLabel" name="label_notes">
-       <property name="text">
-        <string>Notes:</string>
-       </property>
-      </widget>
-     </item>
-     <item row="4" column="1">
-      <widget class="QTextEdit" name="textEdit_notes"/>
      </item>
      <item row="0" column="0">
       <widget class="QLabel" name="label_title">
@@ -63,13 +36,87 @@
        </property>
       </widget>
      </item>
+     <item row="1" column="1">
+      <widget class="QLineEdit" name="lineEdit_experimenterName"/>
+     </item>
+     <item row="4" column="0" alignment="Qt::AlignTop">
+      <widget class="QLabel" name="label_notes">
+       <property name="text">
+        <string>Notes:</string>
+       </property>
+      </widget>
+     </item>
      <item row="0" column="1">
       <widget class="QLineEdit" name="lineEdit_title"/>
+     </item>
+     <item row="3" column="0">
+      <widget class="QLabel" name="label_date">
+       <property name="text">
+        <string>Date: </string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="0">
+      <widget class="QLabel" name="label_subjectName">
+       <property name="text">
+        <string>Subject name:</string>
+       </property>
+      </widget>
+     </item>
+     <item row="0" column="2">
+      <widget class="QLabel" name="label_errTitle">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>[!!!]</string>
+       </property>
+      </widget>
+     </item>
+     <item row="1" column="2">
+      <widget class="QLabel" name="label_errName">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>[!!!]</string>
+       </property>
+      </widget>
+     </item>
+     <item row="2" column="2">
+      <widget class="QLabel" name="label_errSubject">
+       <property name="font">
+        <font>
+         <weight>75</weight>
+         <bold>true</bold>
+         <kerning>true</kerning>
+        </font>
+       </property>
+       <property name="text">
+        <string>[!!!]</string>
+       </property>
+      </widget>
+     </item>
+     <item row="4" column="1">
+      <widget class="QPlainTextEdit" name="plainTextEdit_notes"/>
      </item>
     </layout>
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>lineEdit_title</tabstop>
+  <tabstop>lineEdit_experimenterName</tabstop>
+  <tabstop>lineEdit_subjectName</tabstop>
+  <tabstop>dateEdit_experimentDate</tabstop>
+  <tabstop>plainTextEdit_notes</tabstop>
+ </tabstops>
  <resources/>
  <connections/>
 </ui>
