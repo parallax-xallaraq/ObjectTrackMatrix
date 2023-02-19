@@ -1,6 +1,12 @@
 #include "ExperimentSetup.h"
 #include "ui_ExperimentSetup.h"
 
+// ====================================
+// Created by: Thresa Kelly
+// Email: ThresaKelly133@gmail.com
+// Date: 2/18/2023
+// ====================================
+
 ExperimentSetup::ExperimentSetup(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ExperimentSetup)

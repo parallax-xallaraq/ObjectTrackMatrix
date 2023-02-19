@@ -3,6 +3,12 @@
 
 #include <QMainWindow>
 
+// ====================================
+// Created by: Thresa Kelly
+// Email: ThresaKelly133@gmail.com
+// Date: 2/18/2023
+// ====================================
+
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE

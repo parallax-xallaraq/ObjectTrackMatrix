@@ -1,6 +1,12 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+// ====================================
+// Created by: Thresa Kelly
+// Email: ThresaKelly133@gmail.com
+// Date: 2/18/2023
+// ====================================
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)

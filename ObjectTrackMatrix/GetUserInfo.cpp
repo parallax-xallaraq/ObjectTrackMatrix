@@ -3,6 +3,12 @@
 
 #include <QDate>
 
+// ====================================
+// Created by: Thresa Kelly
+// Email: ThresaKelly133@gmail.com
+// Date: 2/18/2023
+// ====================================
+
 GetUserInfo::GetUserInfo(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::GetUserInfo)
