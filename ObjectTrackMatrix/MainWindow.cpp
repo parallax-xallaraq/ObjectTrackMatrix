@@ -36,11 +36,16 @@ void MainWindow::on_pushButton_experimentSubmit_clicked()
     bool isUserGood = ui->widget_userInfo->CheckRequiredInputs();
     bool isSequenceGood = ui->widget_experimentSetup->CheckRequiredInputs();
 
-    // if all inputs are valid, disable fields
+    // if all inputs are valid...
     if(isUserGood && isSequenceGood)
     {
+        // disable user input fields
         ui->widget_userInfo->EnableInputs(false);
         ui->widget_experimentSetup->EnableInputs(false);
+        // disable submit button
+        ui->pushButton_experimentSubmit->setVisible(false);
     }
+
+
 
 }
