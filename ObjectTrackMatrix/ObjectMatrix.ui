@@ -1,21 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <author/>
- <comment/>
- <exportmacro/>
  <class>ObjectMatrix</class>
  <widget class="QWidget" name="ObjectMatrix">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>548</width>
+    <height>196</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="label_objectMatrix">
+       <property name="text">
+        <string>Object Matrix</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QTableWidget" name="tableWidget_objects">
+     <row>
+      <property name="text">
+       <string>E</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>F</string>
+      </property>
+     </row>
+     <row>
+      <property name="text">
+       <string>G</string>
+      </property>
+     </row>
+     <column>
+      <property name="text">
+       <string>A</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>B</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>C</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>D</string>
+      </property>
+     </column>
+     <item row="0" column="0">
+      <property name="text">
+       <string>1</string>
+      </property>
+     </item>
+     <item row="0" column="1">
+      <property name="text">
+       <string>2</string>
+      </property>
+     </item>
+     <item row="0" column="2">
+      <property name="text">
+       <string>3</string>
+      </property>
+     </item>
+     <item row="0" column="3">
+      <property name="text">
+       <string>4</string>
+      </property>
+     </item>
+     <item row="1" column="0">
+      <property name="text">
+       <string>5</string>
+      </property>
+     </item>
+     <item row="1" column="1">
+      <property name="text">
+       <string>6</string>
+      </property>
+     </item>
+     <item row="1" column="2">
+      <property name="text">
+       <string>7</string>
+      </property>
+     </item>
+     <item row="1" column="3">
+      <property name="text">
+       <string>8</string>
+      </property>
+     </item>
+     <item row="2" column="0">
+      <property name="text">
+       <string>9</string>
+      </property>
+     </item>
+     <item row="2" column="1">
+      <property name="text">
+       <string>10</string>
+      </property>
+     </item>
+     <item row="2" column="2">
+      <property name="text">
+       <string>11</string>
+      </property>
+     </item>
+     <item row="2" column="3">
+      <property name="text">
+       <string>12</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+  </layout>
  </widget>
- <pixmapfunction/>
+ <resources/>
  <connections/>
 </ui>
