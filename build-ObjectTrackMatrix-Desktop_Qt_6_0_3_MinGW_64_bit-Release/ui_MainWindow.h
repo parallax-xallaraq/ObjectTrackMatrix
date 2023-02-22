@@ -24,6 +24,7 @@
 #include <QtWidgets/QWidget>
 #include "ExperimentSetup.h"
 #include "GetUserInfo.h"
+#include "ObjectMatrix.h"
 
 QT_BEGIN_NAMESPACE
 
@@ -46,6 +47,12 @@ public:
     QPushButton *pushButton_experimentEdit;
     QPushButton *pushButton_experimentSubmit;
     QSpacerItem *horizontalSpacer_2;
+    QGroupBox *groupBox_objectMatrix;
+    QVBoxLayout *verticalLayout_5;
+    QHBoxLayout *horizontalLayout_4;
+    QSpacerItem *horizontalSpacer_5;
+    ObjectMatrix *widget_objectMatrix;
+    QSpacerItem *horizontalSpacer_6;
     QGroupBox *groupBox_NewUser;
     QVBoxLayout *verticalLayout;
     QLabel *label;
@@ -62,7 +69,7 @@ public:
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
-        MainWindow->resize(800, 362);
+        MainWindow->resize(800, 494);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName(QString::fromUtf8("centralwidget"));
         gridLayout = new QGridLayout(centralwidget);
@@ -126,6 +133,31 @@ public:
 
         gridLayout->addWidget(groupBox_experimentDetails, 1, 0, 1, 1);
 
+        groupBox_objectMatrix = new QGroupBox(centralwidget);
+        groupBox_objectMatrix->setObjectName(QString::fromUtf8("groupBox_objectMatrix"));
+        verticalLayout_5 = new QVBoxLayout(groupBox_objectMatrix);
+        verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
+        horizontalLayout_4 = new QHBoxLayout();
+        horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
+        horizontalSpacer_5 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_4->addItem(horizontalSpacer_5);
+
+        widget_objectMatrix = new ObjectMatrix(groupBox_objectMatrix);
+        widget_objectMatrix->setObjectName(QString::fromUtf8("widget_objectMatrix"));
+
+        horizontalLayout_4->addWidget(widget_objectMatrix);
+
+        horizontalSpacer_6 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+        horizontalLayout_4->addItem(horizontalSpacer_6);
+
+
+        verticalLayout_5->addLayout(horizontalLayout_4);
+
+
+        gridLayout->addWidget(groupBox_objectMatrix, 2, 0, 1, 1);
+
         groupBox_NewUser = new QGroupBox(centralwidget);
         groupBox_NewUser->setObjectName(QString::fromUtf8("groupBox_NewUser"));
         verticalLayout = new QVBoxLayout(groupBox_NewUser);
@@ -163,7 +195,7 @@ public:
 
         verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
-        gridLayout->addItem(verticalSpacer, 2, 0, 1, 1);
+        gridLayout->addItem(verticalSpacer, 3, 0, 1, 1);
 
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
@@ -187,6 +219,7 @@ public:
         groupBox_experimentSetup->setTitle(QCoreApplication::translate("MainWindow", "Experiment Setup", nullptr));
         pushButton_experimentEdit->setText(QCoreApplication::translate("MainWindow", "Edit", nullptr));
         pushButton_experimentSubmit->setText(QCoreApplication::translate("MainWindow", "Submit", nullptr));
+        groupBox_objectMatrix->setTitle(QCoreApplication::translate("MainWindow", "Object Track Matrix", nullptr));
         groupBox_NewUser->setTitle(QCoreApplication::translate("MainWindow", "New User", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "Welcome!", nullptr));
         label_2->setText(QCoreApplication::translate("MainWindow", "Click the button below to setup a new experiment.", nullptr));

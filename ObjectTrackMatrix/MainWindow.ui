@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>362</height>
+    <height>494</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -96,6 +96,48 @@
       </layout>
      </widget>
     </item>
+    <item row="2" column="0">
+     <widget class="QGroupBox" name="groupBox_objectMatrix">
+      <property name="title">
+       <string>Object Track Matrix</string>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout_5">
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
+         <item>
+          <spacer name="horizontalSpacer_5">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+         <item>
+          <widget class="ObjectMatrix" name="widget_objectMatrix" native="true"/>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_6">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
+      </layout>
+     </widget>
+    </item>
     <item row="0" column="0">
      <widget class="QGroupBox" name="groupBox_NewUser">
       <property name="title">
@@ -156,7 +198,7 @@
       </layout>
      </widget>
     </item>
-    <item row="2" column="0">
+    <item row="3" column="0">
      <spacer name="verticalSpacer">
       <property name="orientation">
        <enum>Qt::Vertical</enum>
@@ -194,6 +236,12 @@
    <class>GetUserInfo</class>
    <extends>QWidget</extends>
    <header>GetUserInfo.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>ObjectMatrix</class>
+   <extends>QWidget</extends>
+   <header>ObjectMatrix.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>
