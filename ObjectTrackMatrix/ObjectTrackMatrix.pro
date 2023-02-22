@@ -11,18 +11,21 @@ CONFIG += c++11
 SOURCES += \
     ExperimentSetup.cpp \
     GetUserInfo.cpp \
+    ObjectMatrix.cpp \
     main.cpp \
     MainWindow.cpp
 
 HEADERS += \
     ExperimentSetup.h \
     GetUserInfo.h \
-    MainWindow.h
+    MainWindow.h \
+    ObjectMatrix.h
 
 FORMS += \
     ExperimentSetup.ui \
     GetUserInfo.ui \
-    MainWindow.ui
+    MainWindow.ui \
+    ObjectMatrix.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
