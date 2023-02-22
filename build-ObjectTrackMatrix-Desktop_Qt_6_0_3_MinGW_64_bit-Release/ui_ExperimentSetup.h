@@ -46,7 +46,7 @@ public:
     {
         if (ExperimentSetup->objectName().isEmpty())
             ExperimentSetup->setObjectName(QString::fromUtf8("ExperimentSetup"));
-        ExperimentSetup->resize(466, 300);
+        ExperimentSetup->resize(466, 204);
         gridLayout = new QGridLayout(ExperimentSetup);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         label_trialDuration = new QLabel(ExperimentSetup);
@@ -84,7 +84,7 @@ public:
         label_sequence = new QLabel(ExperimentSetup);
         label_sequence->setObjectName(QString::fromUtf8("label_sequence"));
 
-        gridLayout->addWidget(label_sequence, 2, 0, 1, 1);
+        gridLayout->addWidget(label_sequence, 2, 0, 1, 1, Qt::AlignTop);
 
         plainTextEdit_sequence = new QPlainTextEdit(ExperimentSetup);
         plainTextEdit_sequence->setObjectName(QString::fromUtf8("plainTextEdit_sequence"));
