@@ -24,8 +24,11 @@ public:
 private slots:
     void on_pushButton_newExperiment_clicked();
     void on_pushButton_experimentSubmit_clicked();
+    void on_pushButton_experimentEdit_clicked();
 
 private:
     Ui::MainWindow *ui;
+
+    void EnableExperimentInputs(bool en);
 };
 #endif // MAINWINDOW_H

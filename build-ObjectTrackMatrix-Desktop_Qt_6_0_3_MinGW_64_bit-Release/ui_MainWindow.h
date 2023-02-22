@@ -43,6 +43,7 @@ public:
     ExperimentSetup *widget_experimentSetup;
     QHBoxLayout *horizontalLayout;
     QSpacerItem *horizontalSpacer;
+    QPushButton *pushButton_experimentEdit;
     QPushButton *pushButton_experimentSubmit;
     QSpacerItem *horizontalSpacer_2;
     QGroupBox *groupBox_NewUser;
@@ -104,6 +105,11 @@ public:
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout->addItem(horizontalSpacer);
+
+        pushButton_experimentEdit = new QPushButton(groupBox_experimentDetails);
+        pushButton_experimentEdit->setObjectName(QString::fromUtf8("pushButton_experimentEdit"));
+
+        horizontalLayout->addWidget(pushButton_experimentEdit);
 
         pushButton_experimentSubmit = new QPushButton(groupBox_experimentDetails);
         pushButton_experimentSubmit->setObjectName(QString::fromUtf8("pushButton_experimentSubmit"));
@@ -179,6 +185,7 @@ public:
         groupBox_experimentDetails->setTitle(QCoreApplication::translate("MainWindow", "Experiment Details", nullptr));
         groupBox_userInfo->setTitle(QCoreApplication::translate("MainWindow", "User Information", nullptr));
         groupBox_experimentSetup->setTitle(QCoreApplication::translate("MainWindow", "Experiment Setup", nullptr));
+        pushButton_experimentEdit->setText(QCoreApplication::translate("MainWindow", "Edit", nullptr));
         pushButton_experimentSubmit->setText(QCoreApplication::translate("MainWindow", "Submit", nullptr));
         groupBox_NewUser->setTitle(QCoreApplication::translate("MainWindow", "New User", nullptr));
         label->setText(QCoreApplication::translate("MainWindow", "Welcome!", nullptr));

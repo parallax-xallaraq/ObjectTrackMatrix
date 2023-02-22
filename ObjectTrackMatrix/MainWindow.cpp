@@ -24,6 +24,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_newExperiment_clicked()
 {
+    // allow user input
+    EnableExperimentInputs(true);
     // toggle visible groupboxes
     ui->groupBox_NewUser->setVisible(false);
     ui->groupBox_experimentDetails->setVisible(true);
@@ -38,10 +40,23 @@ void MainWindow::on_pushButton_experimentSubmit_clicked()
     // if all inputs are valid...
     if(isUserGood && isSequenceGood)
     {
-        // disable user input fields
-        ui->widget_userInfo->EnableInputs(false);
-        ui->widget_experimentSetup->EnableInputs(false);
-        // disable submit button
-        ui->pushButton_experimentSubmit->setVisible(false);
+        // submit info
+        EnableExperimentInputs(false);
     }
+}
+
+void MainWindow::on_pushButton_experimentEdit_clicked()
+{
+    // allow input
+    EnableExperimentInputs(true);
+}
+
+void MainWindow::EnableExperimentInputs(bool en)
+{
+    // enable user input fields
+    ui->widget_userInfo->EnableInputs(en);
+    ui->widget_experimentSetup->EnableInputs(en);
+    // toggle button visibility
+    ui->pushButton_experimentSubmit->setVisible(en);
+    ui->pushButton_experimentEdit->setVisible(!en);
 }

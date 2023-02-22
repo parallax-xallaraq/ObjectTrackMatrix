@@ -45,7 +45,7 @@ public:
     {
         if (ExperimentSetup->objectName().isEmpty())
             ExperimentSetup->setObjectName(QString::fromUtf8("ExperimentSetup"));
-        ExperimentSetup->resize(400, 233);
+        ExperimentSetup->resize(413, 233);
         verticalLayout = new QVBoxLayout(ExperimentSetup);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         gridLayout = new QGridLayout();
@@ -124,6 +124,10 @@ public:
 
         verticalLayout->addLayout(gridLayout);
 
+        QWidget::setTabOrder(doubleSpinBox_trialDuration, doubleSpinBox_timeBetweenTrials);
+        QWidget::setTabOrder(doubleSpinBox_timeBetweenTrials, plainTextEdit_sequence);
+        QWidget::setTabOrder(plainTextEdit_sequence, spinBox_nTrials);
+        QWidget::setTabOrder(spinBox_nTrials, pushButton_generateRandomSequence);
 
         retranslateUi(ExperimentSetup);
 
