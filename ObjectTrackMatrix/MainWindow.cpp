@@ -4,7 +4,7 @@
 // ====================================
 // Created by: Thresa Kelly
 // Email: ThresaKelly133@gmail.com
-// Date: 2/18/2023
+// Date: 03/03/2023
 // ====================================
 
 MainWindow::MainWindow(QWidget *parent)
@@ -69,4 +69,7 @@ void MainWindow::on_pushButton_startExperiment_clicked()
 {
     // lock experiment details
     ui->groupBox_experimentDetails->setEnabled(false);
+
+    // TODO write experiment setup settings to hardware
+    // TODO start reading data
 }
