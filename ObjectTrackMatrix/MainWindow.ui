@@ -99,13 +99,13 @@
     <item row="2" column="0">
      <widget class="QGroupBox" name="groupBox_objectMatrix">
       <property name="title">
-       <string>Object Track Matrix</string>
+       <string>Experiment</string>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_5">
        <item>
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <layout class="QHBoxLayout" name="horizontalLayout_5">
          <item>
-          <spacer name="horizontalSpacer_5">
+          <spacer name="horizontalSpacer_7">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
@@ -118,10 +118,14 @@
           </spacer>
          </item>
          <item>
-          <widget class="ObjectMatrix" name="widget_objectMatrix" native="true"/>
+          <widget class="QPushButton" name="pushButton_startExperiment">
+           <property name="text">
+            <string>Start Experiment</string>
+           </property>
+          </widget>
          </item>
          <item>
-          <spacer name="horizontalSpacer_6">
+          <spacer name="horizontalSpacer_8">
            <property name="orientation">
             <enum>Qt::Horizontal</enum>
            </property>
@@ -236,12 +240,6 @@
    <class>GetUserInfo</class>
    <extends>QWidget</extends>
    <header>GetUserInfo.h</header>
-   <container>1</container>
-  </customwidget>
-  <customwidget>
-   <class>ObjectMatrix</class>
-   <extends>QWidget</extends>
-   <header>ObjectMatrix.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

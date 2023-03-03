@@ -15,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // hide
     ui->groupBox_experimentDetails->setVisible(false);
+    ui->groupBox_objectMatrix->setVisible(false);
 }
 
 MainWindow::~MainWindow()
@@ -42,6 +43,7 @@ void MainWindow::on_pushButton_experimentSubmit_clicked()
     {
         // submit info
         EnableExperimentInputs(false);
+        ui->groupBox_objectMatrix->setVisible(true);
     }
 }
 
@@ -59,4 +61,12 @@ void MainWindow::EnableExperimentInputs(bool en)
     // toggle button visibility
     ui->pushButton_experimentSubmit->setVisible(en);
     ui->pushButton_experimentEdit->setVisible(!en);
+    // un-enable the experiment window
+    ui->groupBox_objectMatrix->setEnabled(!en);
+}
+
+void MainWindow::on_pushButton_startExperiment_clicked()
+{
+    // lock experiment details
+    ui->groupBox_experimentDetails->setEnabled(false);
 }
