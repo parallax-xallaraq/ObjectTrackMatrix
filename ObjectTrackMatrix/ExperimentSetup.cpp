@@ -32,7 +32,7 @@ void ExperimentSetup::EnableInputs(bool lock)
 {
     // enable or disable user inputs using lock
     ui->doubleSpinBox_timeBetweenTrials->setEnabled(lock);
-    ui->doubleSpinBox_trialDuration->setEnabled(lock);
+    ui->doubleSpinBox_sampleRate->setEnabled(lock);
     ui->plainTextEdit_sequence->setEnabled(lock);
     ui->spinBox_nTrials->setEnabled(lock);
     ui->pushButton_generateRandomSequence->setEnabled(lock);
@@ -52,9 +52,9 @@ bool ExperimentSetup::CheckRequiredInputs()
     }
 }
 
-double ExperimentSetup::GetTrialDuration()
+int ExperimentSetup::GetSampleRate()
 {
-    return(ui->doubleSpinBox_trialDuration->value());
+    return(ui->doubleSpinBox_sampleRate->value());
 }
 
 double ExperimentSetup::GetTimeBetweenTrials()

@@ -27,9 +27,9 @@ public:
     bool CheckRequiredInputs();
 
     // getters
-    double GetTrialDuration();
-    double GetTimeBetweenTrials();
-    int GetNumberOfTrials();
+    int     GetSampleRate();
+    double  GetTimeBetweenTrials();
+    int     GetNumberOfTrials();
     QList<int> GetTrialSequence();
 
     // setters

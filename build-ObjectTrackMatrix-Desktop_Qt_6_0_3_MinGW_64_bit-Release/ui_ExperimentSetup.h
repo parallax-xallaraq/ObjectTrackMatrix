@@ -27,20 +27,20 @@ class Ui_ExperimentSetup
 {
 public:
     QGridLayout *gridLayout;
-    QLabel *label_trialDuration;
-    QDoubleSpinBox *doubleSpinBox_trialDuration;
-    QLabel *label_secDuration;
     QLabel *label_timeBetweenTrials;
     QDoubleSpinBox *doubleSpinBox_timeBetweenTrials;
-    QLabel *label_secBetweenTrials;
-    QLabel *label_sequence;
     QPlainTextEdit *plainTextEdit_sequence;
+    QLabel *label_sequence;
     QVBoxLayout *verticalLayout_2;
     QLabel *label_errSequence;
     QHBoxLayout *horizontalLayout_2;
     QPushButton *pushButton_generateRandomSequence;
     QLabel *label_nTrials;
     QSpinBox *spinBox_nTrials;
+    QLabel *label_secBetweenTrials;
+    QLabel *label_sampleRate;
+    QLabel *label_HzSampleRate;
+    QDoubleSpinBox *doubleSpinBox_sampleRate;
 
     void setupUi(QWidget *ExperimentSetup)
     {
@@ -49,22 +49,6 @@ public:
         ExperimentSetup->resize(466, 204);
         gridLayout = new QGridLayout(ExperimentSetup);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
-        label_trialDuration = new QLabel(ExperimentSetup);
-        label_trialDuration->setObjectName(QString::fromUtf8("label_trialDuration"));
-
-        gridLayout->addWidget(label_trialDuration, 0, 0, 1, 1);
-
-        doubleSpinBox_trialDuration = new QDoubleSpinBox(ExperimentSetup);
-        doubleSpinBox_trialDuration->setObjectName(QString::fromUtf8("doubleSpinBox_trialDuration"));
-        doubleSpinBox_trialDuration->setMinimum(1.000000000000000);
-
-        gridLayout->addWidget(doubleSpinBox_trialDuration, 0, 1, 1, 1);
-
-        label_secDuration = new QLabel(ExperimentSetup);
-        label_secDuration->setObjectName(QString::fromUtf8("label_secDuration"));
-
-        gridLayout->addWidget(label_secDuration, 0, 2, 1, 1);
-
         label_timeBetweenTrials = new QLabel(ExperimentSetup);
         label_timeBetweenTrials->setObjectName(QString::fromUtf8("label_timeBetweenTrials"));
 
@@ -72,24 +56,20 @@ public:
 
         doubleSpinBox_timeBetweenTrials = new QDoubleSpinBox(ExperimentSetup);
         doubleSpinBox_timeBetweenTrials->setObjectName(QString::fromUtf8("doubleSpinBox_timeBetweenTrials"));
+        doubleSpinBox_timeBetweenTrials->setDecimals(3);
         doubleSpinBox_timeBetweenTrials->setMinimum(1.000000000000000);
 
         gridLayout->addWidget(doubleSpinBox_timeBetweenTrials, 1, 1, 1, 1);
 
-        label_secBetweenTrials = new QLabel(ExperimentSetup);
-        label_secBetweenTrials->setObjectName(QString::fromUtf8("label_secBetweenTrials"));
+        plainTextEdit_sequence = new QPlainTextEdit(ExperimentSetup);
+        plainTextEdit_sequence->setObjectName(QString::fromUtf8("plainTextEdit_sequence"));
 
-        gridLayout->addWidget(label_secBetweenTrials, 1, 2, 1, 1);
+        gridLayout->addWidget(plainTextEdit_sequence, 3, 1, 1, 1);
 
         label_sequence = new QLabel(ExperimentSetup);
         label_sequence->setObjectName(QString::fromUtf8("label_sequence"));
 
-        gridLayout->addWidget(label_sequence, 2, 0, 1, 1, Qt::AlignTop);
-
-        plainTextEdit_sequence = new QPlainTextEdit(ExperimentSetup);
-        plainTextEdit_sequence->setObjectName(QString::fromUtf8("plainTextEdit_sequence"));
-
-        gridLayout->addWidget(plainTextEdit_sequence, 2, 1, 1, 1);
+        gridLayout->addWidget(label_sequence, 3, 0, 1, 1, Qt::AlignTop);
 
         verticalLayout_2 = new QVBoxLayout();
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
@@ -102,7 +82,7 @@ public:
         verticalLayout_2->addWidget(label_errSequence, 0, Qt::AlignTop);
 
 
-        gridLayout->addLayout(verticalLayout_2, 2, 2, 1, 1);
+        gridLayout->addLayout(verticalLayout_2, 3, 2, 1, 1);
 
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
@@ -124,9 +104,31 @@ public:
         horizontalLayout_2->addWidget(spinBox_nTrials);
 
 
-        gridLayout->addLayout(horizontalLayout_2, 3, 1, 1, 1);
+        gridLayout->addLayout(horizontalLayout_2, 4, 1, 1, 1);
 
-        QWidget::setTabOrder(doubleSpinBox_trialDuration, doubleSpinBox_timeBetweenTrials);
+        label_secBetweenTrials = new QLabel(ExperimentSetup);
+        label_secBetweenTrials->setObjectName(QString::fromUtf8("label_secBetweenTrials"));
+
+        gridLayout->addWidget(label_secBetweenTrials, 1, 2, 1, 1);
+
+        label_sampleRate = new QLabel(ExperimentSetup);
+        label_sampleRate->setObjectName(QString::fromUtf8("label_sampleRate"));
+
+        gridLayout->addWidget(label_sampleRate, 2, 0, 1, 1);
+
+        label_HzSampleRate = new QLabel(ExperimentSetup);
+        label_HzSampleRate->setObjectName(QString::fromUtf8("label_HzSampleRate"));
+
+        gridLayout->addWidget(label_HzSampleRate, 2, 2, 1, 1);
+
+        doubleSpinBox_sampleRate = new QDoubleSpinBox(ExperimentSetup);
+        doubleSpinBox_sampleRate->setObjectName(QString::fromUtf8("doubleSpinBox_sampleRate"));
+        doubleSpinBox_sampleRate->setDecimals(3);
+        doubleSpinBox_sampleRate->setMaximum(1000.000000000000000);
+        doubleSpinBox_sampleRate->setValue(1.000000000000000);
+
+        gridLayout->addWidget(doubleSpinBox_sampleRate, 2, 1, 1, 1);
+
         QWidget::setTabOrder(doubleSpinBox_timeBetweenTrials, plainTextEdit_sequence);
         QWidget::setTabOrder(plainTextEdit_sequence, spinBox_nTrials);
         QWidget::setTabOrder(spinBox_nTrials, pushButton_generateRandomSequence);
@@ -139,14 +141,14 @@ public:
     void retranslateUi(QWidget *ExperimentSetup)
     {
         ExperimentSetup->setWindowTitle(QCoreApplication::translate("ExperimentSetup", "Form", nullptr));
-        label_trialDuration->setText(QCoreApplication::translate("ExperimentSetup", "Trial duration:", nullptr));
-        label_secDuration->setText(QCoreApplication::translate("ExperimentSetup", "seconds", nullptr));
         label_timeBetweenTrials->setText(QCoreApplication::translate("ExperimentSetup", "Time between trials:", nullptr));
-        label_secBetweenTrials->setText(QCoreApplication::translate("ExperimentSetup", "seconds", nullptr));
         label_sequence->setText(QCoreApplication::translate("ExperimentSetup", "Sequence:", nullptr));
         label_errSequence->setText(QCoreApplication::translate("ExperimentSetup", "[!!!]", nullptr));
         pushButton_generateRandomSequence->setText(QCoreApplication::translate("ExperimentSetup", "Generate Random", nullptr));
         label_nTrials->setText(QCoreApplication::translate("ExperimentSetup", "Number of trials:", nullptr));
+        label_secBetweenTrials->setText(QCoreApplication::translate("ExperimentSetup", "seconds", nullptr));
+        label_sampleRate->setText(QCoreApplication::translate("ExperimentSetup", "Sample rate:", nullptr));
+        label_HzSampleRate->setText(QCoreApplication::translate("ExperimentSetup", "Hz", nullptr));
     } // retranslateUi
 
 };
