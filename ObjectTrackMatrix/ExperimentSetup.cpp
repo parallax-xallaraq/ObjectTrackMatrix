@@ -3,6 +3,9 @@
 
 #include <QStringList>
 #include <QRandomGenerator>
+#include <QDebug>
+
+#include "Commands.h"
 
 // ====================================
 // Created by: Thresa Kelly
@@ -21,6 +24,9 @@ ExperimentSetup::ExperimentSetup(QWidget *parent) :
 
     // hide errors
     ui->label_errSequence->setVisible(false);
+
+    // TESTING
+    Commands cmd = Commands();
 }
 
 ExperimentSetup::~ExperimentSetup()
