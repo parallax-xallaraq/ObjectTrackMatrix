@@ -1,6 +1,8 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
+#include <QByteArray>
+
 // ====================================
 // Created by: Thresa Kelly
 // Email: ThresaKelly133@gmail.com
@@ -28,6 +30,17 @@ public:
         NCOMMANDS   // number of commands
     };
 
+    //
+    QByteArray BuildCommand(uint8_t cmd, uint8_t id = 0, uint16_t data = 0);
+
+    // conversions
+    QByteArray UintToHexBytes(uint value, uint nBytes);
+    QString UintToHex(uint value);
+
+    // byte characters
+    QByteArray STX();
+    QByteArray ETX();
+
     // getters
     int nObjects() const;
     int nBytes_STX() const;
@@ -35,7 +48,7 @@ public:
     int nBytes_id() const;
     int nBytes_data() const;
     int nBytes_ETX() const;
-    int nBytes_packet();
+    int nBytes_command();
 
     // setters
     void setNObjects(int nObjects);
