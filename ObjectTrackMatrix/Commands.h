@@ -30,8 +30,11 @@ public:
         NCOMMANDS   // number of commands
     };
 
-    //
+    // Using Commands
     QByteArray BuildCommand(uint8_t cmd, uint8_t id = 0, uint16_t data = 0);
+
+    // TODO unpack command -- take command byts and return int of cmd id and data
+    // TODO DoesCommand_Send/Recieve_ID/Data(int cmd) -- functions that interpret _commandArguments array
 
     // conversions
     QByteArray UintToHexBytes(uint value, uint nBytes);
@@ -65,7 +68,7 @@ private:
     int _nBytes_ETX  = 1;
 
     // structure of each command
-    // // stores true if the command takes an argument,
+    // // true if the command takes an argument,
     // // false otherwise.
     bool _commandArguments[NCOMMANDS][4] = {
         {false,false,false,false},  // PING
@@ -78,7 +81,7 @@ private:
         {false,true ,false,false},  // TIMEOUT
         {false,true ,false,false},  // SAMPLERATE
         {false,true ,true , true}   // STREAM
-    };//{has sender ID, has sender data, has recieved ID, has recieved data}
+    };//{sends ID, sends data, recieves ID, recieves data}
 
 };
 
