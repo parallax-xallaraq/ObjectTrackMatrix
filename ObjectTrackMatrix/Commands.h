@@ -1,15 +1,13 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
-#include <QByteArray>
-#include <QBitArray>
 #include <QList>
 #include <QtMath>
 
 // ====================================
 // Created by: Thresa Kelly
 // Email: ThresaKelly133@gmail.com
-// Date: 3/8/2023
+// Date: 3/10/2023
 // ====================================
 
 class Commands
@@ -32,6 +30,7 @@ public:
         STREAM,     // 9
         NCOMMANDS   // number of commands
     };
+
     // array index key for unpacked commands
     enum UnpackedCommandKey {
         CMD,
@@ -41,11 +40,11 @@ public:
 
     // Using Commands
     QList<bool> BuildCommand(uint8_t cmd, uint8_t id = 0, uint16_t data = 0);
-    QList<int> UnpackCommand(QList<bool> bits);
+    QList<int>  UnpackCommand(QList<bool> bits);
 
     // conversions
     QList<bool> UintToBits(uint value, uint n);
-    int BitsToUint(QList<bool> bits);
+    int         BitsToUint(QList<bool> bits);
 
     // check command parameters
     bool DoesCommandSendID(int cmd);
@@ -60,7 +59,7 @@ public:
     QList<bool> ETX();
 
     // getters
-    int nObjects()      const;
+    int nObjects()     const;
     int nBits_STX()    const;
     int nBits_cmd()    const;
     int nBits_id()     const;
@@ -76,24 +75,22 @@ private:
     // number of objects on matrix
     int _nObjects = 12;
 
-    // number of bytes
+    // number of bits
     int _nBits_STX  = 8;
     int _nBits_cmd  = 8;
     int _nBits_id   = 8;
     int _nBits_data = 16;
     int _nBits_ETX  = 8;
 
-    // corresponds to array index in _commandArguments[]
-    enum CommandArgRequirements {
+    // use as _commandArguments[CommandNum][ArgRequirements]
+    enum ArgRequirements {
         SENDSID,
         SENDSDATA,
         RECIEVESID,
         RECIEVESDATA
     };
 
-    // structure of each command
-    // // true if the command takes an argument,
-    // // false otherwise.
+    // true if the command takes an argument, false otherwise.
     bool _commandArguments[NCOMMANDS][4] = {
         {false,false,false,false},  // PING
         {true ,true ,false,false},  // TESTLED
@@ -105,7 +102,7 @@ private:
         {false,true ,false,false},  // TIMEOUT
         {false,true ,false,false},  // SAMPLERATE
         {false,true ,true , true}   // STREAM
-    };//{sends ID, sends data, recieves ID, recieves data}
+    };
 
 };
 

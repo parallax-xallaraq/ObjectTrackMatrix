@@ -4,22 +4,6 @@
 
 Commands::Commands()
 {
-    QList<bool> c =  BuildCommand(TESTLED, 12, 10);
-//    qDebug() << c;
-
-    QList<int> cc = UnpackCommand(c);
-    qDebug() << cc.at(CMD);
-    qDebug() << cc.at(ID);
-    qDebug() << cc.at(DATA);
-
-
-//    int num = 15;
-//    QList<bool> t = UintToBits(num, 4);
-//    qDebug() << num;
-//    qDebug() << t;
-
-//    int tt = BitsToUint(t);
-//    qDebug() << tt;
 
 }
 
@@ -55,18 +39,16 @@ QList<bool> Commands::BuildCommand(uint8_t cmd, uint8_t id, uint16_t data)
 
 QList<int> Commands::UnpackCommand(QList<bool> bits)
 {
-    QList<bool> cmdB  = bits.mid(_nBits_STX, _nBits_cmd);
-    QList<bool> idB   = bits.mid(_nBits_STX+_nBits_cmd, _nBits_id);
-    QList<bool> dataB = bits.mid(_nBits_STX+_nBits_cmd+_nBits_id, _nBits_data);
+    // get sublists
+    QList<bool> cmd  = bits.mid(_nBits_STX, _nBits_cmd);
+    QList<bool> id   = bits.mid(_nBits_STX+_nBits_cmd, _nBits_id);
+    QList<bool> data = bits.mid(_nBits_STX+_nBits_cmd+_nBits_id, _nBits_data);
 
-    int cmdI  = BitsToUint(cmdB);
-    int idI   = BitsToUint(idB);
-    int dataI = BitsToUint(dataB);
-
+    // store value as integer
     QList<int> command;
-    command.append(cmdI);
-    command.append(idI);
-    command.append(dataI);
+    command.append(BitsToUint(cmd));
+    command.append(BitsToUint(id));
+    command.append(BitsToUint(data));
 
     return command;
 }
