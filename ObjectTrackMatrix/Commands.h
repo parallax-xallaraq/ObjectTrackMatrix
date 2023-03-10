@@ -2,6 +2,7 @@
 #define COMMANDS_H
 
 #include <QByteArray>
+#include <QList>
 
 // ====================================
 // Created by: Thresa Kelly
@@ -29,34 +30,48 @@ public:
         STREAM,     // 9
         NCOMMANDS   // number of commands
     };
+    // array index key for unpacked commands
+    enum UnpackedCommandKey {
+        COMMAND,
+        ID,
+        DATA
+    };
 
     // Using Commands
-    QByteArray BuildCommand(uint8_t cmd, uint8_t id = 0, uint16_t data = 0);
+//    QByteArray BuildCommand(uint8_t cmd, uint8_t id = 0, uint16_t data = 0);
+//    QList<int> UnpackCommand(QByteArray cmdPacket);
 
-    // TODO unpack command -- take command byts and return int of cmd id and data
-    // TODO DoesCommand_Send/Recieve_ID/Data(int cmd) -- functions that interpret _commandArguments array
+    // check command parameters
+    bool DoesCommandSendID(int cmd);
+    bool DoesCommandSendData(int cmd);
+    bool DoesCommandRecieveID(int cmd);
+    bool DoesCommandRecieveData(int cmd);
+    bool DoesCommandExist(int cmd);
+    bool DoesIdExist(int id);
 
     // conversions
-    QByteArray UintToHexBytes(uint value, uint nBytes);
-    QString UintToHex(uint value);
+//    QByteArray  UintToHexBytes(uint value, uint nBytes);
+//    QString     UintToHex(uint value);
+//    int         HexBytesToInt(QByteArray ba);
 
     // byte characters
     QByteArray STX();
     QByteArray ETX();
 
     // getters
-    int nObjects() const;
-    int nBytes_STX() const;
-    int nBytes_cmd() const;
-    int nBytes_id() const;
-    int nBytes_data() const;
-    int nBytes_ETX() const;
+    int nObjects()      const;
+    int nBytes_STX()    const;
+    int nBytes_cmd()    const;
+    int nBytes_id()     const;
+    int nBytes_data()   const;
+    int nBytes_ETX()    const;
     int nBytes_command();
 
     // setters
     void setNObjects(int nObjects);
 
 private:
+
     // number of objects on matrix
     int _nObjects = 12;
 
@@ -66,6 +81,14 @@ private:
     int _nBytes_id   = 1;
     int _nBytes_data = 2;
     int _nBytes_ETX  = 1;
+
+    // corresponds to array index in _commandArguments[]
+    enum CommandArgRequirements {
+        SENDSID,
+        SENDSDATA,
+        RECIEVESID,
+        RECIEVESDATA
+    };
 
     // structure of each command
     // // true if the command takes an argument,
