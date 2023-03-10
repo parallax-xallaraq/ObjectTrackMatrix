@@ -2,7 +2,9 @@
 #define COMMANDS_H
 
 #include <QByteArray>
+#include <QBitArray>
 #include <QList>
+#include <QtMath>
 
 // ====================================
 // Created by: Thresa Kelly
@@ -32,7 +34,7 @@ public:
     };
     // array index key for unpacked commands
     enum UnpackedCommandKey {
-        COMMAND,
+        CMD,
         ID,
         DATA
     };
@@ -40,6 +42,15 @@ public:
     // Using Commands
 //    QByteArray BuildCommand(uint8_t cmd, uint8_t id = 0, uint16_t data = 0);
 //    QList<int> UnpackCommand(QByteArray cmdPacket);
+    QList<bool> BuildCommand(uint8_t cmd, uint8_t id = 0, uint16_t data = 0);
+    QList<int> UnpackCommand(QList<bool> bits);
+
+    // conversions
+//    QByteArray  UintToHexBytes(uint value, uint nBits);
+//    QString     UintToHex(uint value);
+//    int         HexBytesToInt(QByteArray ba);
+    QList<bool> UintToBits(uint value, uint n);
+    int BitsToUint(QList<bool> bits);
 
     // check command parameters
     bool DoesCommandSendID(int cmd);
@@ -49,23 +60,20 @@ public:
     bool DoesCommandExist(int cmd);
     bool DoesIdExist(int id);
 
-    // conversions
-//    QByteArray  UintToHexBytes(uint value, uint nBytes);
-//    QString     UintToHex(uint value);
-//    int         HexBytesToInt(QByteArray ba);
-
     // byte characters
-    QByteArray STX();
-    QByteArray ETX();
+//    QByteArray STX();
+//    QByteArray ETX();
+    QList<bool> STX();
+    QList<bool> ETX();
 
     // getters
     int nObjects()      const;
-    int nBytes_STX()    const;
-    int nBytes_cmd()    const;
-    int nBytes_id()     const;
-    int nBytes_data()   const;
-    int nBytes_ETX()    const;
-    int nBytes_command();
+    int nBits_STX()    const;
+    int nBits_cmd()    const;
+    int nBits_id()     const;
+    int nBits_data()   const;
+    int nBits_ETX()    const;
+    int nBits_command();
 
     // setters
     void setNObjects(int nObjects);
@@ -76,11 +84,11 @@ private:
     int _nObjects = 12;
 
     // number of bytes
-    int _nBytes_STX  = 1;
-    int _nBytes_cmd  = 1;
-    int _nBytes_id   = 1;
-    int _nBytes_data = 2;
-    int _nBytes_ETX  = 1;
+    int _nBits_STX  = 8;
+    int _nBits_cmd  = 8;
+    int _nBits_id   = 8;
+    int _nBits_data = 16;
+    int _nBits_ETX  = 8;
 
     // corresponds to array index in _commandArguments[]
     enum CommandArgRequirements {

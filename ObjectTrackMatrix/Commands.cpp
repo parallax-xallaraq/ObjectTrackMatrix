@@ -4,18 +4,105 @@
 
 Commands::Commands()
 {
-//    QByteArray c =  BuildCommand(TRIAL, 2, 1);
+    QList<bool> c =  BuildCommand(TESTLED, 12, 10);
 //    qDebug() << c;
 
-//    qDebug() << c[0];
-//    qDebug() << c[1];
-//    qDebug() << c[2];
-//    qDebug() << c[3];
-//    qDebug() << c[4];
-//    qDebug() << c[5];
+    QList<int> cc = UnpackCommand(c);
+    qDebug() << cc.at(CMD);
+    qDebug() << cc.at(ID);
+    qDebug() << cc.at(DATA);
 
-//    QList<int> l = UnpackCommand(c);
-//    qDebug() << l;
+
+//    int num = 15;
+//    QList<bool> t = UintToBits(num, 4);
+//    qDebug() << num;
+//    qDebug() << t;
+
+//    int tt = BitsToUint(t);
+//    qDebug() << tt;
+
+}
+
+QList<bool> Commands::BuildCommand(uint8_t cmd, uint8_t id, uint16_t data)
+{
+    // check that command exists
+    if(!DoesCommandExist(cmd)){
+        throw std::invalid_argument("Command does not exist.");
+    }
+    // check that ID is valid
+    if(id > _nObjects) {
+        throw std::invalid_argument("ID of object does not exist.");
+    }
+    // check that id is provided if needed
+    if( DoesCommandSendID(cmd) ^ (id!=0) ) { // xor
+        throw std::invalid_argument("Command needs an ID.");
+    }
+    // check that data is provided if needed
+    if( DoesCommandSendData(cmd) ^ (data!=0)) {
+        throw std::invalid_argument("Command needs data.");
+      }
+
+    // build command packet
+    QList<bool> command;
+    command.append(STX());
+    command.append(UintToBits(cmd,_nBits_cmd));
+    command.append(UintToBits(id, _nBits_id));
+    command.append(UintToBits(data, _nBits_data));
+    command.append(ETX());
+
+    return command;
+}
+
+QList<int> Commands::UnpackCommand(QList<bool> bits)
+{
+    QList<bool> cmdB  = bits.mid(_nBits_STX, _nBits_cmd);
+    QList<bool> idB   = bits.mid(_nBits_STX+_nBits_cmd, _nBits_id);
+    QList<bool> dataB = bits.mid(_nBits_STX+_nBits_cmd+_nBits_id, _nBits_data);
+
+    int cmdI  = BitsToUint(cmdB);
+    int idI   = BitsToUint(idB);
+    int dataI = BitsToUint(dataB);
+
+    QList<int> command;
+    command.append(cmdI);
+    command.append(idI);
+    command.append(dataI);
+
+    return command;
+}
+
+QList<bool> Commands::UintToBits(uint value, uint n)
+{
+    // check that value is in range
+    if( value > (qPow(2,n) - 1)){
+        throw std::invalid_argument("Out of range.");
+    }
+
+    // initialize variables
+    QList<bool> bits;
+    int temp = value;
+
+    // calculate binary numver
+    for(uint i=0; i<n; i++){
+        bits.prepend(bool(temp % 2));
+        temp = temp / 2;
+    }
+
+    return bits;
+}
+
+int Commands::BitsToUint(QList<bool> bits)
+{
+    // initialize
+    int value = 0;
+    int n = bits.length();
+
+    // calculate decimal
+    for(int i=0; i<n; i++){
+        value += int(bits.at(i)) * qPow(2, n-i-1);
+    }
+
+    return value;
 }
 
 //QByteArray Commands::BuildCommand(uint8_t cmd, uint8_t id, uint16_t data)
@@ -40,9 +127,9 @@ Commands::Commands()
 //    // add each part of command packet
 //    QByteArray command;
 //    command.append( STX() );
-//    command.append( UintToHexBytes(cmd,  _nBytes_cmd)  ); // convert integers into hexidecimal, then to bytes
-//    command.append( UintToHexBytes(id,   _nBytes_id)   ); // " "
-//    command.append( UintToHexBytes(data, _nBytes_data) ); // " "
+//    command.append( UintToHexBytes(cmd,  _nBits_cmd)  ); // convert integers into hexidecimal, then to bytes
+//    command.append( UintToHexBytes(id,   _nBits_id)   ); // " "
+//    command.append( UintToHexBytes(data, _nBits_data) ); // " "
 //    command.append( ETX() );
 
 //    return command;
@@ -51,7 +138,7 @@ Commands::Commands()
 //QList<int> Commands::UnpackCommand(QByteArray cmdPacket)
 //{
 //    // check for proper length
-//    if(cmdPacket.length() != nBytes_command()){
+//    if(cmdPacket.length() != nBits_command()){
 //        throw std::invalid_argument("Command is incorrect size.");
 //    }
 
@@ -106,14 +193,14 @@ bool Commands::DoesIdExist(int id)
     return false;
 }
 
-//QByteArray Commands::UintToHexBytes(uint value, uint nBytes)
+//QByteArray Commands::UintToHexBytes(uint value, uint nBits)
 //{
 //    // initialize
 //    QByteArray final;
 
 //    // convert number to bytes
 //    QByteArray bValue = QByteArray::fromHex(UintToHex(value).toLatin1());
-//    int add = nBytes - bValue.length();
+//    int add = nBits - bValue.length();
 
 //    // value is too small
 //    if(add > 0){
@@ -147,18 +234,28 @@ bool Commands::DoesIdExist(int id)
 
 //}
 
-QByteArray Commands::STX()
+//QByteArray Commands::STX()
+//{
+//    QByteArray stx;
+//    stx.append(0x02);
+//    return stx;
+//}
+
+//QByteArray Commands::ETX()
+//{
+//    QByteArray etx;
+//    etx.append(0x03);
+//    return etx;
+//}
+
+QList<bool> Commands::STX()
 {
-    QByteArray stx;
-    stx.append(0x02);
-    return stx;
+    return UintToBits(0x02, _nBits_STX);
 }
 
-QByteArray Commands::ETX()
+QList<bool> Commands::ETX()
 {
-    QByteArray etx;
-    etx.append(0x03);
-    return etx;
+    return UintToBits(0x03, _nBits_ETX);
 }
 
 // ===== GETTERS ======
@@ -168,37 +265,38 @@ int Commands::nObjects() const
     return _nObjects;
 }
 
-int Commands::nBytes_STX() const
+int Commands::nBits_STX() const
 {
-    return _nBytes_STX;
+    return _nBits_STX;
 }
 
-int Commands::nBytes_cmd() const
+int Commands::nBits_cmd() const
 {
-    return _nBytes_cmd;
+    return _nBits_cmd;
 }
 
-int Commands::nBytes_id() const
+int Commands::nBits_id() const
 {
-    return _nBytes_id;
+    return _nBits_id;
 }
 
-int Commands::nBytes_data() const
+int Commands::nBits_data() const
 {
-    return _nBytes_data;
+    return _nBits_data;
 }
 
-int Commands::nBytes_ETX() const
+int Commands::nBits_ETX() const
 {
-    return _nBytes_ETX;
+    return _nBits_ETX;
 }
 
-int Commands::nBytes_command()
+int Commands::nBits_command()
 {
-    return (_nBytes_STX+_nBytes_cmd+_nBytes_id+_nBytes_data+_nBytes_ETX);
+    return (_nBits_STX+_nBits_cmd+_nBits_id+_nBits_data+_nBits_ETX);
 }
 
 // ===== SETTER =====
+
 void Commands::setNObjects(int nObjects)
 {
     _nObjects = nObjects;
