@@ -40,15 +40,10 @@ public:
     };
 
     // Using Commands
-//    QByteArray BuildCommand(uint8_t cmd, uint8_t id = 0, uint16_t data = 0);
-//    QList<int> UnpackCommand(QByteArray cmdPacket);
     QList<bool> BuildCommand(uint8_t cmd, uint8_t id = 0, uint16_t data = 0);
     QList<int> UnpackCommand(QList<bool> bits);
 
     // conversions
-//    QByteArray  UintToHexBytes(uint value, uint nBits);
-//    QString     UintToHex(uint value);
-//    int         HexBytesToInt(QByteArray ba);
     QList<bool> UintToBits(uint value, uint n);
     int BitsToUint(QList<bool> bits);
 
@@ -60,9 +55,7 @@ public:
     bool DoesCommandExist(int cmd);
     bool DoesIdExist(int id);
 
-    // byte characters
-//    QByteArray STX();
-//    QByteArray ETX();
+    // bit characters
     QList<bool> STX();
     QList<bool> ETX();
 

@@ -105,56 +105,6 @@ int Commands::BitsToUint(QList<bool> bits)
     return value;
 }
 
-//QByteArray Commands::BuildCommand(uint8_t cmd, uint8_t id, uint16_t data)
-//{
-//    // check that command exists
-//    if(!DoesCommandExist(cmd)){
-//        throw std::invalid_argument("Command does not exist.");
-//    }
-//    // check that ID is valid
-//    if(id > _nObjects) {
-//        throw std::invalid_argument("ID of object does not exist.");
-//    }
-//    // check that id is provided if needed
-//    if( DoesCommandSendID(cmd) ^ (id!=0) ) { // xor
-//        throw std::invalid_argument("Command needs an ID.");
-//    }
-//    // check that data is provided if needed
-//    if( DoesCommandSendData(cmd) ^ (data!=0)) {
-//        throw std::invalid_argument("Command needs data.");
-//    }
-
-//    // add each part of command packet
-//    QByteArray command;
-//    command.append( STX() );
-//    command.append( UintToHexBytes(cmd,  _nBits_cmd)  ); // convert integers into hexidecimal, then to bytes
-//    command.append( UintToHexBytes(id,   _nBits_id)   ); // " "
-//    command.append( UintToHexBytes(data, _nBits_data) ); // " "
-//    command.append( ETX() );
-
-//    return command;
-//}
-
-//QList<int> Commands::UnpackCommand(QByteArray cmdPacket)
-//{
-//    // check for proper length
-//    if(cmdPacket.length() != nBits_command()){
-//        throw std::invalid_argument("Command is incorrect size.");
-//    }
-
-////    int cmd  = HexBytesToInt(cmdPacket[1]);
-////    int id   = HexBytesToInt(cmdPacket[2]);
-////    int data = HexBytesToInt(cmdPacket[3] + cmdPacket[4]);
-
-
-//    QList<int> commands;
-////    commands.append(cmd);
-////    commands.append(id);
-////    commands.append(data);
-
-//    return commands;
-//}
-
 bool Commands::DoesCommandSendID(int cmd)
 {
     return _commandArguments[cmd][SENDSID];
@@ -192,61 +142,6 @@ bool Commands::DoesIdExist(int id)
     }
     return false;
 }
-
-//QByteArray Commands::UintToHexBytes(uint value, uint nBits)
-//{
-//    // initialize
-//    QByteArray final;
-
-//    // convert number to bytes
-//    QByteArray bValue = QByteArray::fromHex(UintToHex(value).toLatin1());
-//    int add = nBits - bValue.length();
-
-//    // value is too small
-//    if(add > 0){
-//        for(int i=0; i<add; i++){
-//            // add zeros to beginning
-//            final.append(QByteArray::fromHex(QString("0").toLatin1()));
-//        }
-//        // add value to lsb
-//        final.append(bValue);
-//    }
-//    // value is too large
-//    else if(add < 0){
-//        throw std::invalid_argument("value to large for byte allotment");
-//    }
-//    // value right size
-//    else
-//    {
-//        final.append(bValue);
-//    }
-
-//    return final;
-//}
-
-//QString Commands::UintToHex(uint value)
-//{
-//    return QString::number(value, 16);
-//}
-
-//int Commands::HexBytesToInt(QByteArray ba)
-//{
-
-//}
-
-//QByteArray Commands::STX()
-//{
-//    QByteArray stx;
-//    stx.append(0x02);
-//    return stx;
-//}
-
-//QByteArray Commands::ETX()
-//{
-//    QByteArray etx;
-//    etx.append(0x03);
-//    return etx;
-//}
 
 QList<bool> Commands::STX()
 {
