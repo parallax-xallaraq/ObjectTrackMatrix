@@ -37,6 +37,7 @@ public:
 
 private slots:
     void on_pushButton_generateRandomSequence_clicked();
+    void on_pushButton_port_clicked();
 
 private:
     Ui::ExperimentSetup *ui;
