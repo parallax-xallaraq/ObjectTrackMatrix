@@ -1,4 +1,4 @@
-QT       += core gui serialport
+QT       += core gui
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,7 +13,8 @@ SOURCES += \
     ExperimentSetup.cpp \
     GetUserInfo.cpp \
     ObjectMatrix.cpp \
-    MainWindow.cpp
+    MainWindow.cpp \
+    main.cpp
     main.cpp \
 
 HEADERS += \

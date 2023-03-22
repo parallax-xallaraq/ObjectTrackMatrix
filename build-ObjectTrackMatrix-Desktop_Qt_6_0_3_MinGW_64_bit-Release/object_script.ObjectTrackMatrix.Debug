@@ -2,8 +2,8 @@ debug/Commands.o
 debug/ExperimentSetup.o
 debug/GetUserInfo.o
 debug/ObjectMatrix.o
-debug/main.o
 debug/MainWindow.o
+debug/main.o
 debug/moc_ExperimentSetup.o
 debug/moc_GetUserInfo.o
 debug/moc_MainWindow.o
