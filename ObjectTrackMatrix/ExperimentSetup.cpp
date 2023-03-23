@@ -60,7 +60,6 @@ bool ExperimentSetup::CheckRequiredInputs()
     {
         ui->label_portErr->setVisible(true);
         valid = false;
-        qDebug() << ":(";
     }
 
     return(valid);
