@@ -3,11 +3,12 @@
 
 #include <QWidget>
 #include <QList>
+#include <QSerialPortInfo>
 
 // ====================================
 // Created by: Thresa Kelly
 // Email: ThresaKelly133@gmail.com
-// Date: 2/18/2023
+// Date: 3/22/2023
 // ====================================
 
 namespace Ui {
@@ -27,10 +28,11 @@ public:
     bool CheckRequiredInputs();
 
     // getters
-    int     GetSampleRate();
-    double  GetTimeBetweenTrials();
-    int     GetNumberOfTrials();
-    QList<int> GetTrialSequence();
+    double      GetTimeBetweenTrials();
+    int         GetSampleRate();
+    int         GetNumberOfTrials();
+    QList<int>  GetTrialSequence();
+    QString     GetPortName();
 
     // setters
     void SetNumberOfObjects(int n);
@@ -47,6 +49,7 @@ private:
 
     // input validation
     bool IsSequenceValid();
+    bool IsPortValid();
 };
 
 #endif // EXPERIMENTSETUP_H

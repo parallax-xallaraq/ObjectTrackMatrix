@@ -28,31 +28,55 @@ class Ui_ExperimentSetup
 {
 public:
     QGridLayout *gridLayout;
+    QLabel *label_secBetweenTrials;
+    QVBoxLayout *verticalLayout_2;
+    QLabel *label_sequenceErr;
+    QPlainTextEdit *plainTextEdit_sequence;
     QHBoxLayout *horizontalLayout_2;
     QPushButton *pushButton_generateRandomSequence;
     QLabel *label_nTrials;
     QSpinBox *spinBox_nTrials;
-    QLabel *label_HzSampleRate;
-    QComboBox *comboBox_port;
-    QLabel *label_port;
-    QDoubleSpinBox *doubleSpinBox_timeBetweenTrials;
-    QLabel *label_sequence;
-    QLabel *label_sampleRate;
-    QDoubleSpinBox *doubleSpinBox_sampleRate;
-    QVBoxLayout *verticalLayout_2;
-    QLabel *label_errSequence;
-    QLabel *label_timeBetweenTrials;
-    QPlainTextEdit *plainTextEdit_sequence;
-    QLabel *label_secBetweenTrials;
     QPushButton *pushButton_port;
+    QDoubleSpinBox *doubleSpinBox_timeBetweenTrials;
+    QLabel *label_port;
+    QComboBox *comboBox_port;
+    QLabel *label_HzSampleRate;
+    QDoubleSpinBox *doubleSpinBox_sampleRate;
+    QLabel *label_sampleRate;
+    QLabel *label_sequence;
+    QLabel *label_timeBetweenTrials;
+    QLabel *label_portErr;
 
     void setupUi(QWidget *ExperimentSetup)
     {
         if (ExperimentSetup->objectName().isEmpty())
             ExperimentSetup->setObjectName("ExperimentSetup");
-        ExperimentSetup->resize(466, 204);
+        ExperimentSetup->resize(594, 253);
         gridLayout = new QGridLayout(ExperimentSetup);
         gridLayout->setObjectName("gridLayout");
+        label_secBetweenTrials = new QLabel(ExperimentSetup);
+        label_secBetweenTrials->setObjectName("label_secBetweenTrials");
+
+        gridLayout->addWidget(label_secBetweenTrials, 6, 2, 1, 1);
+
+        verticalLayout_2 = new QVBoxLayout();
+        verticalLayout_2->setObjectName("verticalLayout_2");
+        label_sequenceErr = new QLabel(ExperimentSetup);
+        label_sequenceErr->setObjectName("label_sequenceErr");
+        QFont font;
+        font.setBold(true);
+        label_sequenceErr->setFont(font);
+
+        verticalLayout_2->addWidget(label_sequenceErr, 0, Qt::AlignTop);
+
+
+        gridLayout->addLayout(verticalLayout_2, 8, 2, 1, 1);
+
+        plainTextEdit_sequence = new QPlainTextEdit(ExperimentSetup);
+        plainTextEdit_sequence->setObjectName("plainTextEdit_sequence");
+
+        gridLayout->addWidget(plainTextEdit_sequence, 8, 1, 1, 1);
+
         horizontalLayout_2 = new QHBoxLayout();
         horizontalLayout_2->setObjectName("horizontalLayout_2");
         pushButton_generateRandomSequence = new QPushButton(ExperimentSetup);
@@ -73,39 +97,34 @@ public:
         horizontalLayout_2->addWidget(spinBox_nTrials);
 
 
-        gridLayout->addLayout(horizontalLayout_2, 6, 1, 1, 1);
+        gridLayout->addLayout(horizontalLayout_2, 10, 1, 1, 1);
 
-        label_HzSampleRate = new QLabel(ExperimentSetup);
-        label_HzSampleRate->setObjectName("label_HzSampleRate");
+        pushButton_port = new QPushButton(ExperimentSetup);
+        pushButton_port->setObjectName("pushButton_port");
 
-        gridLayout->addWidget(label_HzSampleRate, 4, 2, 1, 1);
-
-        comboBox_port = new QComboBox(ExperimentSetup);
-        comboBox_port->setObjectName("comboBox_port");
-
-        gridLayout->addWidget(comboBox_port, 1, 1, 1, 1);
-
-        label_port = new QLabel(ExperimentSetup);
-        label_port->setObjectName("label_port");
-
-        gridLayout->addWidget(label_port, 1, 0, 1, 1);
+        gridLayout->addWidget(pushButton_port, 1, 2, 1, 1);
 
         doubleSpinBox_timeBetweenTrials = new QDoubleSpinBox(ExperimentSetup);
         doubleSpinBox_timeBetweenTrials->setObjectName("doubleSpinBox_timeBetweenTrials");
         doubleSpinBox_timeBetweenTrials->setDecimals(3);
         doubleSpinBox_timeBetweenTrials->setMinimum(1.000000000000000);
 
-        gridLayout->addWidget(doubleSpinBox_timeBetweenTrials, 3, 1, 1, 1);
+        gridLayout->addWidget(doubleSpinBox_timeBetweenTrials, 6, 1, 1, 1);
 
-        label_sequence = new QLabel(ExperimentSetup);
-        label_sequence->setObjectName("label_sequence");
+        label_port = new QLabel(ExperimentSetup);
+        label_port->setObjectName("label_port");
 
-        gridLayout->addWidget(label_sequence, 5, 0, 1, 1, Qt::AlignTop);
+        gridLayout->addWidget(label_port, 1, 0, 1, 1);
 
-        label_sampleRate = new QLabel(ExperimentSetup);
-        label_sampleRate->setObjectName("label_sampleRate");
+        comboBox_port = new QComboBox(ExperimentSetup);
+        comboBox_port->setObjectName("comboBox_port");
 
-        gridLayout->addWidget(label_sampleRate, 4, 0, 1, 1);
+        gridLayout->addWidget(comboBox_port, 1, 1, 1, 1);
+
+        label_HzSampleRate = new QLabel(ExperimentSetup);
+        label_HzSampleRate->setObjectName("label_HzSampleRate");
+
+        gridLayout->addWidget(label_HzSampleRate, 7, 2, 1, 1);
 
         doubleSpinBox_sampleRate = new QDoubleSpinBox(ExperimentSetup);
         doubleSpinBox_sampleRate->setObjectName("doubleSpinBox_sampleRate");
@@ -113,40 +132,28 @@ public:
         doubleSpinBox_sampleRate->setMaximum(1000.000000000000000);
         doubleSpinBox_sampleRate->setValue(1.000000000000000);
 
-        gridLayout->addWidget(doubleSpinBox_sampleRate, 4, 1, 1, 1);
+        gridLayout->addWidget(doubleSpinBox_sampleRate, 7, 1, 1, 1);
 
-        verticalLayout_2 = new QVBoxLayout();
-        verticalLayout_2->setObjectName("verticalLayout_2");
-        label_errSequence = new QLabel(ExperimentSetup);
-        label_errSequence->setObjectName("label_errSequence");
-        QFont font;
-        font.setBold(true);
-        label_errSequence->setFont(font);
+        label_sampleRate = new QLabel(ExperimentSetup);
+        label_sampleRate->setObjectName("label_sampleRate");
 
-        verticalLayout_2->addWidget(label_errSequence, 0, Qt::AlignTop);
+        gridLayout->addWidget(label_sampleRate, 7, 0, 1, 1);
 
+        label_sequence = new QLabel(ExperimentSetup);
+        label_sequence->setObjectName("label_sequence");
 
-        gridLayout->addLayout(verticalLayout_2, 5, 2, 1, 1);
+        gridLayout->addWidget(label_sequence, 8, 0, 1, 1, Qt::AlignTop);
 
         label_timeBetweenTrials = new QLabel(ExperimentSetup);
         label_timeBetweenTrials->setObjectName("label_timeBetweenTrials");
 
-        gridLayout->addWidget(label_timeBetweenTrials, 3, 0, 1, 1);
+        gridLayout->addWidget(label_timeBetweenTrials, 6, 0, 1, 1);
 
-        plainTextEdit_sequence = new QPlainTextEdit(ExperimentSetup);
-        plainTextEdit_sequence->setObjectName("plainTextEdit_sequence");
+        label_portErr = new QLabel(ExperimentSetup);
+        label_portErr->setObjectName("label_portErr");
+        label_portErr->setFont(font);
 
-        gridLayout->addWidget(plainTextEdit_sequence, 5, 1, 1, 1);
-
-        label_secBetweenTrials = new QLabel(ExperimentSetup);
-        label_secBetweenTrials->setObjectName("label_secBetweenTrials");
-
-        gridLayout->addWidget(label_secBetweenTrials, 3, 2, 1, 1);
-
-        pushButton_port = new QPushButton(ExperimentSetup);
-        pushButton_port->setObjectName("pushButton_port");
-
-        gridLayout->addWidget(pushButton_port, 1, 2, 1, 1);
+        gridLayout->addWidget(label_portErr, 1, 3, 1, 1);
 
         QWidget::setTabOrder(doubleSpinBox_timeBetweenTrials, plainTextEdit_sequence);
         QWidget::setTabOrder(plainTextEdit_sequence, spinBox_nTrials);
@@ -160,16 +167,17 @@ public:
     void retranslateUi(QWidget *ExperimentSetup)
     {
         ExperimentSetup->setWindowTitle(QCoreApplication::translate("ExperimentSetup", "Form", nullptr));
+        label_secBetweenTrials->setText(QCoreApplication::translate("ExperimentSetup", "seconds", nullptr));
+        label_sequenceErr->setText(QCoreApplication::translate("ExperimentSetup", "[!!!]", nullptr));
         pushButton_generateRandomSequence->setText(QCoreApplication::translate("ExperimentSetup", "Generate Random", nullptr));
         label_nTrials->setText(QCoreApplication::translate("ExperimentSetup", "Number of trials:", nullptr));
-        label_HzSampleRate->setText(QCoreApplication::translate("ExperimentSetup", "Hz", nullptr));
-        label_port->setText(QCoreApplication::translate("ExperimentSetup", "Port:", nullptr));
-        label_sequence->setText(QCoreApplication::translate("ExperimentSetup", "Sequence:", nullptr));
-        label_sampleRate->setText(QCoreApplication::translate("ExperimentSetup", "Sample rate:", nullptr));
-        label_errSequence->setText(QCoreApplication::translate("ExperimentSetup", "[!!!]", nullptr));
-        label_timeBetweenTrials->setText(QCoreApplication::translate("ExperimentSetup", "Time between trials:", nullptr));
-        label_secBetweenTrials->setText(QCoreApplication::translate("ExperimentSetup", "seconds", nullptr));
         pushButton_port->setText(QCoreApplication::translate("ExperimentSetup", "Reload Ports", nullptr));
+        label_port->setText(QCoreApplication::translate("ExperimentSetup", "Port:", nullptr));
+        label_HzSampleRate->setText(QCoreApplication::translate("ExperimentSetup", "Hz", nullptr));
+        label_sampleRate->setText(QCoreApplication::translate("ExperimentSetup", "Sample rate:", nullptr));
+        label_sequence->setText(QCoreApplication::translate("ExperimentSetup", "Sequence:", nullptr));
+        label_timeBetweenTrials->setText(QCoreApplication::translate("ExperimentSetup", "Time between trials:", nullptr));
+        label_portErr->setText(QCoreApplication::translate("ExperimentSetup", "[!!!]", nullptr));
     } // retranslateUi
 
 };

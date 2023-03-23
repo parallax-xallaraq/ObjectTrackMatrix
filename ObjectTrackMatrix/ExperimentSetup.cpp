@@ -5,12 +5,10 @@
 #include <QRandomGenerator>
 #include <QDebug>
 
-#include "Commands.h"
-
 // ====================================
 // Created by: Thresa Kelly
 // Email: ThresaKelly133@gmail.com
-// Date: 2/18/2023
+// Date: 3/22/2023
 // ====================================
 
 ExperimentSetup::ExperimentSetup(QWidget *parent) :
@@ -19,14 +17,13 @@ ExperimentSetup::ExperimentSetup(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    // initialize variables
+    // initialize
     SetNumberOfObjects(12);
+    on_pushButton_port_clicked();
 
     // hide errors
     ui->label_sequenceErr->setVisible(false);
-
-    // TESTING
-    Commands cmd = Commands();
+    ui->label_portErr->setVisible(false);
 }
 
 ExperimentSetup::~ExperimentSetup()
@@ -42,30 +39,41 @@ void ExperimentSetup::EnableInputs(bool lock)
     ui->plainTextEdit_sequence->setEnabled(lock);
     ui->spinBox_nTrials->setEnabled(lock);
     ui->pushButton_generateRandomSequence->setEnabled(lock);
+    ui->comboBox_port->setEnabled(lock);
+    ui->pushButton_port->setEnabled(lock);
 }
 
 bool ExperimentSetup::CheckRequiredInputs()
-{
-    if(IsSequenceValid())
-    {
-        ui->label_sequenceErr->setVisible(false);
-        return(true);
-    }
-    else
+{    
+    // hide error lables
+    ui->label_sequenceErr->setVisible(false);
+    ui->label_portErr->setVisible(false);
+    bool valid = true;
+
+    // show error for invalid input(s)
+    if(!IsSequenceValid())
     {
         ui->label_sequenceErr->setVisible(true);
-        return(false);
+        valid = false;
     }
-}
+    if(!IsPortValid())
+    {
+        ui->label_portErr->setVisible(true);
+        valid = false;
+        qDebug() << ":(";
+    }
 
-int ExperimentSetup::GetSampleRate()
-{
-    return(ui->doubleSpinBox_sampleRate->value());
+    return(valid);
 }
 
 double ExperimentSetup::GetTimeBetweenTrials()
 {
     return(ui->doubleSpinBox_timeBetweenTrials->value());
+}
+
+int ExperimentSetup::GetSampleRate()
+{
+    return(ui->doubleSpinBox_sampleRate->value());
 }
 
 int ExperimentSetup::GetNumberOfTrials()
@@ -95,6 +103,11 @@ QList<int> ExperimentSetup::GetTrialSequence()
     }
     // return sequence list
     return(seq);
+}
+
+QString ExperimentSetup::GetPortName()
+{
+    return(ui->comboBox_port->currentText());
 }
 
 void ExperimentSetup::SetNumberOfObjects(int n)
@@ -143,7 +156,36 @@ bool ExperimentSetup::IsSequenceValid()
     return(true);
 }
 
+bool ExperimentSetup::IsPortValid()
+{
+    // a port must be selected
+    if( ui->comboBox_port->currentText() == QString("No ports available"))
+    {
+        return(false);
+    }
+    return(true);
+}
+
 void ExperimentSetup::on_pushButton_port_clicked()
 {
+    // clear out contents
+    ui->comboBox_port->clear();
 
+    // get available serial ports from computer
+    QList<QSerialPortInfo> Allports = QSerialPortInfo::availablePorts();
+
+    // no ports
+    if( Allports.length() == 0 )
+    {
+        ui->comboBox_port->addItem(QString("No ports available"));
+    }
+    // has ports
+    else
+    {
+        for(QSerialPortInfo port : Allports)
+        {
+            // add all port names to box
+            ui->comboBox_port->addItem(port.portName());
+        }
+    }
 }
