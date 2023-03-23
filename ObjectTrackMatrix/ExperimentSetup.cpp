@@ -23,7 +23,7 @@ ExperimentSetup::ExperimentSetup(QWidget *parent) :
     SetNumberOfObjects(12);
 
     // hide errors
-    ui->label_errSequence->setVisible(false);
+    ui->label_sequenceErr->setVisible(false);
 
     // TESTING
     Commands cmd = Commands();
@@ -48,12 +48,12 @@ bool ExperimentSetup::CheckRequiredInputs()
 {
     if(IsSequenceValid())
     {
-        ui->label_errSequence->setVisible(false);
+        ui->label_sequenceErr->setVisible(false);
         return(true);
     }
     else
     {
-        ui->label_errSequence->setVisible(true);
+        ui->label_sequenceErr->setVisible(true);
         return(false);
     }
 }
