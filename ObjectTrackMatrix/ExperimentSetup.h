@@ -28,8 +28,11 @@ public:
     bool CheckRequiredInputs();
 
     // getters
-    double      GetTimeBetweenTrials();
-    int         GetSampleRate();
+    double      GetTimeBetweenTrials_s();
+    int         GetTimeBetweenTrials_ms();
+    double      GetTimeout_s();
+    int         GetTimeout_ms();
+    int         GetSampleRate_Hz();
     int         GetNumberOfTrials();
     QList<int>  GetTrialSequence();
     QString     GetPortName();

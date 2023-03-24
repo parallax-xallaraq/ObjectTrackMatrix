@@ -3,6 +3,8 @@
 
 #include <QMainWindow>
 
+#include "Commands.h"
+
 // ====================================
 // Created by: Thresa Kelly
 // Email: ThresaKelly133@gmail.com
@@ -30,6 +32,9 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
+    Commands * cmdCtrl;
+
     void EnableExperimentInputs(bool en);
+    void InitExperiment();
 };
 #endif // MAINWINDOW_H

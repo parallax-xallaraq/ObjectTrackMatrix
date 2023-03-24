@@ -41,6 +41,7 @@ void ExperimentSetup::EnableInputs(bool lock)
     ui->pushButton_generateRandomSequence->setEnabled(lock);
     ui->comboBox_port->setEnabled(lock);
     ui->pushButton_port->setEnabled(lock);
+    ui->doubleSpinBox_timeout->setEnabled(lock);
 }
 
 bool ExperimentSetup::CheckRequiredInputs()
@@ -65,12 +66,27 @@ bool ExperimentSetup::CheckRequiredInputs()
     return(valid);
 }
 
-double ExperimentSetup::GetTimeBetweenTrials()
+double ExperimentSetup::GetTimeBetweenTrials_s()
 {
     return(ui->doubleSpinBox_timeBetweenTrials->value());
 }
 
-int ExperimentSetup::GetSampleRate()
+int ExperimentSetup::GetTimeBetweenTrials_ms()
+{
+    return( int( GetTimeBetweenTrials_s() / 1000. ) );
+}
+
+double ExperimentSetup::GetTimeout_s()
+{
+    return(ui->doubleSpinBox_timeout->value());
+}
+
+int ExperimentSetup::GetTimeout_ms()
+{
+    return( int( GetTimeout_s() / 1000. ) );
+}
+
+int ExperimentSetup::GetSampleRate_Hz()
 {
     return(ui->doubleSpinBox_sampleRate->value());
 }
