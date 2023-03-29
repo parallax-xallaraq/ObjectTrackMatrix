@@ -15,12 +15,9 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    // setup commands
+    // setup pointers
     cmdCtrl = new Commands();
-
-    // setup serial port
     port = new QSerialPort(this);
-    port->setBaudRate(115200);
 
     // hide
     ui->groupBox_experimentDetails->setVisible(false);
@@ -81,9 +78,6 @@ void MainWindow::EnableExperimentInputs(bool en)
 
 void MainWindow::InitExperiment()
 {
-    OpenPort();
-
-    /*
     // NTRIALS
     QList<bool> cmdNtrials = cmdCtrl->BuildCommand(
                     Commands::NTRIALS,
@@ -98,7 +92,7 @@ void MainWindow::InitExperiment()
     {
         QList<bool> cmdTrial = cmdCtrl->BuildCommand(
                         Commands::TRIAL,
-                        i,
+                        i+1,
                         trialSequence[i]
                     );
         // TODO write here
@@ -128,7 +122,8 @@ void MainWindow::InitExperiment()
                     ui->widget_experimentSetup->GetSampleRate_Hz()
                 );
     // TODO write here
-    */
+
+    qDebug() << "Experiment initialized.";
 }
 
 void MainWindow::OpenPort()
@@ -142,26 +137,16 @@ void MainWindow::OpenPort()
 
     if(port->isOpen())
     {
-        // settup port
+        // setup port
         port->setBaudRate(QSerialPort::Baud115200);
         port->setDataBits(QSerialPort::Data8);
         port->setParity(QSerialPort::NoParity);
         port->setStopBits(QSerialPort::OneStop);
         port->setFlowControl(QSerialPort::NoFlowControl);
-
-       while(1)
-       {
-           if(port->waitForReadyRead())
-           {
-                QByteArray r = port->read(1);
-                qDebug() << " Reading " << r;
-           }
-       }
     }
-
     else
     {
-      qDebug() << "can't open the port";
+        throw std::invalid_argument("can't open the port");
     }
 }
 
@@ -169,6 +154,9 @@ void MainWindow::on_pushButton_startExperiment_clicked()
 {
     // lock experiment details
     ui->groupBox_experimentDetails->setEnabled(false);
+
+    // open serial port
+    OpenPort();
 
     // write experiment setup settings to hardware
     InitExperiment();
