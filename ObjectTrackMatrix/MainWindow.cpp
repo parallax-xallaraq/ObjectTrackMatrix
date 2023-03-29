@@ -1,6 +1,8 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+#include <QIODevice>
+
 // ====================================
 // Created by: Thresa Kelly
 // Email: ThresaKelly133@gmail.com
@@ -13,8 +15,12 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    // create command control object
+    // setup commands
     cmdCtrl = new Commands();
+
+    // setup serial port
+    port = new QSerialPort(this);
+    port->setBaudRate(115200);
 
     // hide
     ui->groupBox_experimentDetails->setVisible(false);
@@ -25,6 +31,8 @@ MainWindow::~MainWindow()
 {
     delete cmdCtrl;
     cmdCtrl = nullptr;
+
+    port->close();
 
     delete ui;
 }
@@ -73,6 +81,9 @@ void MainWindow::EnableExperimentInputs(bool en)
 
 void MainWindow::InitExperiment()
 {
+    OpenPort();
+
+    /*
     // NTRIALS
     QList<bool> cmdNtrials = cmdCtrl->BuildCommand(
                     Commands::NTRIALS,
@@ -117,6 +128,41 @@ void MainWindow::InitExperiment()
                     ui->widget_experimentSetup->GetSampleRate_Hz()
                 );
     // TODO write here
+    */
+}
+
+void MainWindow::OpenPort()
+{
+    // set port name
+    port->setPortName(ui->widget_experimentSetup->GetPortName());
+
+    // open port for read and write
+    port->close();
+    port->open(QIODevice::ReadWrite);
+
+    if(port->isOpen())
+    {
+        // settup port
+        port->setBaudRate(QSerialPort::Baud115200);
+        port->setDataBits(QSerialPort::Data8);
+        port->setParity(QSerialPort::NoParity);
+        port->setStopBits(QSerialPort::OneStop);
+        port->setFlowControl(QSerialPort::NoFlowControl);
+
+       while(1)
+       {
+           if(port->waitForReadyRead())
+           {
+                QByteArray r = port->read(1);
+                qDebug() << " Reading " << r;
+           }
+       }
+    }
+
+    else
+    {
+      qDebug() << "can't open the port";
+    }
 }
 
 void MainWindow::on_pushButton_startExperiment_clicked()

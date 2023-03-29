@@ -2,13 +2,14 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QSerialPort>
 
 #include "Commands.h"
 
 // ====================================
 // Created by: Thresa Kelly
 // Email: ThresaKelly133@gmail.com
-// Date: 2/18/2023
+// Date: 3/29/2023
 // ====================================
 
 QT_BEGIN_NAMESPACE
@@ -33,8 +34,11 @@ private:
     Ui::MainWindow *ui;
 
     Commands * cmdCtrl;
+    QSerialPort * port;
 
     void EnableExperimentInputs(bool en);
     void InitExperiment();
+
+    void OpenPort();
 };
 #endif // MAINWINDOW_H
