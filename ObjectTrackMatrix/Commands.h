@@ -3,6 +3,7 @@
 
 #include <QList>
 #include <QtMath>
+#include <QByteArray>
 
 // ====================================
 // Created by: Thresa Kelly
@@ -39,12 +40,19 @@ public:
     };
 
     // Using Commands
-    QList<bool> BuildCommand(uint8_t cmd, uint8_t id = 0, uint16_t data = 0);
-    QList<int>  UnpackCommand(QList<bool> bits);
+//    QList<bool> BuildCommand(uint8_t cmd, uint8_t id = 0, uint16_t data = 0);
+//    QList<int>  UnpackCommand(QList<bool> bits);
+
+    QByteArray BuildCommand(uint8_t cmd, uint8_t id = 0, uint16_t data = 0);
+    QList<int> UnpackCommand(QByteArray ba);
 
     // conversions
-    QList<bool> UintToBits(uint value, uint n);
-    int         BitsToUint(QList<bool> bits);
+//    QList<bool> UintToBits(uint value, uint n);
+//    int         BitsToUint(QList<bool> bits);
+
+    QByteArray UintToHexBytes(uint value, uint nBytes);
+    QString UintToHex(uint value);
+    int HexBytesToInt(QByteArray ba);
 
     // check command parameters
     bool DoesCommandSendID(int cmd);
@@ -55,17 +63,29 @@ public:
     bool DoesIdExist(int id);
 
     // bit characters
-    QList<bool> STX();
-    QList<bool> ETX();
+//    QList<bool> STX();
+//    QList<bool> ETX();
+
+    QByteArray STX();
+    QByteArray ETX();
+
 
     // getters
     int nObjects()     const;
-    int nBits_STX()    const;
-    int nBits_cmd()    const;
-    int nBits_id()     const;
-    int nBits_data()   const;
-    int nBits_ETX()    const;
-    int nBits_command();
+
+//    int nBits_STX()    const;
+//    int nBits_cmd()    const;
+//    int nBits_id()     const;
+//    int nBits_data()   const;
+//    int nBits_ETX()    const;
+//    int nBits_command();
+
+    int nBytes_STX() const;
+    int nBytes_cmd() const;
+    int nBytes_id() const;
+    int nBytes_data() const;
+    int nBytes_ETX() const;
+    int nBytes_command();
 
     // setters
     void setNObjects(int nObjects);
@@ -76,11 +96,16 @@ private:
     int _nObjects = 12;
 
     // number of bits
-    int _nBits_STX  = 8;
-    int _nBits_cmd  = 8;
-    int _nBits_id   = 8;
-    int _nBits_data = 16;
-    int _nBits_ETX  = 8;
+//    int _nBits_STX  = 8;
+//    int _nBits_cmd  = 8;
+//    int _nBits_id   = 8;
+//    int _nBits_data = 16;
+//    int _nBits_ETX  = 8;
+    int _nBytes_STX  = 1;
+    int _nBytes_cmd  = 1;
+    int _nBytes_id   = 1;
+    int _nBytes_data = 2;
+    int _nBytes_ETX  = 1;
 
     // use as _commandArguments[CommandNum][ArgRequirements]
     enum ArgRequirements {
@@ -104,6 +129,7 @@ private:
         {false,true ,true , true}   // STREAM
     };
 
+    void ValidateCommand(uint8_t cmd, uint8_t id, uint16_t data);
 };
 
 #endif // COMMANDS_H

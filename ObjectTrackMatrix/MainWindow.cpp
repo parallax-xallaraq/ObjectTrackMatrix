@@ -79,18 +79,19 @@ void MainWindow::EnableExperimentInputs(bool en)
 void MainWindow::InitExperiment()
 {
     // NTRIALS
-    QList<bool> cmdNtrials = cmdCtrl->BuildCommand(
+    QByteArray cmdNtrials = cmdCtrl->BuildCommand(
                     Commands::NTRIALS,
                     0,
                     ui->widget_experimentSetup->GetNumberOfTrials()
                 );
     // TODO write here
+    // need QByteArray to write.....
 
     // TRIAL
     QList<int> trialSequence = ui->widget_experimentSetup->GetTrialSequence();
     for (int i=0; i<trialSequence.length(); i++)
     {
-        QList<bool> cmdTrial = cmdCtrl->BuildCommand(
+        QByteArray cmdTrial = cmdCtrl->BuildCommand(
                         Commands::TRIAL,
                         i+1,
                         trialSequence[i]
@@ -99,7 +100,7 @@ void MainWindow::InitExperiment()
     }
 
     // SEPARATION
-    QList<bool> cmdSeparation = cmdCtrl->BuildCommand(
+    QByteArray cmdSeparation = cmdCtrl->BuildCommand(
                     Commands::SEPARATION,
                     0,
                     ui->widget_experimentSetup->GetTimeBetweenTrials_ms()
@@ -107,7 +108,7 @@ void MainWindow::InitExperiment()
     // TODO write here
 
     // TIMEOUT
-    QList<bool> cmdTimeout = cmdCtrl->BuildCommand(
+    QByteArray cmdTimeout = cmdCtrl->BuildCommand(
                     Commands::TIMEOUT,
                     0,
                     ui->widget_experimentSetup->GetTimeout_ms()
@@ -116,7 +117,7 @@ void MainWindow::InitExperiment()
 
 
     // SAMPLE RATE
-    QList<bool> cmdSampleRate = cmdCtrl->BuildCommand(
+    QByteArray cmdSampleRate = cmdCtrl->BuildCommand(
                     Commands::SAMPLERATE,
                     0,
                     ui->widget_experimentSetup->GetSampleRate_Hz()
