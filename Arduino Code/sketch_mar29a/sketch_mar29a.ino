@@ -32,7 +32,26 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
+  int r1 = Serial.read();
+  int r2 = Serial.read();
+  int r3 = Serial.read();
+  int r4 = Serial.read();
+  int r5 = Serial.read();
+  
+  display.clearDisplay();
+  display.setCursor(0,20);             
+  display.println(r1);
+  display.println(r2);
+  display.println(r3);
+  display.println(r4);
+  display.println(r5);
+  display.display();
+  
+  delay(1000);
+}
 
+void GenerateRand(){
+  
   int n = random(10);
 
   display.clearDisplay();
