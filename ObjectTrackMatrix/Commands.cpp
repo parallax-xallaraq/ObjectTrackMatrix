@@ -1,7 +1,5 @@
 #include "Commands.h"
 
-#include <QDebug>
-
 Commands::Commands()
 {
 

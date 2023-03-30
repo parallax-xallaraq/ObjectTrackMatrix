@@ -2,7 +2,6 @@
 #define COMMANDS_H
 
 #include <QList>
-#include <QtMath>
 #include <QByteArray>
 
 // ====================================
