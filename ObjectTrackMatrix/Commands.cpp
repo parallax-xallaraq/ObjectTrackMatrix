@@ -4,42 +4,73 @@
 
 Commands::Commands()
 {
-    QByteArray ba = BuildCommand(Commands::NTRIALS, 0, 1);
+    QByteArray ba = BuildCommand(Commands::NTRIALS, 0, 50);
     qDebug() << ba;
-    QList<int> vals = UnpackCommand(ba);
+//    qDebug() << ba.toHex();
+    QList<uint> vals = UnpackCommand(ba);
     qDebug() << vals;
+
+//    qDebug() << QString(ba[0]);
+//    qDebug() << QString(ba[1]);
+//    qDebug() << QString(ba[2]);
+//    qDebug() << QString(ba[3]);
+//    qDebug() << QString(ba[4]);
+//    qDebug() << QString(ba[5]);
 }
 
 QByteArray Commands::BuildCommand(uint8_t cmd, uint8_t id, uint16_t data)
 {
     ValidateCommand(cmd,id,data);
 
-    // add each part of command packet
+    QString cmd_s  = UintToHex(cmd);
+    QString id_s   = UintToHex(id);
+    QString data_s = UintToHex(data);
+
+    QString packet = cmd_s + id_s;
+    if(data_s.length()==1)
+    {
+        packet += "0";
+    }
+    packet += data_s;
+
     QByteArray command;
     command.append( STX() );
-    command.append( UintToHexBytes(cmd,  _nBytes_cmd)  ); // convert integers into hexidecimal, then to bytes
-    command.append( UintToHexBytes(id,   _nBytes_id)   ); // " "
-    command.append( UintToHexBytes(data, _nBytes_data) ); // " "
+    command.append( packet.toUtf8() );
     command.append( ETX() );
 
-    return command;
+    return(command);
+
+//    // add each part of command packet
+//    QByteArray command;
+//    command.append( STX() );
+//    command.append( UintToHexBytes(cmd,  _nBytes_cmd)  ); // convert integers into hexidecimal, then to bytes
+//    command.append( UintToHexBytes(id,   _nBytes_id)   ); // " "
+//    command.append( UintToHexBytes(data, _nBytes_data) ); // " "
+//    command.append( ETX() );
+
+//    return command;
 }
 
-QList<int> Commands::UnpackCommand(QByteArray cmdPacket)
+QList<uint> Commands::UnpackCommand(QByteArray cmdPacket)
 {
     // check for proper length
     if(cmdPacket.length() != nBytes_command()){
         throw std::invalid_argument("Command is incorrect size.");
     }
 
-    int cmd  = HexBytesToInt(&cmdPacket[1]);
-    int id   = HexBytesToInt(&cmdPacket[2]);
-//    int data = HexBytesToInt(cmdPacket[3] + cmdPacket[4]);
+    QList<uint> commands;
+    commands.append( HexToUint( QString(cmdPacket[1]) ) );
+    commands.append( HexToUint( QString(cmdPacket[2]) ) );
+    commands.append( HexToUint( QString(cmdPacket[3]) + QString(cmdPacket[4]) ) );
 
-    QList<int> commands;
-    commands.append(cmd);
-    commands.append(id);
-//    commands.append(data);
+//    int cmd  = HexBytesToInt(&cmdPacket[1]);
+//    int id   = HexBytesToInt(&cmdPacket[2]);
+////    int data = HexBytesToInt(cmdPacket[3] + cmdPacket[4]);
+
+
+//    commands.append(cmd);
+//    commands.append(id);
+////    commands.append(data);
 
     return commands;
 }
@@ -80,12 +111,15 @@ QString Commands::UintToHex(uint value)
     return QString::number(value, 16);
 }
 
+uint Commands::HexToUint(QString value)
+{
+    bool ok;
+    return value.toUInt(&ok,16);
+}
+
 int Commands::HexBytesToInt(QByteArray ba)
 {
-    bool ok = true;
-    qDebug() << ba;
-    int val = ba.toInt(&ok);
-    return(val);
+    return(0);
 }
 
 //QList<bool> Commands::BuildCommand(uint8_t cmd, uint8_t id, uint16_t data)

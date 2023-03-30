@@ -44,7 +44,7 @@ public:
 //    QList<int>  UnpackCommand(QList<bool> bits);
 
     QByteArray BuildCommand(uint8_t cmd, uint8_t id = 0, uint16_t data = 0);
-    QList<int> UnpackCommand(QByteArray ba);
+    QList<uint> UnpackCommand(QByteArray ba);
 
     // conversions
 //    QList<bool> UintToBits(uint value, uint n);
@@ -52,6 +52,7 @@ public:
 
     QByteArray UintToHexBytes(uint value, uint nBytes);
     QString UintToHex(uint value);
+    uint HexToUint(QString value);
     int HexBytesToInt(QByteArray ba);
 
     // check command parameters
