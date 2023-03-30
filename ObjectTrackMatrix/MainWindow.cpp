@@ -1,14 +1,6 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
-#include <QIODevice>
-
-// ====================================
-// Created by: Thresa Kelly
-// Email: ThresaKelly133@gmail.com
-// Date: 03/03/2023
-// ====================================
-
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -77,15 +69,14 @@ void MainWindow::EnableExperimentInputs(bool en)
 }
 
 void MainWindow::InitExperiment()
-{
+{    
     // NTRIALS
     QByteArray cmdNtrials = cmdCtrl->BuildCommand(
                     Commands::NTRIALS,
                     0,
                     ui->widget_experimentSetup->GetNumberOfTrials()
                 );
-    // TODO write here
-    // need QByteArray to write.....
+    port->write(cmdNtrials);
 
     // TRIAL
     QList<int> trialSequence = ui->widget_experimentSetup->GetTrialSequence();
@@ -96,7 +87,7 @@ void MainWindow::InitExperiment()
                         i+1,
                         trialSequence[i]
                     );
-        // TODO write here
+        port->write(cmdTrial);
     }
 
     // SEPARATION
@@ -105,7 +96,7 @@ void MainWindow::InitExperiment()
                     0,
                     ui->widget_experimentSetup->GetTimeBetweenTrials_ms()
                 );
-    // TODO write here
+    port->write(cmdSeparation);
 
     // TIMEOUT
     QByteArray cmdTimeout = cmdCtrl->BuildCommand(
@@ -113,7 +104,7 @@ void MainWindow::InitExperiment()
                     0,
                     ui->widget_experimentSetup->GetTimeout_ms()
                 );
-    // TODO write here
+    port->write(cmdTimeout);
 
 
     // SAMPLE RATE
@@ -122,7 +113,7 @@ void MainWindow::InitExperiment()
                     0,
                     ui->widget_experimentSetup->GetSampleRate_Hz()
                 );
-    // TODO write here
+    port->write(cmdSampleRate);
 
     qDebug() << "Experiment initialized.";
 }
