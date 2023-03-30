@@ -37,8 +37,7 @@ private:
     QSerialPort * port;
 
     void EnableExperimentInputs(bool en);
-    void InitExperiment();
-
     void OpenPort();
+    void InitExperiment();
 };
 #endif // MAINWINDOW_H

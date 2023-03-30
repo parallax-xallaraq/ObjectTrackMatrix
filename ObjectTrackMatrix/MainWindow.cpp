@@ -56,6 +56,20 @@ void MainWindow::on_pushButton_experimentEdit_clicked()
     EnableExperimentInputs(true);
 }
 
+void MainWindow::on_pushButton_startExperiment_clicked()
+{
+    // lock experiment details
+    ui->groupBox_experimentDetails->setEnabled(false);
+
+    // open serial port
+    OpenPort();
+
+    // write experiment setup settings to hardware
+    InitExperiment();
+
+    // TODO start reading data
+}
+
 void MainWindow::EnableExperimentInputs(bool en)
 {
     // enable user input fields
@@ -66,6 +80,30 @@ void MainWindow::EnableExperimentInputs(bool en)
     ui->pushButton_experimentEdit->setVisible(!en);
     // un-enable the experiment window
     ui->groupBox_objectMatrix->setEnabled(!en);
+}
+
+void MainWindow::OpenPort()
+{
+    // set port name
+    port->setPortName(ui->widget_experimentSetup->GetPortName());
+
+    // open port for read and write
+    port->close();
+    port->open(QIODevice::ReadWrite);
+
+    if(port->isOpen())
+    {
+        // setup port
+        port->setBaudRate(QSerialPort::Baud115200);
+        port->setDataBits(QSerialPort::Data8);
+        port->setParity(QSerialPort::NoParity);
+        port->setStopBits(QSerialPort::OneStop);
+        port->setFlowControl(QSerialPort::NoFlowControl);
+    }
+    else
+    {
+        throw std::invalid_argument("can't open the port");
+    }
 }
 
 void MainWindow::InitExperiment()
@@ -116,42 +154,4 @@ void MainWindow::InitExperiment()
     port->write(cmdSampleRate);
 
     qDebug() << "Experiment initialized.";
-}
-
-void MainWindow::OpenPort()
-{
-    // set port name
-    port->setPortName(ui->widget_experimentSetup->GetPortName());
-
-    // open port for read and write
-    port->close();
-    port->open(QIODevice::ReadWrite);
-
-    if(port->isOpen())
-    {
-        // setup port
-        port->setBaudRate(QSerialPort::Baud115200);
-        port->setDataBits(QSerialPort::Data8);
-        port->setParity(QSerialPort::NoParity);
-        port->setStopBits(QSerialPort::OneStop);
-        port->setFlowControl(QSerialPort::NoFlowControl);
-    }
-    else
-    {
-        throw std::invalid_argument("can't open the port");
-    }
-}
-
-void MainWindow::on_pushButton_startExperiment_clicked()
-{
-    // lock experiment details
-    ui->groupBox_experimentDetails->setEnabled(false);
-
-    // open serial port
-    OpenPort();
-
-    // write experiment setup settings to hardware
-    InitExperiment();
-
-    // TODO start reading data
 }
