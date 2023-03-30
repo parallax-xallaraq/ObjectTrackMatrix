@@ -9,19 +9,20 @@ Commands::Commands()
 
 QByteArray Commands::BuildCommand(uint8_t cmd, uint8_t id, uint16_t data)
 {
+    // check that command has all required parameters
     ValidateCommand(cmd,id,data);
 
+    // convert to hex
     QString cmd_s  = UintToHex(cmd);
     QString id_s   = UintToHex(id);
     QString data_s = UintToHex(data);
 
+    // build hex packet (size 4)
     QString packet = cmd_s + id_s;
-    if(data_s.length()==1)
-    {
-        packet += "0";
-    }
+    if(data_s.length()==1) packet += "0";
     packet += data_s;
 
+    // build byte array
     QByteArray command;
     command.append( STX() );
     command.append( packet.toUtf8() );
@@ -43,6 +44,7 @@ QList<uint> Commands::UnpackCommand(QByteArray cmdPacket)
     commands.append( HexToUint( QString(cmdPacket[2]) ) );
     commands.append( HexToUint( QString(cmdPacket[3]) + QString(cmdPacket[4]) ) );
 
+    // reference commands list using UnpackedCommandKey enum
     return commands;
 }
 
