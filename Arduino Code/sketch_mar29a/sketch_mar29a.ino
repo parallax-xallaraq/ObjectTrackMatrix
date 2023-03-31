@@ -37,7 +37,7 @@ void loop() {
   int r3 = Serial.read();
   int r4 = Serial.read();
   int r5 = Serial.read();
-  
+  int r6 = Serial.read();
   display.clearDisplay();
   display.setCursor(0,20);             
   display.println(r1);
@@ -45,6 +45,7 @@ void loop() {
   display.println(r3);
   display.println(r4);
   display.println(r5);
+  display.println(r6);
   display.display();
   
   delay(1000);
