@@ -48,11 +48,12 @@ void loop() {
   // display.println(r5);
   // display.println(r6);
   // display.display();
-  readCommand();
+  int * packet;
+  packet = readCommand();
   delay(1000);
 }
 
-void readCommand(){
+int * readCommand(){
   // start and end packet characters
   char start_stx = 0x02;
   char end_etx   = 0x03;
@@ -93,18 +94,23 @@ void readCommand(){
       // return packet data
       display.clearDisplay();
       display.setCursor(0,20);             
-      display.println(b1_cmd);
-      display.println(b2_id);
-      display.println(b34_data);
-      // display.println(cmd);
-      // display.println(id);
-      // display.println(data);
+      // display.println(b1_cmd);
+      // display.println(b2_id);
+      // display.println(b34_data);
+      display.println(cmd);
+      display.println(id);
+      display.println(data);
       display.display();
       delay(1000);
 
-      return;
+      // combine
+      int packet[3] = {cmd, id, data};
+      return(packet);
     }
   }
+  
+  int badPacket[3] = {-1,-1,-1};
+  return(badPacket);
 }
 
 int StrToHex(char str[]) // hmmm I dont think this is working 
