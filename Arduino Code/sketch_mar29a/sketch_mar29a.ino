@@ -32,12 +32,12 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  int r1 = Serial.read();
-  int r2 = Serial.read();
-  int r3 = Serial.read();
-  int r4 = Serial.read();
-  int r5 = Serial.read();
-  int r6 = Serial.read();
+  char r1 = Serial.read();
+  char r2 = Serial.read();
+  char r3 = Serial.read();
+  char r4 = Serial.read();
+  char r5 = Serial.read();
+  char r6 = Serial.read();
   display.clearDisplay();
   display.setCursor(0,20);             
   display.println(r1);
