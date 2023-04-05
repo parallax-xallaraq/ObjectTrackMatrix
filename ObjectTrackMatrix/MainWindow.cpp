@@ -115,43 +115,44 @@ void MainWindow::InitExperiment()
                     ui->widget_experimentSetup->GetNumberOfTrials()
                 );
     port->write(cmdNtrials);
+    qDebug() << cmdNtrials;
 
-    // TRIAL
-    QList<int> trialSequence = ui->widget_experimentSetup->GetTrialSequence();
-    for (int i=0; i<trialSequence.length(); i++)
-    {
-        QByteArray cmdTrial = cmdCtrl->BuildCommand(
-                        Commands::TRIAL,
-                        i+1,
-                        trialSequence[i]
-                    );
-        port->write(cmdTrial);
-    }
+//    // TRIAL
+//    QList<int> trialSequence = ui->widget_experimentSetup->GetTrialSequence();
+//    for (int i=0; i<trialSequence.length(); i++)
+//    {
+//        QByteArray cmdTrial = cmdCtrl->BuildCommand(
+//                        Commands::TRIAL,
+//                        i+1,
+//                        trialSequence[i]
+//                    );
+//        port->write(cmdTrial);
+//    }
 
-    // SEPARATION
-    QByteArray cmdSeparation = cmdCtrl->BuildCommand(
-                    Commands::SEPARATION,
-                    0,
-                    ui->widget_experimentSetup->GetTimeBetweenTrials_ms()
-                );
-    port->write(cmdSeparation);
+//    // SEPARATION
+//    QByteArray cmdSeparation = cmdCtrl->BuildCommand(
+//                    Commands::SEPARATION,
+//                    0,
+//                    ui->widget_experimentSetup->GetTimeBetweenTrials_ms()
+//                );
+//    port->write(cmdSeparation);
 
-    // TIMEOUT
-    QByteArray cmdTimeout = cmdCtrl->BuildCommand(
-                    Commands::TIMEOUT,
-                    0,
-                    ui->widget_experimentSetup->GetTimeout_ms()
-                );
-    port->write(cmdTimeout);
+//    // TIMEOUT
+//    QByteArray cmdTimeout = cmdCtrl->BuildCommand(
+//                    Commands::TIMEOUT,
+//                    0,
+//                    ui->widget_experimentSetup->GetTimeout_ms()
+//                );
+//    port->write(cmdTimeout);
 
 
-    // SAMPLE RATE
-    QByteArray cmdSampleRate = cmdCtrl->BuildCommand(
-                    Commands::SAMPLERATE,
-                    0,
-                    ui->widget_experimentSetup->GetSampleRate_Hz()
-                );
-    port->write(cmdSampleRate);
+//    // SAMPLE RATE
+//    QByteArray cmdSampleRate = cmdCtrl->BuildCommand(
+//                    Commands::SAMPLERATE,
+//                    0,
+//                    ui->widget_experimentSetup->GetSampleRate_Hz()
+//                );
+//    port->write(cmdSampleRate);
 
     qDebug() << "Experiment initialized.";
 }
