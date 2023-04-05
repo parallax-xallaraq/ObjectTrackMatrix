@@ -11,17 +11,25 @@
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 // ^^^ Display screen stuff
 
+struct packet {
+  int commandNumber;
+  int objectID;
+  int data;
+};
+
 
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
 
+  // setup display
   if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { 
     Serial.println("SSD1306 allocation failed");
     for(;;);
   }
   delay(2000);
 
+  // test display
   display.clearDisplay();
   display.setTextSize(1);             
   display.setTextColor(WHITE);        
@@ -31,89 +39,79 @@ void setup() {
   delay(2000); 
 }
 
+// put your main code here, to run repeatedly:
 void loop() {
-  // put your main code here, to run repeatedly:
-  // char r1 = Serial.read();
-  // char r2 = Serial.read();
-  // char r3 = Serial.read();
-  // char r4 = Serial.read();
-  // char r5 = Serial.read();
-  // char r6 = Serial.read();
-  // display.clearDisplay();
-  // display.setCursor(0,20);             
-  // display.println(r1);
-  // display.println(r2);
-  // display.println(r3);
-  // display.println(r4);
-  // display.println(r5);
-  // display.println(r6);
-  // display.display();
-  int * packet;
-  packet = readCommand();
+
+  // read one data packet from computer 
+  struct packet p = readCommand();
+
+  // show to screen for 1 sec
+  display.clearDisplay();
+  display.setCursor(0,20);             
+  display.println(p.commandNumber);
+  display.println(p.objectID);
+  display.println(p.data);
+  display.display();
   delay(1000);
+  
+  // clear screen
+  display.clearDisplay();
+  display.setCursor(0,20);
+  display.display();
+  delay(1000);
+  
 }
 
-int * readCommand(){
-  // start and end packet characters
-  char start_stx = 0x02;
-  char end_etx   = 0x03;
-
+struct packet readCommand(){
   // init strings
-  char b0_stx[]   = "0";
+  char b0_stx[]   = "0"; // note: string terminates with '\0'
   char b1_cmd[]   = "0";
   char b2_id[]    = "0";
   char b34_data[] = "00";
   char b6_etx[]   = "0";
-  
+
   // read until STX found, which marks the start of a data packet
-  bool started = false;
-  while(!started && Serial.available() > 0){    
-    // read a byte
-    b0_stx[0] = Serial.read();
-    // check if byte is STX
-    if(b0_stx[0] == start_stx){
-      started = true;
-
-      // then read next 5 bytes
-      b1_cmd[0]   = Serial.read();
-      b2_id[0]    = Serial.read();
-      b34_data[0] = Serial.read();
-      b34_data[1] = Serial.read();
-      b6_etx[0]   = Serial.read();
-
-      // verify that last byte is ETX, which ends the packet
-      if( b6_etx[0] != end_etx){
-        readCommand();
+  while(true){
+    // wait for data 
+    if(Serial.available() > 0){
+      // read a byte
+      b0_stx[0] = Serial.read();
+      // check if byte is STX
+      if(b0_stx[0] == 0x02){
+        break;
       }
-
-      // convert hex characters into integers 
-      int cmd  = StrToHex(b1_cmd);
-      int id   = StrToHex(b2_id);
-      int data = StrToHex(b34_data);
-
-      // return packet data
-      display.clearDisplay();
-      display.setCursor(0,20);             
-      // display.println(b1_cmd);
-      // display.println(b2_id);
-      // display.println(b34_data);
-      display.println(cmd);
-      display.println(id);
-      display.println(data);
-      display.display();
-      delay(1000);
-
-      // combine
-      int packet[3] = {cmd, id, data};
-      return(packet);
-    }
-  }
+    }        
+  }   
   
-  int badPacket[3] = {-1,-1,-1};
-  return(badPacket);
+  // wait for full packet to be available 
+  while(Serial.available() < 5){
+    delay(0.5);
+  }
+
+  // read next 5 bytes  
+  b1_cmd[0]   = Serial.read();
+  b2_id[0]    = Serial.read();
+  b34_data[0] = Serial.read();
+  b34_data[1] = Serial.read();
+  b6_etx[0]   = Serial.read();
+
+  // verify that last byte is ETX, which ends the packet
+  if( b6_etx[0] != 0x03){
+    // bad packet, try to read again 
+    return(readCommand());
+  }
+
+  // convert hex characters into integers and add to struct 
+  struct packet p;
+  p.commandNumber = StrToHex(b1_cmd);
+  p.objectID      = StrToHex(b2_id);
+  p.data          = StrToHex(b34_data);
+
+  return(p);
 }
 
-int StrToHex(char str[]) // hmmm I dont think this is working 
+int StrToHex(char str[])
 {
+  // convert unsigned hex string into integer
   return (int) strtoul(str, 0, 16);
 }

@@ -136,6 +136,7 @@ void MainWindow::InitExperiment()
 //                    ui->widget_experimentSetup->GetTimeBetweenTrials_ms()
 //                );
 //    port->write(cmdSeparation);
+//    qDebug() << cmdSeparation;
 
 //    // TIMEOUT
 //    QByteArray cmdTimeout = cmdCtrl->BuildCommand(
