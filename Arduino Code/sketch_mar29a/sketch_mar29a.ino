@@ -32,35 +32,77 @@ void setup() {
 
 void loop() {
   // put your main code here, to run repeatedly:
-  char r1 = Serial.read();
-  char r2 = Serial.read();
-  char r3 = Serial.read();
-  char r4 = Serial.read();
-  char r5 = Serial.read();
-  char r6 = Serial.read();
-  display.clearDisplay();
-  display.setCursor(0,20);             
-  display.println(r1);
-  display.println(r2);
-  display.println(r3);
-  display.println(r4);
-  display.println(r5);
-  display.println(r6);
-  display.display();
-  
+  // char r1 = Serial.read();
+  // char r2 = Serial.read();
+  // char r3 = Serial.read();
+  // char r4 = Serial.read();
+  // char r5 = Serial.read();
+  // char r6 = Serial.read();
+  // display.clearDisplay();
+  // display.setCursor(0,20);             
+  // display.println(r1);
+  // display.println(r2);
+  // display.println(r3);
+  // display.println(r4);
+  // display.println(r5);
+  // display.println(r6);
+  // display.display();
+  readCommand();
   delay(1000);
 }
 
-void GenerateRand(){
-  
-  int n = random(10);
+void readCommand(){
+  // start and end packet characters
+  char start_stx = 0x02;
+  char end_etx = 0x03;
 
+  // init strings
+  char b0_stx[1];
+  char b1_cmd[1];
+  char b2_id[1];
+  char b34_data[2];
+  char b6_etx[1];
+  
+  // read until STX found, which marks the start of a data packet
+  bool started = false;
+  while(started == false){
+    b0_stx[0] = Read();
+    if(b0_stx[0] == start_stx){
+      started = true;
+    }
+  }
+  
+  // then read 5 bytes
+  b1_cmd[0]   = Read();
+  b2_id[0]    = Read();
+  b34_data[0] = Read();
+  b34_data[1] = Read();
+  b6_etx[0]   = Read();
+
+  // verify that last byte is ETX, which ends the packet
+
+  // convert hex characters into integers 
+  int cmd  = StrToHex(b1_cmd);
+  int id   = StrToHex(b2_id);
+  int data = StrToHex(b34_data);
+
+  // return packet data
   display.clearDisplay();
   display.setCursor(0,20);             
-  display.println(n);
-  display.display();
-  
-  Serial.write(n);
-  
-  delay(1000);
+  display.println(cmd);
+  display.println(id);
+  display.println(data);
+  display.display(); // temp. display for now 
+}
+
+char Read(){
+  while(Serial.available() > 0){
+    return Serial.read();
+  }
+  return '\0';
+}
+
+int StrToHex(char str[]) // hmmm I dont think this is working 
+{
+  return (int) strtoul(str, nullptr, 16);
 }
