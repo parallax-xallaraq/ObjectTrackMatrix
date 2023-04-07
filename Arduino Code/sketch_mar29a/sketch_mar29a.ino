@@ -23,6 +23,9 @@ const int TIMEOUT    = 7;
 const int SAMPLERATE = 8;
 const int STREAM     = 9;
 
+// number of objects
+const int NOBJECTS   = 12;
+
 // data packet read from software 
 struct packet {
   int commandNumber;
@@ -132,34 +135,42 @@ int HexStringToInt(char str[])
 
 void DoCommand(struct packet currentCommand)
 {
+  // easy access of struct parts
+  int cmd  = currentCommand.commandNumber;
+  int id   = currentCommand.objectID;
+  int data = currentCommand.data;
+
   // choose function using command number 
-  switch(currentCommand.commandNumber) {
+  switch(cmd) {
     case PING:
       Ping();  
       break;
     case TESTLED:
-      TestLED();
+      TestLED(id,data);
       break;
     case BATTERY:
-      Battery();
+      Battery(id);
       break;
     case CALIBRATE:
-      Calibrate();
+      Calibrate(id);
       break;
     case NTRIALS:
-      NTrials();
+      NTrials(data);
       break;
+    case TRIAL:
+      Trial(id,data);
+      break;      
     case SEPARATION:
-      Separation();
+      Separation(data);
       break;
     case TIMEOUT:
-      Timeout();
+      Timeout(data);
       break;
     case SAMPLERATE:
-      SampleRate();
+      SampleRate(data);
       break;
     case STREAM:
-      Stream();
+      Stream(data);
       break;
     default:
       NoCommand();
@@ -171,42 +182,47 @@ void Ping()
   
 }
 
-void TestLED()
+void TestLED(int id, int time_ms)
 {
   
 }
 
-void Battery()
+void Battery(int id)
 {
   
 }
 
-void Calibrate()
+void Calibrate(int id)
 {
 
 }
 
-void NTrials()
-{
-  
-}
-
-void Separation()
+void NTrials(int numberOfTrials)
 {
   
 }
 
-void Timeout()
+void Trial(int id, int trialNumber)
 {
   
 }
 
-void SampleRate()
+void Separation(int time_ms)
 {
   
 }
 
-void Stream()
+void Timeout(int time_ms)
+{
+  
+}
+
+void SampleRate(int frequency_Hz)
+{
+  
+}
+
+void Stream(int flag)
 {
   
 }
