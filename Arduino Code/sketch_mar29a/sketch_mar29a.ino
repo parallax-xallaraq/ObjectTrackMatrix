@@ -52,14 +52,12 @@ void loop() {
   display.println(p.objectID);
   display.println(p.data);
   display.display();
-  delay(1000);
+  delay(500);
   
   // clear screen
   display.clearDisplay();
   display.setCursor(0,20);
-  display.display();
-  delay(1000);
-  
+  display.display();  
 }
 
 struct packet readCommand(){
@@ -67,8 +65,8 @@ struct packet readCommand(){
   char b0_stx[]   = "0"; // note: string terminates with '\0'
   char b1_cmd[]   = "0";
   char b2_id[]    = "0";
-  char b34_data[] = "00";
-  char b6_etx[]   = "0";
+  char b3456_data[] = "0000";
+  char b7_etx[]   = "0";
 
   // read until STX found, which marks the start of a data packet
   while(true){
@@ -84,19 +82,21 @@ struct packet readCommand(){
   }   
   
   // wait for full packet to be available 
-  while(Serial.available() < 5){
+  while(Serial.available() < 7){
     delay(0.5);
   }
 
   // read next 5 bytes  
   b1_cmd[0]   = Serial.read();
   b2_id[0]    = Serial.read();
-  b34_data[0] = Serial.read();
-  b34_data[1] = Serial.read();
-  b6_etx[0]   = Serial.read();
+  b3456_data[0] = Serial.read();
+  b3456_data[1] = Serial.read();
+  b3456_data[2] = Serial.read();
+  b3456_data[3] = Serial.read();
+  b7_etx[0]   = Serial.read();
 
   // verify that last byte is ETX, which ends the packet
-  if( b6_etx[0] != 0x03){
+  if( b7_etx[0] != 0x03){
     // bad packet, try to read again 
     return(readCommand());
   }
@@ -105,7 +105,7 @@ struct packet readCommand(){
   struct packet p;
   p.commandNumber = StrToHex(b1_cmd);
   p.objectID      = StrToHex(b2_id);
-  p.data          = StrToHex(b34_data);
+  p.data          = StrToHex(b3456_data);
 
   return(p);
 }
