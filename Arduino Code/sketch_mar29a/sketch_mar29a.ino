@@ -60,20 +60,40 @@ void loop() {
 
   // read one data packet from computer 
   struct packet p = readCommand();
+  // DoCommand(p);
 
-  // show to screen for 1 sec
+  // show to screen
+  DisplayPacket(p);
+  delay(500);
+  ClearScreen();
+}
+
+bool WritePacket(struct packet p)
+{
+  // TODO write packet
+
+  // convert int to hex string
+  // concatenate STX+cmd+id+data+ETX
+  // write packet to computer
+
+  // return true for successful write, false for error or bad inputs  
+}
+
+void ClearScreen()
+{
+  display.clearDisplay();
+  display.setCursor(0,20);
+  display.display();    
+}
+
+void DisplayPacket(struct packet p)
+{
   display.clearDisplay();
   display.setCursor(0,20);             
   display.println(p.commandNumber);
   display.println(p.objectID);
   display.println(p.data);
   display.display();
-  delay(500);
-  
-  // clear screen
-  display.clearDisplay();
-  display.setCursor(0,20);
-  display.display();  
 }
 
 struct packet readCommand(){
