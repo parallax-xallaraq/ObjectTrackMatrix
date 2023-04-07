@@ -11,6 +11,19 @@
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 // ^^^ Display screen stuff
 
+// command IDs
+const int PING       = 0;
+const int TESTLED    = 1;
+const int BATTERY    = 2;
+const int CALIBRATE  = 3;
+const int NTRIALS    = 4;
+const int TRIAL      = 5;
+const int SEPARATION = 6;
+const int TIMEOUT    = 7;
+const int SAMPLERATE = 8;
+const int STREAM     = 9;
+
+// data packet read from software 
 struct packet {
   int commandNumber;
   int objectID;
@@ -62,11 +75,11 @@ void loop() {
 
 struct packet readCommand(){
   // init strings
-  char b0_stx[]   = "0"; // note: string terminates with '\0'
-  char b1_cmd[]   = "0";
-  char b2_id[]    = "0";
+  char b0_stx[]     = "0"; // note: string terminates with '\0'
+  char b1_cmd[]     = "0";
+  char b2_id[]      = "0";
   char b3456_data[] = "0000";
-  char b7_etx[]   = "0";
+  char b7_etx[]     = "0";
 
   // read until STX found, which marks the start of a data packet
   while(true){
@@ -86,7 +99,7 @@ struct packet readCommand(){
     delay(0.5);
   }
 
-  // read next 5 bytes  
+  // read next bytes  
   b1_cmd[0]   = Serial.read();
   b2_id[0]    = Serial.read();
   b3456_data[0] = Serial.read();
@@ -103,15 +116,102 @@ struct packet readCommand(){
 
   // convert hex characters into integers and add to struct 
   struct packet p;
-  p.commandNumber = StrToHex(b1_cmd);
-  p.objectID      = StrToHex(b2_id);
-  p.data          = StrToHex(b3456_data);
+  p.commandNumber = HexStringToInt(b1_cmd);
+  p.objectID      = HexStringToInt(b2_id);
+  p.data          = HexStringToInt(b3456_data);
 
   return(p);
 }
 
-int StrToHex(char str[])
+int HexStringToInt(char str[])
 {
   // convert unsigned hex string into integer
   return (int) strtoul(str, 0, 16);
+}
+
+
+void DoCommand(struct packet currentCommand)
+{
+  // choose function using command number 
+  switch(currentCommand.commandNumber) {
+    case PING:
+      Ping();  
+      break;
+    case TESTLED:
+      TestLED();
+      break;
+    case BATTERY:
+      Battery();
+      break;
+    case CALIBRATE:
+      Calibrate();
+      break;
+    case NTRIALS:
+      NTrials();
+      break;
+    case SEPARATION:
+      Separation();
+      break;
+    case TIMEOUT:
+      Timeout();
+      break;
+    case SAMPLERATE:
+      SampleRate();
+      break;
+    case STREAM:
+      Stream();
+      break;
+    default:
+      NoCommand();
+  }
+}
+
+void Ping()
+{
+  
+}
+
+void TestLED()
+{
+  
+}
+
+void Battery()
+{
+  
+}
+
+void Calibrate()
+{
+
+}
+
+void NTrials()
+{
+  
+}
+
+void Separation()
+{
+  
+}
+
+void Timeout()
+{
+  
+}
+
+void SampleRate()
+{
+  
+}
+
+void Stream()
+{
+  
+}
+
+void NoCommand()
+{
+  
 }
