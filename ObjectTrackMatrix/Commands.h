@@ -39,7 +39,7 @@ public:
     };
 
     // Using Commands
-    QByteArray BuildCommand(uint8_t cmd, uint8_t id = 0, uint16_t data = 0);
+    QByteArray BuildCommand(uint8_t cmd, uint8_t id = 0, uint data = 0);
     QList<uint> UnpackCommand(QByteArray ba);
 
     // conversions
@@ -79,7 +79,7 @@ private:
     int _nBytes_STX  = 1;
     int _nBytes_cmd  = 1;
     int _nBytes_id   = 1;
-    int _nBytes_data = 2;
+    int _nBytes_data = 4;
     int _nBytes_ETX  = 1;
 
     // use as _commandArguments[CommandNum][ArgRequirements]
@@ -104,7 +104,7 @@ private:
         {false,true ,true , true}   // STREAM
     };
 
-    void ValidateCommand(uint8_t cmd, uint8_t id, uint16_t data);
+    void ValidateCommand(uint8_t cmd, uint8_t id, uint data);
 };
 
 #endif // COMMANDS_H

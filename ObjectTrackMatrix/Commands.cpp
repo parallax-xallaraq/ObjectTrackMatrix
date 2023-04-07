@@ -5,7 +5,7 @@ Commands::Commands()
 
 }
 
-QByteArray Commands::BuildCommand(uint8_t cmd, uint8_t id, uint16_t data)
+QByteArray Commands::BuildCommand(uint8_t cmd, uint8_t id, uint data)
 {
     // check that command has all required parameters
     ValidateCommand(cmd,id,data);
@@ -15,10 +15,13 @@ QByteArray Commands::BuildCommand(uint8_t cmd, uint8_t id, uint16_t data)
     QString id_s   = UintToHex(id);
     QString data_s = UintToHex(data);
 
+    // extend data to proper length
+    while(data_s.length() < _nBytes_data ){
+        data_s.prepend("0");
+    }
+
     // build hex packet (size 4)
-    QString packet = cmd_s + id_s;
-    if(data_s.length()==1) packet += "0";
-    packet += data_s;
+    QString packet = cmd_s + id_s + data_s;
 
     // build byte array
     QByteArray command;
@@ -155,7 +158,7 @@ void Commands::setNObjects(int nObjects)
 
 // ===== HELPER FUCNTIONS =====
 
-void Commands::ValidateCommand(uint8_t cmd, uint8_t id, uint16_t data)
+void Commands::ValidateCommand(uint8_t cmd, uint8_t id, uint data)
 {
     // check that command exists
     if(!DoesCommandExist(cmd)){
@@ -172,5 +175,9 @@ void Commands::ValidateCommand(uint8_t cmd, uint8_t id, uint16_t data)
     // check that data is provided if needed
     if( DoesCommandSendData(cmd) ^ (data!=0)) {
         throw std::invalid_argument("Command needs data.");
+    }
+    // check that data can be represented by 4 hex btyes
+    if(UintToHex(data).length() > _nBytes_data){
+        throw std::invalid_argument("Data packet overflow.");
     }
 }

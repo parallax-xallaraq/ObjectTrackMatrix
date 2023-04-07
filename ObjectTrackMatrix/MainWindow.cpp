@@ -107,7 +107,7 @@ void MainWindow::OpenPort()
 }
 
 void MainWindow::InitExperiment()
-{    
+{
     // NTRIALS
     QByteArray cmdNtrials = cmdCtrl->BuildCommand(
                     Commands::NTRIALS,
@@ -129,14 +129,14 @@ void MainWindow::InitExperiment()
 //        port->write(cmdTrial);
 //    }
 
-//    // SEPARATION
-//    QByteArray cmdSeparation = cmdCtrl->BuildCommand(
-//                    Commands::SEPARATION,
-//                    0,
-//                    ui->widget_experimentSetup->GetTimeBetweenTrials_ms()
-//                );
-//    port->write(cmdSeparation);
-//    qDebug() << cmdSeparation;
+    // SEPARATION
+    QByteArray cmdSeparation = cmdCtrl->BuildCommand(
+                    Commands::SEPARATION,
+                    0,
+                    ui->widget_experimentSetup->GetTimeBetweenTrials_ms()
+                );
+    port->write(cmdSeparation);
+    qDebug() << cmdSeparation;
 
 //    // TIMEOUT
 //    QByteArray cmdTimeout = cmdCtrl->BuildCommand(
@@ -145,6 +145,7 @@ void MainWindow::InitExperiment()
 //                    ui->widget_experimentSetup->GetTimeout_ms()
 //                );
 //    port->write(cmdTimeout);
+//    qDebug() << cmdTimeout;
 
 
 //    // SAMPLE RATE
