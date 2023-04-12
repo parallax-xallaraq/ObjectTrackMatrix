@@ -78,12 +78,13 @@ void loop() {
   // display.display();
   // delete[] hs.hex;
 
-  struct packet p;
-  p.commandNumber = 4;
-  p.objectID = 0;
-  p.data = 10;
+  // struct packet p;
+  // p.commandNumber = 4;
+  // p.objectID = 0;
+  // p.data = 10;
 
-  bool writeStatus = WritePacket(p);
+  // bool writeStatus = WritePacket(p);
+  Ping();
   
   delay(1000);
   ClearScreen();
@@ -277,7 +278,11 @@ void DoCommand(struct packet currentCommand)
 
 void Ping()
 {
-  
+  struct packet p;
+  p.commandNumber = PING;
+  p.objectID = 0;
+  p.data = 0;
+  bool status = WritePacket(p);
 }
 
 void TestLED(int id, int time_ms)
