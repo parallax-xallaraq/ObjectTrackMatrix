@@ -13,9 +13,9 @@ Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 // command IDs
 const int PING       = 0;
-const int TESTLED    = 1;
-const int BATTERY    = 2;
-const int CALIBRATE  = 3;
+const int TESTLED    = 1; // not implemented in software
+const int BATTERY    = 2; // not implemented in software
+const int CALIBRATE  = 3; // not implemented in software
 const int NTRIALS    = 4;
 const int TRIAL      = 5;
 const int SEPARATION = 6;
@@ -33,6 +33,7 @@ struct packet {
   int data;
 };
 
+//  holds character array of hex numbers with array size
 struct hexString {
   char * hex;
   int    size;
@@ -63,9 +64,10 @@ void setup() {
 // put your main code here, to run repeatedly:
 void loop() {
 
+  /////////////////////////////////////////////
   // read one data packet from computer 
-  // struct packet p = ReadCommand();
-  // DoCommand(p);
+  DoCommand(ReadCommand());
+  /////////////////////////////////////////////
 
   // show to screen
   // DisplayPacket(p);
@@ -78,13 +80,13 @@ void loop() {
   // display.display();
   // delete[] hs.hex;
 
-  // struct packet p;
-  // p.commandNumber = 4;
-  // p.objectID = 0;
-  // p.data = 10;
+  struct packet p;
+  p.commandNumber = 4;
+  p.objectID = 0;
+  p.data = 10;
 
-  // bool writeStatus = WritePacket(p);
-  Ping();
+  bool writeStatus = WritePacket(p);
+  // Ping();
   
   delay(1000);
   ClearScreen();
