@@ -38,6 +38,13 @@ QList<uint> Commands::UnpackCommand(QByteArray cmdPacket)
     if(cmdPacket.length() != nBytes_command()){
         throw std::invalid_argument("Command is incorrect size.");
     }
+    // check start and stop bits
+    if(cmdPacket[0] != STX() [0]){
+        throw std::invalid_argument("Packet does not start with STX.");
+    }
+    if(cmdPacket[nBytes_command() - 1] != STX() [0]){
+        throw std::invalid_argument("Packet does not end with ETX.");
+    }
 
     // convert each part of packet into int
     QList<uint> commands;

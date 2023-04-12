@@ -74,6 +74,24 @@ QList<uint> SerialControl::ReadPacket()
     return( _commands->UnpackCommand( Read(_maxlength_readPacket) ) );
 }
 
+QList<uint> SerialControl::WriteAndReadPacket(uint8_t cmd, uint8_t id, uint data)
+{
+    WritePacket(cmd, id, data);
+    return(ReadPacket());
+}
+
+bool SerialControl::WriteAndReadPacket_CheckMatch(uint8_t cmd, uint8_t id, uint data)
+{
+    // write
+    QList<uint> writePkt = {cmd,id,data};
+    WritePacket(cmd, id, data);
+    // read
+    QList<uint> readPkt = ReadPacket();
+
+    // true if lists match, false otherwise
+    return(writePkt==readPkt);
+}
+
 QByteArray SerialControl::Read(qint64 maxLength)
 {
     // check for open port

@@ -28,6 +28,8 @@ public:
     // command packet communication
     void        WritePacket(uint8_t cmd, uint8_t id = 0, uint data = 0);
     QList<uint> ReadPacket(); // use Commands::UnpackedCommandKey for list indexing
+    QList<uint> WriteAndReadPacket(uint8_t cmd, uint8_t id = 0, uint data = 0);
+    bool        WriteAndReadPacket_CheckMatch(uint8_t cmd, uint8_t id = 0, uint data = 0);
 
     // general serial communication
     void        Write(QByteArray packet);
