@@ -35,6 +35,7 @@ private:
 
     void EnableExperimentInputs(bool en);
     void OpenPort();
+    bool TestConnection();
     void InitExperiment();
 };
 #endif // MAINWINDOW_H

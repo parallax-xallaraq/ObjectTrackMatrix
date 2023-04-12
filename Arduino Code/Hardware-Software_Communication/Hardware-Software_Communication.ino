@@ -91,9 +91,9 @@ void loop() {
   // bool writeStatus = WritePacket(p);
   // // Ping();
   
-  delay(1000);
-  ClearScreen();
-  delay(200);
+  // delay(1000);
+  // ClearScreen();
+  // delay(200);
 }
 
 void ClearScreen()

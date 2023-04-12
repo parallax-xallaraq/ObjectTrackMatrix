@@ -92,8 +92,14 @@ void MainWindow::OpenPort()
 
 bool MainWindow::TestConnection()
 {
-    // TODO ping
-    return(true);
+    // write
+    QList<uint> pingPkt = {Commands::PING,0,0};
+    _port->WritePacket(pingPkt[0],pingPkt[1],pingPkt[2]);
+    // read
+    QList<uint> readPkt = _port->ReadPacket();
+
+    // true if lists match, false otherwise
+    return(pingPkt == readPkt);
 }
 
 void MainWindow::InitExperiment()

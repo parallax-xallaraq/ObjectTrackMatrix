@@ -4,7 +4,7 @@ SerialControl::SerialControl()
 {
     // initialize
     _commands = new Commands();
-    _port = new QSerialPort();
+    _port     = new QSerialPort();
     _maxlength_readPacket = _commands->nBytes_command();
 }
 
@@ -64,18 +64,27 @@ void SerialControl::Write(QByteArray packet)
 
 void SerialControl::WritePacket(uint8_t cmd, uint8_t id, uint data)
 {
+    // write command packet
     Write(_commands->BuildCommand(cmd,id,data));
 }
 
 QList<uint> SerialControl::ReadPacket()
 {
+    // read number of bytes equal to a full packet. Then unpack the packet into a list.
     return( _commands->UnpackCommand( Read(_maxlength_readPacket) ) );
 }
 
 QByteArray SerialControl::Read(qint64 maxLength)
 {
-    if(_port->isOpen()){
-        return(_port->read(maxLength));
+    // check for open port
+    if(_port->isOpen() ){
+        // wait for data
+        if(_port->waitForReadyRead()){
+            return(_port->read(maxLength));
+        }
+        else{
+            throw std::invalid_argument("Timeout when reading data.");
+        }
     }
     else{
         throw std::invalid_argument("port is closed.");
