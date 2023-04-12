@@ -97,6 +97,13 @@ void loop() {
   delay(200);
 }
 
+void ClearScreen()
+{
+  display.clearDisplay();
+  display.setCursor(0,20);
+  display.display();    
+}
+
 bool WritePacket(struct packet p)
 {  
   // check packet inputs 
@@ -172,13 +179,6 @@ struct hexString IntToHexString(uint n){
   hs.hex = new char[hs.size];
   sprintf(hs.hex, "%X", n);   
   return(hs);
-}
-
-void ClearScreen()
-{
-  display.clearDisplay();
-  display.setCursor(0,20);
-  display.display();    
 }
 
 struct packet ReadCommand(){
