@@ -5,10 +5,19 @@
 #include <QIODevice>
 #include <QByteArray>
 #include <QString>
+#include <QList>
+
+#include "Commands.h"
+
+// ====================================
+// Created by: Thresa Kelly
+// Email: ThresaKelly133@gmail.com
+// ====================================
 
 class SerialControl
 {
 public:
+    // constructor and destructor
     SerialControl();
     ~SerialControl();
 
@@ -16,20 +25,21 @@ public:
     void OpenPort(QString portName);
     void ClosePort();
 
-    // serial communication
-    void        WritePacket(QByteArray packet);
-    QByteArray  ReadPacket();
+    // command packet communication
+    void        WritePacket(uint8_t cmd, uint8_t id = 0, uint data = 0);
+    QList<uint> ReadPacket(); // use Commands::UnpackedCommandKey for list indexing
+
+    // general serial communication
+    void        Write(QByteArray packet);
     QByteArray  Read(qint64 maxLength);
 
-    // getter and setter
-    qint64 maxlength_readPacket() const;
-    void setMaxlength_readPacket(qint64 newMaxlength_readPacket);
-
 private:
+    // class objects
+    Commands * _commands;
     QSerialPort * _port;
 
-    //
-    qint64 _maxlength_readPacket = 8;
+    // useful constants
+    qint64 _maxlength_readPacket;
 
     // port parameters
     QIODeviceBase::OpenMode  _mode        = QIODevice::ReadWrite;
@@ -38,7 +48,6 @@ private:
     QSerialPort::Parity      _parity      = QSerialPort::NoParity;
     QSerialPort::StopBits    _stopBits    = QSerialPort::OneStop;
     QSerialPort::FlowControl _flowControl = QSerialPort::NoFlowControl;
-
 };
 
 #endif // SERIALCONTROL_H

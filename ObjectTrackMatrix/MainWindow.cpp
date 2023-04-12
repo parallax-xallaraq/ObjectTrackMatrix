@@ -8,8 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
 
     // setup pointers
-    cmdCtrl = new Commands();
-    port = new QSerialPort(this);
+    _port    = new SerialControl();
 
     // hide
     ui->groupBox_experimentDetails->setVisible(false);
@@ -18,10 +17,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
-    delete cmdCtrl;
-    cmdCtrl = nullptr;
-
-    port->close();
+    _port->ClosePort();
+    delete _port;
+    _port = nullptr;
 
     delete ui;
 }
@@ -64,10 +62,15 @@ void MainWindow::on_pushButton_startExperiment_clicked()
     // open serial port
     OpenPort();
 
-    // write experiment setup settings to hardware
-    InitExperiment();
-
-    // TODO start reading data
+    // test that device is connected
+    if(TestConnection()){
+        // write experiment setup settings to hardware
+        InitExperiment();
+        // TODO start reading data
+    }
+    else{
+        throw std::invalid_argument("Connection failed.");
+    }
 }
 
 void MainWindow::EnableExperimentInputs(bool en)
@@ -84,77 +87,55 @@ void MainWindow::EnableExperimentInputs(bool en)
 
 void MainWindow::OpenPort()
 {
-    // set port name
-    port->setPortName(ui->widget_experimentSetup->GetPortName());
+    _port->OpenPort(ui->widget_experimentSetup->GetPortName());
+}
 
-    // open port for read and write
-    port->close();
-    port->open(QIODevice::ReadWrite);
-
-    if(port->isOpen())
-    {
-        // setup port
-        port->setBaudRate(QSerialPort::Baud115200);
-        port->setDataBits(QSerialPort::Data8);
-        port->setParity(QSerialPort::NoParity);
-        port->setStopBits(QSerialPort::OneStop);
-        port->setFlowControl(QSerialPort::NoFlowControl);
-    }
-    else
-    {
-        throw std::invalid_argument("can't open the port");
-    }
+bool MainWindow::TestConnection()
+{
+    // TODO ping
+    return(true);
 }
 
 void MainWindow::InitExperiment()
 {
     // NTRIALS
-    QByteArray cmdNtrials = cmdCtrl->BuildCommand(
+    _port->WritePacket(
                     Commands::NTRIALS,
                     0,
                     ui->widget_experimentSetup->GetNumberOfTrials()
                 );
-    port->write(cmdNtrials);
-    qDebug() << cmdNtrials;
 
     // TRIAL
     QList<int> trialSequence = ui->widget_experimentSetup->GetTrialSequence();
     for (int i=0; i<trialSequence.length(); i++)
     {
-        QByteArray cmdTrial = cmdCtrl->BuildCommand(
+        _port->WritePacket(
                         Commands::TRIAL,
                         i+1,
                         trialSequence[i]
                     );
-        port->write(cmdTrial);
     }
 
     // SEPARATION
-    QByteArray cmdSeparation = cmdCtrl->BuildCommand(
+    _port->WritePacket(
                     Commands::SEPARATION,
                     0,
                     ui->widget_experimentSetup->GetTimeBetweenTrials_ms()
                 );
-    port->write(cmdSeparation);
-    qDebug() << cmdSeparation;
 
     // TIMEOUT
-    QByteArray cmdTimeout = cmdCtrl->BuildCommand(
+   _port->WritePacket(
                     Commands::TIMEOUT,
                     0,
                     ui->widget_experimentSetup->GetTimeout_ms()
                 );
-    port->write(cmdTimeout);
-    qDebug() << cmdTimeout;
-
 
     // SAMPLE RATE
-    QByteArray cmdSampleRate = cmdCtrl->BuildCommand(
+    _port->WritePacket(
                     Commands::SAMPLERATE,
                     0,
                     ui->widget_experimentSetup->GetSampleRate_Hz()
                 );
-    port->write(cmdSampleRate);
 
     qDebug() << "Experiment initialized.";
 }

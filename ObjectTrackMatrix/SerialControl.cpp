@@ -3,7 +3,9 @@
 SerialControl::SerialControl()
 {
     // initialize
+    _commands = new Commands();
     _port = new QSerialPort();
+    _maxlength_readPacket = _commands->nBytes_command();
 }
 
 SerialControl::~SerialControl()
@@ -12,6 +14,9 @@ SerialControl::~SerialControl()
 
     delete _port;
     _port = nullptr;
+
+    delete _commands;
+    _commands = nullptr;
 }
 
 void SerialControl::OpenPort(QString portName)
@@ -47,7 +52,7 @@ void SerialControl::ClosePort()
     }
 }
 
-void SerialControl::WritePacket(QByteArray packet)
+void SerialControl::Write(QByteArray packet)
 {
     if(_port->isOpen()){
         _port->write(packet);
@@ -57,9 +62,14 @@ void SerialControl::WritePacket(QByteArray packet)
     }
 }
 
-QByteArray SerialControl::ReadPacket()
+void SerialControl::WritePacket(uint8_t cmd, uint8_t id, uint data)
 {
-    return(Read(_maxlength_readPacket));
+    Write(_commands->BuildCommand(cmd,id,data));
+}
+
+QList<uint> SerialControl::ReadPacket()
+{
+    return( _commands->UnpackCommand( Read(_maxlength_readPacket) ) );
 }
 
 QByteArray SerialControl::Read(qint64 maxLength)
@@ -70,14 +80,4 @@ QByteArray SerialControl::Read(qint64 maxLength)
     else{
         throw std::invalid_argument("port is closed.");
     }
-}
-
-qint64 SerialControl::maxlength_readPacket() const
-{
-    return _maxlength_readPacket;
-}
-
-void SerialControl::setMaxlength_readPacket(qint64 newMaxlength_readPacket)
-{
-    _maxlength_readPacket = newMaxlength_readPacket;
 }
