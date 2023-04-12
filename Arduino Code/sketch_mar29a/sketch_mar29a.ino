@@ -59,17 +59,54 @@ void setup() {
 void loop() {
 
   // read one data packet from computer 
-  struct packet p = readCommand();
+  // struct packet p = readCommand();
   // DoCommand(p);
 
   // show to screen
-  DisplayPacket(p);
-  delay(500);
+  // DisplayPacket(p);
+
+  // struct packet p;
+  // p.commandNumber = 4;
+  // p.objectID = 0;
+  // p.data = 10;
+
+  char * hex1 = IntToHexString(10);
+  char * hex2 = IntToHexString(1000);
+  // bool writeStatus = WritePacket(p)
+
+  display.clearDisplay();
+  display.setCursor(0,20);  
+  display.println(10);             
+  display.println(hex1);
+  display.println(1000);             
+  display.println(hex2);
+  // display.println(hex[2]);
+  // display.println(hex[3]);
+  // display.println(hex[4]);
+  // display.println(hex[5]);
+  display.display();
+  
+  delay(1000);
   ClearScreen();
+  delay(200);
+
+  delete[] hex1;
+  delete[] hex2;
 }
 
 bool WritePacket(struct packet p)
-{
+{  
+  // convert to hex
+  char * cmd  = IntToHexString(p.commandNumber);
+  char * id   = IntToHexString(p.objectID);
+  char * data = IntToHexString(p.data);
+
+  // check size 
+  int cmdsize = sizeof(cmd) / sizeof(int) ;
+
+  // initialize packet of 8 bytes
+  char command[] = "00000000";
+  
   // TODO write packet
 
   // convert int to hex string
@@ -77,6 +114,16 @@ bool WritePacket(struct packet p)
   // write packet to computer
 
   // return true for successful write, false for error or bad inputs  
+  return(false);
+}
+
+char * IntToHexString(int n){
+  // calculate number of digits needed to represent number in hex 
+  int size = floor( log(n)/log(16) ) + 1;
+  // get hex string 
+  char * hex = new char[size];
+  sprintf(hex, "%X", n);
+  return(hex);
 }
 
 void ClearScreen()
