@@ -43,7 +43,6 @@ struct hexString {
   int    size;
 };
 
-
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
@@ -84,13 +83,13 @@ void loop() {
   // display.display();
   // delete[] hs.hex;
 
-  struct packet p;
-  p.commandNumber = 4;
-  p.objectID = 0;
-  p.data = 10;
+  // struct packet p;
+  // p.commandNumber = 4;
+  // p.objectID = 0;
+  // p.data = 10;
 
-  bool writeStatus = WritePacket(p);
-  // Ping();
+  // bool writeStatus = WritePacket(p);
+  // // Ping();
   
   delay(1000);
   ClearScreen();
@@ -323,7 +322,7 @@ void Separation(int time_ms)
 
 void Timeout(int time_ms)
 {
-  
+
 }
 
 void SampleRate(int frequency_Hz)

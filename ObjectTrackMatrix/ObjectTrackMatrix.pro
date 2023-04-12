@@ -14,6 +14,7 @@ SOURCES += \
     GetUserInfo.cpp \
     ObjectMatrix.cpp \
     MainWindow.cpp \
+    SerialControl.cpp \
     main.cpp
     main.cpp \
 
@@ -22,7 +23,8 @@ HEADERS += \
     ExperimentSetup.h \
     GetUserInfo.h \
     MainWindow.h \
-    ObjectMatrix.h
+    ObjectMatrix.h \
+    SerialControl.h
 
 FORMS += \
     ExperimentSetup.ui \
