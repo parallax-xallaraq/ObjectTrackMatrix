@@ -33,6 +33,11 @@ struct packet {
   int data;
 };
 
+struct hexString {
+  char * hex;
+  int    size;
+};
+
 
 void setup() {
   // put your setup code here, to run once:
@@ -59,71 +64,107 @@ void setup() {
 void loop() {
 
   // read one data packet from computer 
-  // struct packet p = readCommand();
+  // struct packet p = ReadCommand();
   // DoCommand(p);
 
   // show to screen
   // DisplayPacket(p);
 
-  // struct packet p;
-  // p.commandNumber = 4;
-  // p.objectID = 0;
-  // p.data = 10;
+  // struct hexString hs = IntToHexString(100);
+  // display.clearDisplay();
+  // display.setCursor(0,20);             
+  // display.println(hs.hex);
+  // display.println(hs.size);
+  // display.display();
+  // delete[] hs.hex;
 
-  char * hex1 = IntToHexString(10);
-  char * hex2 = IntToHexString(1000);
-  // bool writeStatus = WritePacket(p)
+  struct packet p;
+  p.commandNumber = 4;
+  p.objectID = 0;
+  p.data = 10;
 
-  display.clearDisplay();
-  display.setCursor(0,20);  
-  display.println(10);             
-  display.println(hex1);
-  display.println(1000);             
-  display.println(hex2);
-  // display.println(hex[2]);
-  // display.println(hex[3]);
-  // display.println(hex[4]);
-  // display.println(hex[5]);
-  display.display();
+  bool writeStatus = WritePacket(p);
   
   delay(1000);
   ClearScreen();
   delay(200);
-
-  delete[] hex1;
-  delete[] hex2;
 }
 
 bool WritePacket(struct packet p)
 {  
+  // check packet inputs 
+  if( (p.commandNumber > STREAM) || // check that command number is valid 
+      (p.commandNumber < PING) ||
+      (p.objectID > NOBJECTS) ||    // check for valid ID 
+      (p.objectID < 0)
+  ){
+    return(false);
+  }
+
   // convert to hex
-  char * cmd  = IntToHexString(p.commandNumber);
-  char * id   = IntToHexString(p.objectID);
-  char * data = IntToHexString(p.data);
+  struct hexString cmd  = IntToHexString(p.commandNumber);
+  struct hexString id   = IntToHexString(p.objectID);
+  struct hexString data = IntToHexString(p.data);
 
-  // check size 
-  int cmdsize = sizeof(cmd) / sizeof(int) ;
-
+  // check char* sizes
+  if( (cmd.size  > 1) ||
+      (id.size   > 1) ||
+      (data.size > 4)
+  ){
+    return(false);
+  }  
+  
   // initialize packet of 8 bytes
   char command[] = "00000000";
+
+  // set start/stop flags
+  command[0] = 0x02; // STX
+  command[7] = 0x03; // ETX
   
-  // TODO write packet
+  // write command info 
+  command[1] = cmd.hex[0];
+  command[2] = id.hex[0];
+  if(data.size == 4){
+    command[3] = data.hex[0];
+    command[4] = data.hex[1];
+    command[5] = data.hex[2];
+    command[6] = data.hex[3];
+  } else if(data.size == 3){
+    command[4] = data.hex[0];
+    command[5] = data.hex[1];
+    command[6] = data.hex[2];    
+  }else if(data.size == 2){
+    command[5] = data.hex[0];
+    command[6] = data.hex[1];       
+  } else { // data.size == 1
+    command[6] = data.hex[0];     
+  }
 
-  // convert int to hex string
-  // concatenate STX+cmd+id+data+ETX
-  // write packet to computer
+  // write to computer 
+  Serial.write(command);  
 
-  // return true for successful write, false for error or bad inputs  
-  return(false);
+  // delete pointers to prevent memory leak
+  delete[] cmd.hex;
+  delete[] id.hex;
+  delete[] data.hex;
+  
+  // return true for successful write
+  return(true);
 }
 
-char * IntToHexString(int n){
-  // calculate number of digits needed to represent number in hex 
-  int size = floor( log(n)/log(16) ) + 1;
-  // get hex string 
-  char * hex = new char[size];
-  sprintf(hex, "%X", n);
-  return(hex);
+struct hexString IntToHexString(uint n){
+  struct hexString hs; 
+  if(n == 0){
+    hs.size = 1;    
+  }
+  else{
+    // calculate number of digits needed to represent number in hex
+    hs.size = floor( log(n)/log(16) ) + 1;       
+  }
+  // convert n to hex string 
+  hs.hex = new char[hs.size];
+  sprintf(hs.hex, "%X", n);   
+  return(hs);
 }
 
 void ClearScreen()
@@ -133,17 +174,7 @@ void ClearScreen()
   display.display();    
 }
 
-void DisplayPacket(struct packet p)
-{
-  display.clearDisplay();
-  display.setCursor(0,20);             
-  display.println(p.commandNumber);
-  display.println(p.objectID);
-  display.println(p.data);
-  display.display();
-}
-
-struct packet readCommand(){
+struct packet ReadCommand(){
   // init strings
   char b0_stx[]     = "0"; // note: string terminates with '\0'
   char b1_cmd[]     = "0";
@@ -181,7 +212,7 @@ struct packet readCommand(){
   // verify that last byte is ETX, which ends the packet
   if( b7_etx[0] != 0x03){
     // bad packet, try to read again 
-    return(readCommand());
+    return(ReadCommand());
   }
 
   // convert hex characters into integers and add to struct 
