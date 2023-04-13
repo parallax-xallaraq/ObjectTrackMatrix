@@ -42,7 +42,7 @@ QList<uint> Commands::UnpackCommand(QByteArray cmdPacket)
     if(cmdPacket[0] != STX() [0]){
         throw std::invalid_argument("Packet does not start with STX.");
     }
-    if(cmdPacket[nBytes_command() - 1] != STX() [0]){
+    if(cmdPacket[nBytes_command() - 1] != ETX() [0]){
         throw std::invalid_argument("Packet does not end with ETX.");
     }
 
