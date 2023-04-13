@@ -63,14 +63,16 @@ void MainWindow::on_pushButton_startExperiment_clicked()
     OpenPort();
 
     // test that device is connected
-    if(TestConnection()){
-        // write experiment setup settings to hardware
-        InitExperiment();
-        // TODO start reading data
-    }
-    else{
+    if(!TestConnection()){
         throw std::invalid_argument("Connection failed.");
     }
+
+    // write experiment setup settings to hardware
+    bool success = InitExperiment();
+    if(!success){
+        throw std::invalid_argument("Initialization failed.");
+    }
+    // TODO start reading data
 }
 
 void MainWindow::EnableExperimentInputs(bool en)
@@ -96,46 +98,58 @@ bool MainWindow::TestConnection()
     return(_port->WriteAndReadPacket_CheckMatch(Commands::PING,0,0));
 }
 
-void MainWindow::InitExperiment()
+bool MainWindow::InitExperiment()
 {
+    // status flags
+    bool success = true;
+    bool written = false;
+
     // NTRIALS
-    _port->WritePacket(
+    written =_port->WriteAndReadPacket_CheckMatch(
                     Commands::NTRIALS,
                     0,
                     ui->widget_experimentSetup->GetNumberOfTrials()
                 );
+    success = success && written;
 
     // TRIAL
     QList<int> trialSequence = ui->widget_experimentSetup->GetTrialSequence();
     for (int i=0; i<trialSequence.length(); i++)
     {
-        _port->WritePacket(
+        written =_port->WriteAndReadPacket_CheckMatch(
                         Commands::TRIAL,
                         i+1,
                         trialSequence[i]
                     );
+        success = success && written;
     }
 
     // SEPARATION
-    _port->WritePacket(
+    written =_port->WriteAndReadPacket_CheckMatch(
                     Commands::SEPARATION,
                     0,
                     ui->widget_experimentSetup->GetTimeBetweenTrials_ms()
                 );
+    success = success && written;
 
     // TIMEOUT
-   _port->WritePacket(
+    written =_port->WriteAndReadPacket_CheckMatch(
                     Commands::TIMEOUT,
                     0,
                     ui->widget_experimentSetup->GetTimeout_ms()
                 );
+    success = success && written;
 
     // SAMPLE RATE
-    _port->WritePacket(
+    written =_port->WriteAndReadPacket_CheckMatch(
                     Commands::SAMPLERATE,
                     0,
                     ui->widget_experimentSetup->GetSampleRate_Hz()
                 );
+    success = success && written;
 
     qDebug() << "Experiment initialized.";
+
+    // return true when all commands were written and read back, false otherwise
+    return(success);
 }
