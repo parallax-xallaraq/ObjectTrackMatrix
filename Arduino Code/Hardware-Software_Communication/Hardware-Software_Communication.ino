@@ -77,7 +77,7 @@ void loop() {
 
   /////////////////////////////////////////////
   // read one data packet from computer 
-  DoCommand(ReadCommand());
+  bool status = DoCommand(ReadCommand());
   /////////////////////////////////////////////
 
   // show to screen
@@ -99,7 +99,7 @@ void loop() {
   // bool writeStatus = WritePacket(p);
   // // Ping();
   
-  delay(1000);
+  // delay(1000);
   // ClearScreen();
   // delay(200);
 }
@@ -255,8 +255,11 @@ int HexStringToInt(char str[])
 }
 
 
-void DoCommand(struct packet currentCommand)
+bool DoCommand(struct packet currentCommand)
 {
+  // true when command was successful, false if failed
+  bool status = false;  
+
   // easy access of struct parts
   int cmd  = currentCommand.commandNumber;
   int id   = currentCommand.objectID;
@@ -265,72 +268,82 @@ void DoCommand(struct packet currentCommand)
   // choose function using command number 
   switch(cmd) {
     case PING:
-      Ping();  
+      status = Ping();  
       break;
     case TESTLED:
-      TestLED(id,data);
+      status = TestLED(id,data);
       break;
     case BATTERY:
-      Battery(id);
+      status = Battery(id);
       break;
     case CALIBRATE:
-      Calibrate(id);
+      status = Calibrate(id);
       break;
     case NTRIALS:
-      NTrials(data);
+      status = NTrials(data);
       break;
     case TRIAL:
-      Trial(id,data);
+      status = Trial(id,data);
       break;      
     case SEPARATION:
-      Separation(data);
+      status = Separation(data);
       break;
     case TIMEOUT:
-      Timeout(data);
+      status = Timeout(data);
       break;
     case SAMPLERATE:
-      SampleRate(data);
+      status = SampleRate(data);
       break;
     case STREAM:
-      Stream(data);
+      status = Stream(data);
       break;
     default:
-      NoCommand();
+      status = NoCommand();
   }
+
+  return(status);  
 }
 
-void Ping()
+bool Ping()
 {
+  // true for successful command implementation, false otherwise
   bool status = WritePacket(PING,0,0);
+  return(status);
 }
 
-void TestLED(int id, int time_ms)
+bool TestLED(int id, int time_ms)
+{
+  // not implemented
+  return(false); // temp
+}
+
+bool Battery(int id)
+{
+  // not implemented
+  return(false); // temp
+}
+
+bool Calibrate(int id)
 {
   // not implemented 
+  return(false); // temp
 }
 
-void Battery(int id)
+bool NTrials(int numberOfTrials)
 {
-  // not implemented 
-}
+  // true for successful command implementation, false otherwise
+  bool status = false;
 
-void Calibrate(int id)
-{
-  // not implemented 
-}
-
-void NTrials(int numberOfTrials)
-{
-  // set number of trials globally
-  _numberOfTrials = numberOfTrials;
-  
-  // clear out old array
-  if(_trialSequence != nullptr){
-    delete[] _trialSequence;
-    _trialSequence = nullptr;
-  }  
-  
   if(numberOfTrials > 0){
+    // set number of trials globally
+    _numberOfTrials = numberOfTrials;
+    
+    // clear out old array
+    if(_trialSequence != nullptr){
+      delete[] _trialSequence;
+      _trialSequence = nullptr;
+    }  
+    
     // initalize sequence array of size _trialSequence and fill with -1s
     _trialSequence = new int[numberOfTrials]; 
     for(int i=0; i<numberOfTrials; i++){
@@ -338,37 +351,80 @@ void NTrials(int numberOfTrials)
     } 
 
     // write back command
-    bool status = WritePacket(NTRIALS,0,_numberOfTrials);   
+    status = WritePacket(NTRIALS,0,_numberOfTrials);   
   }
   // else { bad input, do not write back to software }
+  return(status);
 }
 
-void Trial(int id, int trialNumber)
+bool Trial(int id, int trialNumber)
 {
+  // true for successful command implementation, false otherwise
+  bool status = false;
   
+  if(_trialSequence != nullptr){
+    // set trial 
+    _trialSequence[trialNumber-1] = id;
+
+    // write back command
+    bool status = WritePacket(TRIAL,_trialSequence[trialNumber-1],trialNumber);    
+  }
+  // else { need NTrials first, do not write back to software }
+  return(status);
 }
 
-void Separation(int time_ms)
+bool Separation(int time_ms)
 {
+  // true for successful command implementation, false otherwise
+  bool status = false;
+
+  if(time_ms > 0){
+    // set time 
+    _separation_ms = time_ms;
+    // write back command
+    bool status = WritePacket(SEPARATION,0,_separation_ms);
+  }
+  // else { bad input, do not write back to software }
+  return(status);
+}
+
+bool Timeout(int time_ms)
+{
+  // true for successful command implementation, false otherwise
+  bool status = false;
   
+  if(time_ms > 0){
+    // set time
+    _timeout_ms = time_ms;
+    // write back command
+    bool status = WritePacket(TIMEOUT,0,_timeout_ms);    
+  }
+  // else { bad input, do not write back to software }
+  return(status);
 }
 
-void Timeout(int time_ms)
+bool SampleRate(int frequency_Hz)
 {
-
-}
-
-void SampleRate(int frequency_Hz)
-{
+  // true for successful command implementation, false otherwise
+  bool status = false;
   
+  if(frequency_Hz > 0){
+    // set frequency 
+    _sampleRate_Hz = frequency_Hz;
+    // write back command
+    bool status = WritePacket(SAMPLERATE,0,_sampleRate_Hz); 
+  }
+  // else { bad input, do not write back to software }
+  return(status);
 }
 
-void Stream(int flag)
+bool Stream(int flag)
 {
-  
+  // TODO 
+  return(false); // temp
 }
 
-void NoCommand()
+bool NoCommand()
 {
-  
+  return(false);
 }

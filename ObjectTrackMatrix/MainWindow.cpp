@@ -111,7 +111,7 @@ bool MainWindow::InitExperiment()
                     ui->widget_experimentSetup->GetNumberOfTrials()
                 );
     success = success && written;
-/*
+
     // TRIAL
     QList<int> trialSequence = ui->widget_experimentSetup->GetTrialSequence();
     for (int i=0; i<trialSequence.length(); i++)
@@ -147,7 +147,7 @@ bool MainWindow::InitExperiment()
                     ui->widget_experimentSetup->GetSampleRate_Hz()
                 );
     success = success && written;
-*/
+
     qDebug() << "Experiment initialized.";
 
     // return true when all commands were written and read back, false otherwise

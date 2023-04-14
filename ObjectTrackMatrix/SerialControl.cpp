@@ -1,4 +1,5 @@
 #include "SerialControl.h"
+#include <QDebug>
 
 SerialControl::SerialControl()
 {
@@ -65,13 +66,17 @@ void SerialControl::Write(QByteArray packet)
 void SerialControl::WritePacket(uint8_t cmd, uint8_t id, uint data)
 {
     // write command packet
-    Write( _commands->BuildCommand(cmd,id,data) );
+    QByteArray ba = _commands->BuildCommand(cmd,id,data);
+    qDebug() << "WRITE:\t" << ba;
+    Write( ba );
 }
 
 QList<uint> SerialControl::ReadPacket()
 {
     // read number of bytes equal to a full packet. Then unpack the packet into a list.
-    return( _commands->UnpackCommand( Read(_maxlength_readPacket) ) );
+    QByteArray ba = Read(_maxlength_readPacket);
+    qDebug() << "READ:\t" << ba;
+    return( _commands->UnpackCommand( ba ) );
 }
 
 QList<uint> SerialControl::WriteAndReadPacket(uint8_t cmd, uint8_t id, uint data)
