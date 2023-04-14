@@ -48,9 +48,9 @@ QList<uint> Commands::UnpackCommand(QByteArray cmdPacket)
 
     // convert each part of packet into int
     QList<uint> commands;
-    commands.append( HexToUint( QString(cmdPacket[1]) ) );
-    commands.append( HexToUint( QString(cmdPacket[2]) ) );
-    commands.append( HexToUint( QString(cmdPacket[3]) + QString(cmdPacket[4]) ) );
+    commands.append( HexToUint( QString(cmdPacket[1]).toLower() ) );
+    commands.append( HexToUint( QString(cmdPacket[2]).toLower() ) );
+    commands.append( HexToUint( QString(cmdPacket[3]).toLower() + QString(cmdPacket[4]).toLower() + QString(cmdPacket[5]).toLower() + QString(cmdPacket[6]).toLower()) );
 
     // reference commands list using UnpackedCommandKey enum
     return commands;
