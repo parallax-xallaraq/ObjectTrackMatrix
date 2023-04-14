@@ -144,12 +144,30 @@ void DisplayPacket(int commandNumber, int objectID, int data)
   display.display();
 }
 
-void DisplayPacketHex(char * pkt)
+void DisplayPacket(char * commandNumber, char * objectID, char * data)
+{
+  display.clearDisplay();
+  display.setCursor(0,20);             
+  display.println(commandNumber);
+  display.println(objectID);
+  display.println(data);
+  display.display();
+}
+
+void DisplayChar(char * pkt)
 {
   display.clearDisplay();
   display.setCursor(0,20);             
   display.println(pkt);
   display.display();
+}
+
+void DisplayInt(int n)
+{
+  display.clearDisplay();
+  display.setCursor(0,20);             
+  display.println(n);
+  display.display();  
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -217,7 +235,6 @@ bool WritePacket(int commandNumber, int objectID, int data)
 
   // write to computer 
   Serial.write(command);
-  DisplayPacketHex(command);  
 
   // delete pointers to prevent memory leak
   delete[] cmdHex.hex;
@@ -301,8 +318,9 @@ struct hexString IntToHexString(uint n){
   }
 
   // convert n to hex string 
-  hs.hex = new char[hs.size];
-  sprintf(hs.hex, "%X", n);   
+  char * h = new char[hs.size];
+  sprintf(h, "%X", n);
+  hs.hex = h;
 
   // return hex string of n   
   return(hs);

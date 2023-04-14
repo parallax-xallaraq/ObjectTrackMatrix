@@ -62,10 +62,10 @@ void MainWindow::on_pushButton_startExperiment_clicked()
     // open serial port
     OpenPort();
 
-    // test that device is connected
-    if(!TestConnection()){
-        throw std::invalid_argument("Connection failed.");
-    }
+//    // test that device is connected
+//    if(!TestConnection()){
+//        throw std::invalid_argument("Connection failed.");
+//    }
 
     // write experiment setup settings to hardware
     bool success = InitExperiment();
@@ -152,4 +152,5 @@ bool MainWindow::InitExperiment()
 
     // return true when all commands were written and read back, false otherwise
     return(success);
+
 }
