@@ -43,6 +43,14 @@ struct hexString {
   int    size;
 };
 
+// global variables
+int   _numberOfTrials  = -1;
+int * _trialSequence = nullptr;
+int   _separation_ms   = -1;
+int   _timeout_ms      = -1; 
+int   _sampleRate_Hz   = -1;
+
+
 void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
@@ -91,7 +99,7 @@ void loop() {
   // bool writeStatus = WritePacket(p);
   // // Ping();
   
-  // delay(1000);
+  delay(1000);
   // ClearScreen();
   // delay(200);
 }
@@ -104,25 +112,30 @@ void ClearScreen()
 }
 
 bool WritePacket(struct packet p)
+{
+  return(WritePacket(p.commandNumber, p.objectID, p.data));
+}
+
+bool WritePacket(int commandNumber, int objectID, int data)
 {  
   // check packet inputs 
-  if( (p.commandNumber > STREAM) || // check that command number is valid 
-      (p.commandNumber < PING) ||
-      (p.objectID > NOBJECTS) ||    // check for valid ID 
-      (p.objectID < 0)
+  if( (commandNumber > STREAM) || // check that command number is valid 
+      (commandNumber < PING) ||
+      (objectID > NOBJECTS) ||    // check for valid ID 
+      (objectID < 0)
   ){
     return(false);
   }
 
   // convert to hex
-  struct hexString cmd  = IntToHexString(p.commandNumber);
-  struct hexString id   = IntToHexString(p.objectID);
-  struct hexString data = IntToHexString(p.data);
+  struct hexString cmdHex  = IntToHexString(commandNumber);
+  struct hexString idHex   = IntToHexString(objectID);
+  struct hexString dataHex = IntToHexString(data);
 
   // check char* sizes
-  if( (cmd.size  > 1) ||
-      (id.size   > 1) ||
-      (data.size > 4)
+  if( (cmdHex.size  > 1) ||
+      (idHex.size   > 1) ||
+      (dataHex.size > 4)
   ){
     return(false);
   }  
@@ -135,31 +148,36 @@ bool WritePacket(struct packet p)
   command[7] = 0x03; // ETX
   
   // write command info 
-  command[1] = cmd.hex[0];
-  command[2] = id.hex[0];
-  if(data.size == 4){
-    command[3] = data.hex[0];
-    command[4] = data.hex[1];
-    command[5] = data.hex[2];
-    command[6] = data.hex[3];
-  } else if(data.size == 3){
-    command[4] = data.hex[0];
-    command[5] = data.hex[1];
-    command[6] = data.hex[2];    
-  }else if(data.size == 2){
-    command[5] = data.hex[0];
-    command[6] = data.hex[1];       
+  command[1] = cmdHex.hex[0];
+  command[2] = idHex.hex[0];
+  if(dataHex.size == 4){
+    command[3] = dataHex.hex[0];
+    command[4] = dataHex.hex[1];
+    command[5] = dataHex.hex[2];
+    command[6] = dataHex.hex[3];
+  } else if(dataHex.size == 3){
+    command[4] = dataHex.hex[0];
+    command[5] = dataHex.hex[1];
+    command[6] = dataHex.hex[2];    
+  }else if(dataHex.size == 2){
+    command[5] = dataHex.hex[0];
+    command[6] = dataHex.hex[1];       
   } else { // data.size == 1
-    command[6] = data.hex[0];     
+    command[6] = dataHex.hex[0];     
   }
 
   // write to computer 
   Serial.write(command);  
 
+  display.clearDisplay();
+  display.setCursor(0,20);             
+  display.println(command);
+  display.display();
+
   // delete pointers to prevent memory leak
-  delete[] cmd.hex;
-  delete[] id.hex;
-  delete[] data.hex;
+  delete[] cmdHex.hex;
+  delete[] idHex.hex;
+  delete[] dataHex.hex;
   
   // return true for successful write
   return(true);
@@ -283,31 +301,46 @@ void DoCommand(struct packet currentCommand)
 
 void Ping()
 {
-  struct packet p;
-  p.commandNumber = PING;
-  p.objectID = 0;
-  p.data = 0;
-  bool status = WritePacket(p);
+  bool status = WritePacket(PING,0,0);
 }
 
 void TestLED(int id, int time_ms)
 {
-  
+  // not implemented 
 }
 
 void Battery(int id)
 {
-  
+  // not implemented 
 }
 
 void Calibrate(int id)
 {
-
+  // not implemented 
 }
 
 void NTrials(int numberOfTrials)
 {
+  // set number of trials globally
+  _numberOfTrials = numberOfTrials;
   
+  // clear out old array
+  if(_trialSequence != nullptr){
+    delete[] _trialSequence;
+    _trialSequence = nullptr;
+  }  
+  
+  if(numberOfTrials > 0){
+    // initalize sequence array of size _trialSequence and fill with -1s
+    _trialSequence = new int[numberOfTrials]; 
+    for(int i=0; i<numberOfTrials; i++){
+      _trialSequence[i] = -1;
+    } 
+
+    // write back command
+    bool status = WritePacket(NTRIALS,0,_numberOfTrials);   
+  }
+  // else { bad input, do not write back to software }
 }
 
 void Trial(int id, int trialNumber)
