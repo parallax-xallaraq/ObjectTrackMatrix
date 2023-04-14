@@ -65,7 +65,7 @@ void SerialControl::Write(QByteArray packet)
 void SerialControl::WritePacket(uint8_t cmd, uint8_t id, uint data)
 {
     // write command packet
-    Write(_commands->BuildCommand(cmd,id,data));
+    Write( _commands->BuildCommand(cmd,id,data) );
 }
 
 QList<uint> SerialControl::ReadPacket()
