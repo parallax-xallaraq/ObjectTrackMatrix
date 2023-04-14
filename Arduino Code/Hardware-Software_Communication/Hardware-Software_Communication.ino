@@ -3,32 +3,26 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 
-/*
-*   @author: Thresa Kelly
-*/
+// ======================================
+// Created by:  Thresa Kelly
+// Email:       ThresaKelly133@gmail.com
+// ======================================
 
-// vvv Display screen stuff
+////////////////////////////////////////////////////////////////////////////////////
+// vvv Display screen stuff vvv
+////////////////////////////////////////////////////////////////////////////////////
 #define SCREEN_WIDTH 128 // OLED display width, in pixels
 #define SCREEN_HEIGHT 64 // OLED display height, in pixels
 // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
 #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-// ^^^ Display screen stuff
 
-// command IDs
-const int PING       = 0;
-const int TESTLED    = 1; // not implemented in software
-const int BATTERY    = 2; // not implemented in software
-const int CALIBRATE  = 3; // not implemented in software
-const int NTRIALS    = 4;
-const int TRIAL      = 5;
-const int SEPARATION = 6;
-const int TIMEOUT    = 7;
-const int SAMPLERATE = 8;
-const int STREAM     = 9;
 
-// number of objects
-const int NOBJECTS   = 12;
+////////////////////////////////////////////////////////////////////////////////////
+// vvv globals vvv
+////////////////////////////////////////////////////////////////////////////////////
+
+//// structs ////
 
 // data packet read from software 
 struct packet {
@@ -43,13 +37,36 @@ struct hexString {
   int    size;
 };
 
-// global variables
-int   _numberOfTrials  = -1;
-int * _trialSequence = nullptr;
-int   _separation_ms   = -1;
-int   _timeout_ms      = -1; 
-int   _sampleRate_Hz   = -1;
+//// constants ////
 
+// command IDs
+const int PING       = 0;
+const int TESTLED    = 1; // not implemented in software
+const int BATTERY    = 2; // not implemented in software
+const int CALIBRATE  = 3; // not implemented in software
+const int NTRIALS    = 4;
+const int TRIAL      = 5;
+const int SEPARATION = 6;
+const int TIMEOUT    = 7;
+const int SAMPLERATE = 8;
+const int STREAM     = 9;
+// number of objects
+const int NOBJECTS   = 12;
+// constant for bad no value or bad value
+const int NOVALUE    = -1;
+
+//// experiment parameters ////
+
+// global variables
+int   _numberOfTrials  = NOVALUE;
+int * _trialSequence   = nullptr;
+int   _separation_ms   = NOVALUE;
+int   _timeout_ms      = NOVALUE; 
+int   _sampleRate_Hz   = NOVALUE;
+
+////////////////////////////////////////////////////////////////////////////////////
+// vvv Arduino functions vvv
+////////////////////////////////////////////////////////////////////////////////////
 
 void setup() {
   // put your setup code here, to run once:
@@ -76,33 +93,19 @@ void setup() {
 void loop() {
 
   /////////////////////////////////////////////
-  // read one data packet from computer 
-  bool status = DoCommand(ReadCommand());
+  // read one data packet from computer and do the command 
+  if(Serial.available() > 0){
+    bool status = DoCommand(ReadCommand());  
+  }
   /////////////////////////////////////////////
-
-  // show to screen
-  // DisplayPacket(p);
-
-  // struct hexString hs = IntToHexString(100);
-  // display.clearDisplay();
-  // display.setCursor(0,20);             
-  // display.println(hs.hex);
-  // display.println(hs.size);
-  // display.display();
-  // delete[] hs.hex;
-
-  // struct packet p;
-  // p.commandNumber = 4;
-  // p.objectID = 0;
-  // p.data = 10;
-
-  // bool writeStatus = WritePacket(p);
-  // // Ping();
   
   // delay(1000);
   // ClearScreen();
-  // delay(200);
 }
+
+////////////////////////////////////////////////////////////////////////////////////
+// vvv screen control vvv
+////////////////////////////////////////////////////////////////////////////////////
 
 void ClearScreen()
 {
@@ -110,6 +113,10 @@ void ClearScreen()
   display.setCursor(0,20);
   display.display();    
 }
+
+////////////////////////////////////////////////////////////////////////////////////
+// vvv data packets vvv
+////////////////////////////////////////////////////////////////////////////////////
 
 bool WritePacket(struct packet p)
 {
@@ -169,11 +176,6 @@ bool WritePacket(int commandNumber, int objectID, int data)
   // write to computer 
   Serial.write(command);  
 
-  display.clearDisplay();
-  display.setCursor(0,20);             
-  display.println(command);
-  display.display();
-
   // delete pointers to prevent memory leak
   delete[] cmdHex.hex;
   delete[] idHex.hex;
@@ -183,20 +185,6 @@ bool WritePacket(int commandNumber, int objectID, int data)
   return(true);
 }
 
-struct hexString IntToHexString(uint n){
-  struct hexString hs; 
-  if(n == 0){
-    hs.size = 1;    
-  }
-  else{
-    // calculate number of digits needed to represent number in hex
-    hs.size = floor( log(n)/log(16) ) + 1;       
-  }
-  // convert n to hex string 
-  hs.hex = new char[hs.size];
-  sprintf(hs.hex, "%X", n);   
-  return(hs);
-}
 
 struct packet ReadCommand(){
   // init strings
@@ -245,6 +233,7 @@ struct packet ReadCommand(){
   p.objectID      = HexStringToInt(b2_id);
   p.data          = HexStringToInt(b3456_data);
 
+  // return packet 
   return(p);
 }
 
@@ -254,6 +243,31 @@ int HexStringToInt(char str[])
   return (int) strtoul(str, 0, 16);
 }
 
+struct hexString IntToHexString(uint n){
+  // init struct 
+  struct hexString hs; 
+  
+  // check edge case
+  if(n == 0){
+    // set size to 1
+    hs.size = 1;    
+  }
+  else{
+    // calculate number of digits needed to represent number in hex
+    hs.size = floor( log(n)/log(16) ) + 1;       
+  }
+
+  // convert n to hex string 
+  hs.hex = new char[hs.size];
+  sprintf(hs.hex, "%X", n);   
+
+  // return hex string of n   
+  return(hs);
+}
+
+////////////////////////////////////////////////////////////////////////////////////
+// vvv run commands vvv
+////////////////////////////////////////////////////////////////////////////////////
 
 bool DoCommand(struct packet currentCommand)
 {
@@ -271,13 +285,13 @@ bool DoCommand(struct packet currentCommand)
       status = Ping();  
       break;
     case TESTLED:
-      status = TestLED(id,data);
+      status = TestLED(id,data); // not implemented in software
       break;
     case BATTERY:
-      status = Battery(id);
+      status = Battery(id); // not implemented in software
       break;
     case CALIBRATE:
-      status = Calibrate(id);
+      status = Calibrate(id); // not implemented in software
       break;
     case NTRIALS:
       status = NTrials(data);
@@ -347,7 +361,7 @@ bool NTrials(int numberOfTrials)
     // initalize sequence array of size _trialSequence and fill with -1s
     _trialSequence = new int[numberOfTrials]; 
     for(int i=0; i<numberOfTrials; i++){
-      _trialSequence[i] = -1;
+      _trialSequence[i] = NOVALUE;
     } 
 
     // write back command
