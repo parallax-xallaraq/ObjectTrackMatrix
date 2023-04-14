@@ -50,19 +50,32 @@ const int SEPARATION = 6;
 const int TIMEOUT    = 7;
 const int SAMPLERATE = 8;
 const int STREAM     = 9;
+
 // number of objects
 const int NOBJECTS   = 12;
+
 // constant for bad no value or bad value
 const int NOVALUE    = -1;
 
-//// experiment parameters ////
+// system states 
+const int MODE_INIT   = 0; // setting experiment parameters 
+const int MODE_STREAM = 1; // experiment running
 
-// global variables
+//// variables ////
+
+// experiment state
+int   _state           = NOVALUE;
+
+// experiment parameters
 int   _numberOfTrials  = NOVALUE;
 int * _trialSequence   = nullptr;
 int   _separation_ms   = NOVALUE;
 int   _timeout_ms      = NOVALUE; 
 int   _sampleRate_Hz   = NOVALUE;
+
+// current experiment status
+int   _currentTrial    = NOVALUE; // trial number (1 to _numberOfTrials)
+int   _currentObject   = NOVALUE; // ID of object that was moved
 
 ////////////////////////////////////////////////////////////////////////////////////
 // vvv Arduino functions vvv
@@ -77,30 +90,27 @@ void setup() {
     Serial.println("SSD1306 allocation failed");
     for(;;);
   }
-  delay(2000);
+  delay(500);
 
-  // test display
-  display.clearDisplay();
-  display.setTextSize(1);             
-  display.setTextColor(WHITE);        
-  display.setCursor(0,20);             
-  display.println("Hello, world!");
-  display.display();
-  delay(2000); 
+  TestDisplay();
+  delay(500);
 }
 
 // put your main code here, to run repeatedly:
 void loop() {
 
-  /////////////////////////////////////////////
   // read one data packet from computer and do the command 
   if(Serial.available() > 0){
     bool status = DoCommand(ReadCommand());  
   }
-  /////////////////////////////////////////////
+
+  if(_state == MODE_STREAM){
+    // experiment running     
+  }
   
-  // delay(1000);
-  // ClearScreen();
+  delay(1000);
+  ClearScreen();
+  delay(200);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -112,6 +122,34 @@ void ClearScreen()
   display.clearDisplay();
   display.setCursor(0,20);
   display.display();    
+}
+
+void TestDisplay()
+{
+  display.clearDisplay();
+  display.setTextSize(1);             
+  display.setTextColor(WHITE);        
+  display.setCursor(0,20);             
+  display.println("Hello, world!");
+  display.display();
+}
+
+void DisplayPacket(int commandNumber, int objectID, int data)
+{
+  display.clearDisplay();
+  display.setCursor(0,20);             
+  display.println(commandNumber);
+  display.println(objectID);
+  display.println(data);
+  display.display();
+}
+
+void DisplayPacketHex(char * pkt)
+{
+  display.clearDisplay();
+  display.setCursor(0,20);             
+  display.println(pkt);
+  display.display();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -126,10 +164,10 @@ bool WritePacket(struct packet p)
 bool WritePacket(int commandNumber, int objectID, int data)
 {  
   // check packet inputs 
-  if( (commandNumber > STREAM) || // check that command number is valid 
-      (commandNumber < PING) ||
-      (objectID > NOBJECTS) ||    // check for valid ID 
-      (objectID < 0)
+  if( ( commandNumber > STREAM   ) || // check that command number is valid 
+      ( commandNumber < PING     ) ||
+      ( objectID      > NOBJECTS ) || // check for valid ID 
+      ( objectID      < 0        )
   ){
     return(false);
   }
@@ -144,6 +182,10 @@ bool WritePacket(int commandNumber, int objectID, int data)
       (idHex.size   > 1) ||
       (dataHex.size > 4)
   ){
+    // delete pointers to prevent memory leak
+    delete[] cmdHex.hex;
+    delete[] idHex.hex;
+    delete[] dataHex.hex;
     return(false);
   }  
   
@@ -174,7 +216,8 @@ bool WritePacket(int commandNumber, int objectID, int data)
   }
 
   // write to computer 
-  Serial.write(command);  
+  Serial.write(command);
+  DisplayPacketHex(command);  
 
   // delete pointers to prevent memory leak
   delete[] cmdHex.hex;
@@ -209,7 +252,7 @@ struct packet ReadCommand(){
   
   // wait for full packet to be available 
   while(Serial.available() < 7){
-    delay(0.5);
+    delayMicroseconds(200); // 0.2 ms
   }
 
   // read next bytes  
@@ -249,7 +292,7 @@ struct hexString IntToHexString(uint n){
   
   // check edge case
   if(n == 0){
-    // set size to 1
+    // only 1 digit needed for 0 hex
     hs.size = 1;    
   }
   else{
@@ -285,13 +328,13 @@ bool DoCommand(struct packet currentCommand)
       status = Ping();  
       break;
     case TESTLED:
-      status = TestLED(id,data); // not implemented in software
+      status = TestLED(id,data);  // not implemented in software
       break;
     case BATTERY:
-      status = Battery(id); // not implemented in software
+      status = Battery(id);       // not implemented in software
       break;
     case CALIBRATE:
-      status = Calibrate(id); // not implemented in software
+      status = Calibrate(id);     // not implemented in software
       break;
     case NTRIALS:
       status = NTrials(data);
@@ -381,7 +424,7 @@ bool Trial(int id, int trialNumber)
     _trialSequence[trialNumber-1] = id;
 
     // write back command
-    bool status = WritePacket(TRIAL,_trialSequence[trialNumber-1],trialNumber);    
+    status = WritePacket(TRIAL,_trialSequence[trialNumber-1],trialNumber);    
   }
   // else { need NTrials first, do not write back to software }
   return(status);
@@ -434,8 +477,23 @@ bool SampleRate(int frequency_Hz)
 
 bool Stream(int flag)
 {
-  // TODO 
-  return(false); // temp
+  // true for successful command implementation, false otherwise
+  bool status = false;
+  
+  if(flag == 0){
+    // stop experiment
+    _state = MODE_INIT;  
+  }
+  else if(flag == 1){
+    // start experiment 
+    _state = MODE_STREAM;
+  }
+  else{
+    return(status);    
+  }
+  
+  status = WritePacket(STREAM,0,_state); 
+  return(status); 
 }
 
 bool NoCommand()
