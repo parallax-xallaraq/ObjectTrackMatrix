@@ -2,7 +2,7 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-#include <arduino-timer.h>
+#include <arduino-timer.h> // https://github.com/contrem/arduino-timer // Copyright (c) 2018, Michael Contreras
 
 // ======================================
 // Created by:  Thresa Kelly
