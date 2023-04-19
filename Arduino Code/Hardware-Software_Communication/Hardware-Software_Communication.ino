@@ -130,12 +130,17 @@ bool TimerEvent_WriteSTREAM(void *)
   bool keepTimerActive = true;
 
   // check for valid parameters
-  if(_currentTrial < 1 || _currentTrial > _numberOfTrials){
+  if(_currentTrial < 1 || _state != MODE_STREAM ){
     keepTimerActive = false;
+    DisplayInt(_state); // testing
   }
   else{
     // write data to computer 
-    WritePacket(STREAM, _currentObject, _currentTrial);    
+    WritePacket(STREAM, _currentObject, _currentTrial); 
+
+    // testing 
+    DisplayInt(_currentTrial);
+    _currentTrial += 1;
   }
 
   return keepTimerActive;
@@ -347,12 +352,7 @@ struct hexString IntToHexString(uint n){
 
   // convert n to hex string 
   hs.hex = new char[hs.size];
-  if(n==12){
-    hs.hex[0] = 'C';
-  }
-  else{
-    sprintf(hs.hex, "%X", n);
-  }
+  sprintf(hs.hex, "%X", n);
   
   // return hex string of n   
   return(hs);

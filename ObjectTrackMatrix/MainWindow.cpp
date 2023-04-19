@@ -123,8 +123,8 @@ bool MainWindow::InitExperiment()
     {
         written =_port->WriteAndReadPacket_CheckMatch(
                         Commands::TRIAL,
-                        i+1,
-                        trialSequence[i]
+                        trialSequence[i],
+                        i+1
                     );
         success = success && written;
     }
@@ -161,7 +161,7 @@ bool MainWindow::InitExperiment()
 
 bool MainWindow::RunExperiment()
 {
-    // STREAM
+    // STREAM ON
     bool success =_port->WriteAndReadPacket_CheckMatch(
                     Commands::STREAM,
                     0,
@@ -173,6 +173,7 @@ bool MainWindow::RunExperiment()
 
     qDebug() << "Streaming...";
 
+    // read data
     bool readAgain = true;
     while(readAgain){
         // read
@@ -183,6 +184,16 @@ bool MainWindow::RunExperiment()
 
         // update condition
         readAgain = (trial > 0) && (trial <= ui->widget_experimentSetup->GetNumberOfTrials() );
+    }
+
+    // STREAM OFF
+    success =_port->WriteAndReadPacket_CheckMatch(
+                    Commands::STREAM,
+                    0,
+                    0
+                );
+    if(!success){
+        return(false);
     }
 
     qDebug() << "Streaming finished.";

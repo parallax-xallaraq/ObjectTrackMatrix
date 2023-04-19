@@ -179,10 +179,12 @@ void Commands::ValidateCommand(uint8_t cmd, uint8_t id, uint data)
     if( DoesCommandSendID(cmd) ^ (id!=0) ) { // xor
         throw std::invalid_argument("Command needs an ID.");
     }
-    // check that data is provided if needed
-    if( DoesCommandSendData(cmd) ^ (data!=0)) {
-        throw std::invalid_argument("Command needs data.");
-    }
+
+//    // check that data is provided if needed
+//    if( DoesCommandSendData(cmd) ^ (data!=0)) {
+//        throw std::invalid_argument("Command needs data.");
+//    } // STREAM can send zero, so dont check this?
+
     // check that data can be represented by 4 hex btyes
     if(UintToHex(data).length() > _nBytes_data){
         throw std::invalid_argument("Data packet overflow.");
