@@ -59,7 +59,7 @@ const int SAMPLERATE = 8;
 const int STREAM     = 9;
 
 // number of objects
-const int NOBJECTS   = 12;
+const int NOBJECTS   = 11; //12;
 
 // constant for bad no value or bad value
 const int NOVALUE    = -1;
@@ -132,7 +132,6 @@ bool TimerEvent_WriteSTREAM(void *)
   // check for valid parameters
   if(_currentTrial < 1 || _state != MODE_STREAM ){
     keepTimerActive = false;
-    DisplayInt(_state); // testing
   }
   else{
     // write data to computer 
