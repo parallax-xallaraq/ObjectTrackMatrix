@@ -116,9 +116,9 @@ void loop() {
     timer.tick();
   }
   
-  delay(1000);
-  ClearScreen();
-  delay(200);
+  // delay(1000);
+  // ClearScreen();
+  // delay(200);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -346,10 +346,14 @@ struct hexString IntToHexString(uint n){
   }
 
   // convert n to hex string 
-  char * h = new char[hs.size];
-  sprintf(h, "%X", n);
-  hs.hex = h;
-
+  hs.hex = new char[hs.size];
+  if(n==12){
+    hs.hex[0] = 'C';
+  }
+  else{
+    sprintf(hs.hex, "%X", n);
+  }
+  
   // return hex string of n   
   return(hs);
 }

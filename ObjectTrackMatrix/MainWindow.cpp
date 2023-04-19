@@ -62,17 +62,22 @@ void MainWindow::on_pushButton_startExperiment_clicked()
     // open serial port
     OpenPort();
 
-//    // test that device is connected
-//    if(!TestConnection()){
-//        throw std::invalid_argument("Connection failed.");
-//    }
+    // test that device is connected
+    if(!TestConnection()){
+        throw std::invalid_argument("Connection failed.");
+    }
 
     // write experiment setup settings to hardware
-    bool success = InitExperiment();
-    if(!success){
+    bool successInit = InitExperiment();
+    if(!successInit){
         throw std::invalid_argument("Initialization failed.");
     }
-    // TODO start reading data
+
+    // start reading data
+    bool successRun = RunExperiment();
+    if(!successRun){
+        throw std::invalid_argument("Streaming failed.");
+    }
 }
 
 void MainWindow::EnableExperimentInputs(bool en)
@@ -152,5 +157,35 @@ bool MainWindow::InitExperiment()
 
     // return true when all commands were written and read back, false otherwise
     return(success);
+}
 
+bool MainWindow::RunExperiment()
+{
+    // STREAM
+    bool success =_port->WriteAndReadPacket_CheckMatch(
+                    Commands::STREAM,
+                    0,
+                    1
+                );
+    if(!success){
+        return(false);
+    }
+
+    qDebug() << "Streaming...";
+
+    bool readAgain = true;
+    while(readAgain){
+        // read
+        QList<uint> pkt = _port->ReadPacket();
+        int objectID = pkt[Commands::ID];
+        int trial    = pkt[Commands::DATA];
+        // TODO write to file
+
+        // update condition
+        readAgain = (trial > 0) && (trial <= ui->widget_experimentSetup->GetNumberOfTrials() );
+    }
+
+    qDebug() << "Streaming finished.";
+
+    return(success);
 }

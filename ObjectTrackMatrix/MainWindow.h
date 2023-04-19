@@ -37,5 +37,6 @@ private:
     void OpenPort();
     bool TestConnection();
     bool InitExperiment();
+    bool RunExperiment();
 };
 #endif // MAINWINDOW_H
