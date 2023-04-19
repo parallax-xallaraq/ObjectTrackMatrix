@@ -2,6 +2,7 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <arduino-timer.h>
 
 // ======================================
 // Created by:  Thresa Kelly
@@ -17,9 +18,15 @@
 #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
+////////////////////////////////////////////////////////////////////////////////////
+// vvv arduino-timer stuff vvv
+////////////////////////////////////////////////////////////////////////////////////
+
+// timer 
+auto timer = timer_create_default(); // create a timer with default settings
 
 ////////////////////////////////////////////////////////////////////////////////////
-// vvv globals vvv
+// vvv my globals vvv
 ////////////////////////////////////////////////////////////////////////////////////
 
 //// structs ////
@@ -104,13 +111,34 @@ void loop() {
     bool status = DoCommand(ReadCommand());  
   }
 
+  // experiment running    
   if(_state == MODE_STREAM){
-    // experiment running     
+    timer.tick();
   }
   
   delay(1000);
   ClearScreen();
   delay(200);
+}
+
+////////////////////////////////////////////////////////////////////////////////////
+// vvv timer vvv
+////////////////////////////////////////////////////////////////////////////////////
+
+bool TimerEvent_WriteSTREAM(void *)
+{
+  bool keepTimerActive = true;
+
+  // check for valid parameters
+  if(_currentTrial < 1 || _currentTrial > _numberOfTrials){
+    keepTimerActive = false;
+  }
+  else{
+    // write data to computer 
+    WritePacket(STREAM, _currentObject, _currentTrial);    
+  }
+
+  return keepTimerActive;
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -501,10 +529,19 @@ bool Stream(int flag)
   if(flag == 0){
     // stop experiment
     _state = MODE_INIT;  
+    // reset experiment variables
+    _currentTrial  = NOVALUE;
+    _currentObject = NOVALUE;
   }
   else if(flag == 1){
     // start experiment 
     _state = MODE_STREAM;
+    // reset experiment variables
+    _currentTrial  = 1;
+    _currentObject = 0;
+    // start timer 
+    int dt_ms = (1.0 / _sampleRate_Hz) * 1000; // (1/[Hz]) = [s] // [s] * 1000[ms]/[s] = [ms]
+    timer.every(dt_ms, TimerEvent_WriteSTREAM);
   }
   else{
     return(status);    
