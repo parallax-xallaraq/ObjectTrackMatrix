@@ -38,12 +38,12 @@ public:
     };
 
     // Using Commands
-    QByteArray BuildCommand(uint8_t cmd, uint8_t id = 0, uint data = 0);
+    QByteArray  BuildCommand(uint8_t cmd, uint8_t id = 0, uint data = 0);
     QList<uint> UnpackCommand(QByteArray ba);
 
     // conversions
     QString UintToHex(uint value);
-    uint HexToUint(QString value);
+    uint    HexToUint(QString value);
 
     // check command parameters
     bool DoesCommandSendID(int cmd);
@@ -103,6 +103,7 @@ private:
         {false,true ,true , true}   // STREAM
     };
 
+    // functions
     void ValidateCommand(uint8_t cmd, uint8_t id, uint data);
 };
 
