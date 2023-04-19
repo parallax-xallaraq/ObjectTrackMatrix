@@ -47,7 +47,7 @@ private:
     Ui::ExperimentSetup *ui;
 
     // variables
-    int numberOfObjects;
+    int _numberOfObjects;
 
     // input validation
     bool IsSequenceValid();

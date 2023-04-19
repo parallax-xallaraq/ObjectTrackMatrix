@@ -1,6 +1,8 @@
 #include "ExperimentSetup.h"
 #include "ui_ExperimentSetup.h"
 
+#include "Commands.h"
+
 #include <QStringList>
 #include <QRandomGenerator>
 #include <QDebug>
@@ -18,7 +20,9 @@ ExperimentSetup::ExperimentSetup(QWidget *parent) :
     ui->setupUi(this);
 
     // initialize
-    SetNumberOfObjects(12);
+    Commands * cmd = new Commands();
+    SetNumberOfObjects(cmd->nObjects());
+    delete cmd;
     on_pushButton_port_clicked();
 
     // hide errors
@@ -127,7 +131,7 @@ QString ExperimentSetup::GetPortName()
 
 void ExperimentSetup::SetNumberOfObjects(int n)
 {
-    numberOfObjects = n;
+    _numberOfObjects = n;
 }
 
 void ExperimentSetup::on_pushButton_generateRandomSequence_clicked()
@@ -138,7 +142,7 @@ void ExperimentSetup::on_pushButton_generateRandomSequence_clicked()
     int nTrials = ui->spinBox_nTrials->value();
     for (int i=0; i<nTrials; i++)
     {
-        int val =  QRandomGenerator::global()->bounded(1, numberOfObjects+1);
+        int val =  QRandomGenerator::global()->bounded(1, _numberOfObjects+1);
         seq = seq + QString::number(val);
         if(i!=nTrials-1)
         {
@@ -162,7 +166,7 @@ bool ExperimentSetup::IsSequenceValid()
         int val = sequenceList[i].toInt(&ok);
 
         // value must be int between 1-12. if not, show error
-        if(!ok || (val < 1 || val > numberOfObjects) )
+        if(!ok || (val < 1 || val > _numberOfObjects) )
         {
             return(false);
         }
