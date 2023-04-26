@@ -1,7 +1,10 @@
 #include <SPI.h>
 #include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
+#include <ESP8266WiFi.h> 
+#include <espnow.h>
+// #include <Adafruit_GFX.h>
+// #include <Adafruit_SSD1306.h>
+#include <Adafruit_AW9523.h> // for multiplexer
 #include <arduino-timer.h> // https://github.com/contrem/arduino-timer // Copyright (c) 2018, Michael Contreras
 
 // ======================================
@@ -12,11 +15,11 @@
 ////////////////////////////////////////////////////////////////////////////////////
 // vvv Display screen stuff vvv
 ////////////////////////////////////////////////////////////////////////////////////
-#define SCREEN_WIDTH 128 // OLED display width, in pixels
-#define SCREEN_HEIGHT 64 // OLED display height, in pixels
-// Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
-#define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
+// #define SCREEN_WIDTH 128 // OLED display width, in pixels
+// #define SCREEN_HEIGHT 64 // OLED display height, in pixels
+// // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
+// #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
+// Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 ////////////////////////////////////////////////////////////////////////////////////
 // vvv arduino-timer stuff vvv
@@ -88,37 +91,34 @@ int   _currentObject   = NOVALUE; // ID of object that was moved
 // vvv Arduino functions vvv
 ////////////////////////////////////////////////////////////////////////////////////
 
-void setup() {
-  // put your setup code here, to run once:
-  Serial.begin(115200);
+void setup() 
+{
+  SystemSetup();
+  
+  // // setup display
+  // if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { 
+  //   Serial.println("SSD1306 allocation failed");
+  //   for(;;);
+  // }
+  // delay(500);
 
-  // setup display
-  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { 
-    Serial.println("SSD1306 allocation failed");
-    for(;;);
-  }
-  delay(500);
-
-  TestDisplay();
+  // TestDisplay();
   delay(500);
 }
 
 // put your main code here, to run repeatedly:
-void loop() {
-
+void loop() 
+{
   // read one data packet from computer and do the command 
   if(Serial.available() > 0){
     bool status = DoCommand(ReadCommand());  
   }
-
+  
   // experiment running    
   if(_state == MODE_STREAM){
     timer.tick();
+    TestSequence();
   }
-  
-  // delay(1000);
-  // ClearScreen();
-  // delay(200);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
@@ -136,71 +136,67 @@ bool TimerEvent_WriteSTREAM(void *)
   else{
     // write data to computer 
     WritePacket(STREAM, _currentObject, _currentTrial); 
-
-    // testing 
-    DisplayInt(_currentTrial);
-    _currentTrial += 1;
   }
 
   return keepTimerActive;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-// vvv screen control vvv
-////////////////////////////////////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////////////////////////////////////
+// // vvv screen control vvv
+// ////////////////////////////////////////////////////////////////////////////////////
 
-void ClearScreen()
-{
-  display.clearDisplay();
-  display.setCursor(0,20);
-  display.display();    
-}
+// void ClearScreen()
+// {
+//   display.clearDisplay();
+//   display.setCursor(0,20);
+//   display.display();    
+// }
 
-void TestDisplay()
-{
-  display.clearDisplay();
-  display.setTextSize(1);             
-  display.setTextColor(WHITE);        
-  display.setCursor(0,20);             
-  display.println("Hello, world!");
-  display.display();
-}
+// void TestDisplay()
+// {
+//   display.clearDisplay();
+//   display.setTextSize(1);             
+//   display.setTextColor(WHITE);        
+//   display.setCursor(0,20);             
+//   display.println("Hello, world!");
+//   display.display();
+// }
 
-void DisplayPacket(int commandNumber, int objectID, int data)
-{
-  display.clearDisplay();
-  display.setCursor(0,20);             
-  display.println(commandNumber);
-  display.println(objectID);
-  display.println(data);
-  display.display();
-}
+// void DisplayPacket(int commandNumber, int objectID, int data)
+// {
+//   display.clearDisplay();
+//   display.setCursor(0,20);             
+//   display.println(commandNumber);
+//   display.println(objectID);
+//   display.println(data);
+//   display.display();
+// }
 
-void DisplayPacket(char * commandNumber, char * objectID, char * data)
-{
-  display.clearDisplay();
-  display.setCursor(0,20);             
-  display.println(commandNumber);
-  display.println(objectID);
-  display.println(data);
-  display.display();
-}
+// void DisplayPacket(char * commandNumber, char * objectID, char * data)
+// {
+//   display.clearDisplay();
+//   display.setCursor(0,20);             
+//   display.println(commandNumber);
+//   display.println(objectID);
+//   display.println(data);
+//   display.display();
+// }
 
-void DisplayChar(char * pkt)
-{
-  display.clearDisplay();
-  display.setCursor(0,20);             
-  display.println(pkt);
-  display.display();
-}
+// void DisplayChar(char * pkt)
+// {
+//   display.clearDisplay();
+//   display.setCursor(0,20);             
+//   display.println(pkt);
+//   display.display();
+// }
 
-void DisplayInt(int n)
-{
-  display.clearDisplay();
-  display.setCursor(0,20);             
-  display.println(n);
-  display.display();  
-}
+// void DisplayInt(int n)
+// {
+//   display.clearDisplay();
+//   display.setCursor(0,20);             
+//   display.println(n);
+//   display.display();  
+// }
 
 ////////////////////////////////////////////////////////////////////////////////////
 // vvv data packets vvv
@@ -278,7 +274,8 @@ bool WritePacket(int commandNumber, int objectID, int data)
 }
 
 
-struct packet ReadCommand(){
+struct packet ReadCommand()
+{
   // init strings
   char b0_stx[]     = "0"; // note: string terminates with '\0'
   char b1_cmd[]     = "0";
@@ -335,7 +332,8 @@ int HexStringToInt(char str[])
   return (int) strtoul(str, 0, 16);
 }
 
-struct hexString IntToHexString(uint n){
+struct hexString IntToHexString(uint n)
+{
   // init struct 
   struct hexString hs; 
   
@@ -557,4 +555,263 @@ bool Stream(int flag)
 bool NoCommand()
 {
   return(false);
+}
+
+
+////////////////////////////////////////////////////////////////////////////////////
+// ======================================
+// Created by:  Ryan Coppens
+// Email:       CoppensRyan@gmail.com
+// ======================================
+////////////////////////////////////////////////////////////////////////////////////
+
+//Box # Color ie B1PR is Box 1 Pin for Red is 1
+Adafruit_AW9523 aw1;
+uint8_t B1PR = 1;  uint8_t B1PB = 2;  uint8_t B1PG = 3;  // Board 1
+uint8_t B2PR = 4;  uint8_t B2PB = 5;  uint8_t B2PG = 6;  // Board 2
+uint8_t B3PR = 7;  uint8_t B3PB = 8;  uint8_t B3PG = 9;  // Board 3
+uint8_t B4PR = 10; uint8_t B4PB = 11; uint8_t B4PG = 12; // Board 4
+
+
+Adafruit_AW9523 aw2;
+uint8_t B5PR = 13; uint8_t B5PB = 14; uint8_t B5PG = 15;    // Board 5
+uint8_t B6PR = 1;   uint8_t B6PB = 2;   uint8_t B6PG = 3;   // Board 6
+uint8_t B7PR = 4;   uint8_t B7PB = 5;   uint8_t B7PG = 6;   // Board 7
+uint8_t B8PR = 7;   uint8_t B8PB = 8;   uint8_t B8PG = 9;   // Board 8
+Adafruit_AW9523 aw3;
+uint8_t B9PR = 10;  uint8_t B9PB = 11;  uint8_t B9PG = 12;  // Board 9
+uint8_t B10PR = 13; uint8_t B10PB = 14; uint8_t B10PG = 15; // Board 10
+uint8_t B11PR = 1;  uint8_t B11PB = 2;  uint8_t B11PG = 3;  // Board 11
+uint8_t B12PR = 4;  uint8_t B12PB = 5;  uint8_t B12PG = 6;  // Board 12
+
+
+typedef struct struct_message 
+{
+    int id;
+    float x;
+    float y;
+    float z;
+    float m;
+    bool isMoving;
+} struct_message;
+// Create a struct_message called myData
+struct_message myData;
+// Create a structure to hold the readings from each board
+struct_message board1; struct_message board2; struct_message board3;
+struct_message board4; struct_message board5; struct_message board6;
+struct_message board7; struct_message board8; struct_message board9;
+struct_message board10; struct_message board11; struct_message board12;
+struct_message board13; struct_message board14; struct_message board15;
+// Create an array with all the structures
+struct_message boardsStruct[15] = {board1, board2,board3,board4,board5, board6,board7,board8,board9, board10,board11,board12,board13, board14,board15};
+
+void OnDataRecv(uint8_t * mac_addr, uint8_t *incomingData, uint8_t len)
+{
+  char macStr[18];
+  Serial.print("Packet received from: ");
+  snprintf(macStr, sizeof(macStr), "%02x:%02x:%02x:%02x:%02x:%02x",mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4], mac_addr[5]);
+  Serial.println(macStr);
+  memcpy(&myData, incomingData, sizeof(myData));
+  Serial.printf("Board ID: %u: %u bytes\n", myData.id, len);
+  // Update the structures with the new incoming data
+  boardsStruct[myData.id].id = myData.id;
+  boardsStruct[myData.id].x = myData.x;
+  boardsStruct[myData.id].y = myData.y;
+  boardsStruct[myData.id].z = myData.z;
+  boardsStruct[myData.id].m = myData.m;
+  boardsStruct[myData.id].isMoving = myData.isMoving;
+  Serial.printf("ID:%d X:%f Y:%f Z:%f m:%f T/F:%d \n",
+                boardsStruct[myData.id].id,
+                boardsStruct[myData.id].x,
+                boardsStruct[myData.id].y,
+                boardsStruct[myData.id].z,
+                boardsStruct[myData.id].m,
+                boardsStruct[myData.id].isMoving);
+  //Serial.println();
+}
+
+void SystemSetup() 
+{
+  Serial.begin(115200); while(! Serial); //Serial.println("Hello World! Serial Has Begun");
+  WiFi.mode(WIFI_STA);
+  WiFi.disconnect();
+  // Serial.println("Device set as a Wi-Fi Station");
+  // if (esp_now_init() != 0) {Serial.println("Error initializing ESP-NOW"); return; }
+  esp_now_set_self_role(ESP_NOW_ROLE_SLAVE);
+  esp_now_register_recv_cb(OnDataRecv);
+  // Serial.println("Setup has been compleated ");
+  
+  //Initalizes the multiplexer I2C
+  //if (! aw1.begin(0x58)) { Serial.println("0x58 not found?");while (1) delay(10);} Serial.println("0x58 found!");//0x58 is default adress
+  //if (! aw1.begin(0x58)) { Serial.println("0x59 not found?");while (1) delay(10);} Serial.println("0x59 found!");//0x59 (A0 shorted)
+  //if (! aw1.begin(0x58)) { Serial.println("0x5A not found?");while (1) delay(10);} Serial.println("0x5A found!");//0x5A (A1 shorted)
+
+  //Defines pins on the multiplexer
+  aw1.pinMode(B1PR, OUTPUT);  aw1.pinMode(B1PB, OUTPUT);  aw1.pinMode(B1PG, OUTPUT);  // Board 1
+  aw1.pinMode(B2PR, OUTPUT);  aw1.pinMode(B2PB, OUTPUT);  aw1.pinMode(B2PG, OUTPUT);  // Board 2
+  aw1.pinMode(B3PR, OUTPUT);  aw1.pinMode(B3PB, OUTPUT);  aw1.pinMode(B3PG, OUTPUT);  // Board 3
+  aw1.pinMode(B4PR, OUTPUT);  aw1.pinMode(B4PB, OUTPUT);  aw1.pinMode(B4PG, OUTPUT);  // Board 4
+  aw2.pinMode(B5PR, OUTPUT);  aw2.pinMode(B5PB, OUTPUT);  aw2.pinMode(B5PG, OUTPUT);  // Board 5
+  aw2.pinMode(B6PR, OUTPUT);  aw2.pinMode(B6PB, OUTPUT);  aw2.pinMode(B6PG, OUTPUT);  // Board 6
+  aw2.pinMode(B7PR, OUTPUT);  aw2.pinMode(B7PB, OUTPUT);  aw2.pinMode(B7PG, OUTPUT);  // Board 7
+  aw2.pinMode(B8PR, OUTPUT);  aw2.pinMode(B8PB, OUTPUT);  aw2.pinMode(B8PG, OUTPUT);  // Board 8
+  aw3.pinMode(B9PR, OUTPUT);  aw3.pinMode(B9PB, OUTPUT);  aw3.pinMode(B9PG, OUTPUT);  // Board 9
+  aw3.pinMode(B10PR, OUTPUT); aw3.pinMode(B10PB, OUTPUT); aw3.pinMode(B10PG, OUTPUT); // Board 10
+  aw3.pinMode(B11PR, OUTPUT); aw3.pinMode(B11PB, OUTPUT); aw3.pinMode(B11PG, OUTPUT); // Board 11
+  aw3.pinMode(B12PR, OUTPUT); aw3.pinMode(B12PB, OUTPUT); aw3.pinMode(B12PG, OUTPUT); // Board 12
+}
+
+
+// // experiment parameters
+// int   _numberOfTrials  = NOVALUE;
+// int * _trialSequence   = nullptr;
+// int   _separation_ms   = NOVALUE;
+// int   _timeout_ms      = NOVALUE; 
+// int   _sampleRate_Hz   = NOVALUE;
+
+// // current experiment status
+// int   _currentTrial    = NOVALUE; // trial number (1 to _numberOfTrials)
+// int   _currentObject   = NOVALUE; // ID of object that was moved
+
+void TestSequence()
+{
+  while (_currentTrial <= _numberOfTrials)
+  {
+    unsigned long startTime = millis(); // gets current time for timeout  
+
+    timer.tick();
+
+    MoveMe(); // indicates which box to move with a blue LEDs
+    
+    bool isMoving = false; // using to set values to allow breaking of loops
+    bool OtherBoxMoving = false;
+    while ((millis() - startTime) < _timeout_ms) //Timeout while checking, breaks if moved
+    {
+      if (boardsStruct[_trialSequence[_currentTrial-1]].isMoving) {
+        isMoving = true; 
+        _currentObject = _trialSequence[_currentTrial-1];
+        break; 
+      } //Checks if commanded is moving 
+      
+      for(int j=1; j<=NOBJECTS;j++) // checks rest of boxes
+      {
+        if (j == _trialSequence[_currentTrial-1]){ continue;} // skip curent box
+        if (boardsStruct[j].isMoving) { 
+          OtherBoxMoving = true; 
+          _currentObject = j;
+          break;
+        } 
+        if(j == NOBJECTS){
+          _currentObject = 0;          
+        }
+      }
+      if(OtherBoxMoving){break;}
+
+      timer.tick();
+    }
+    
+    if (isMoving) {MoveMe_Correct();delay(750);} // Correct LED Responce
+    else if(OtherBoxMoving ) // Wrong LED Responce
+    {
+        for(int j=0; j<5; j++)
+        {
+          MoveMe_WRONG();delay(250);RGB_reset(); delay(250); // Allows for Flashing of RED LED
+        }
+    }
+    else {MoveMe_WRONG();delay(1000);} // Timeout LED Reponce
+    RGB_reset(); 
+    //delay(separation);
+    _currentTrial++;
+  }
+}
+
+void MoveMe()
+{
+  if(_trialSequence == nullptr) {return;}
+
+  if(_trialSequence[_currentTrial]==1)  {setBoardColor(1,  LOW, HIGH, LOW); Serial.println("Box 1 set to blue");}
+  if(_trialSequence[_currentTrial]==2)  {setBoardColor(2,  LOW, HIGH, LOW); Serial.println("Box 2 set to blue");}
+  if(_trialSequence[_currentTrial]==3)  {setBoardColor(3,  LOW, HIGH, LOW); Serial.println("Box 3 set to blue");}
+  if(_trialSequence[_currentTrial]==4)  {setBoardColor(4,  LOW, HIGH, LOW); Serial.println("Box 4 set to blue");}
+  if(_trialSequence[_currentTrial]==5)  {setBoardColor(5,  LOW, HIGH, LOW); Serial.println("Box 5 set to blue");}
+  if(_trialSequence[_currentTrial]==6)  {setBoardColor(6,  LOW, HIGH, LOW); Serial.println("Box 6 set to blue");}
+  if(_trialSequence[_currentTrial]==7)  {setBoardColor(7,  LOW, HIGH, LOW); Serial.println("Box 7 set to blue");}
+  if(_trialSequence[_currentTrial]==8)  {setBoardColor(8,  LOW, HIGH, LOW); Serial.println("Box 8 set to blue");}
+  if(_trialSequence[_currentTrial]==9)  {setBoardColor(9,  LOW, HIGH, LOW); Serial.println("Box 9 set to blue");}
+  if(_trialSequence[_currentTrial]==10) {setBoardColor(10, LOW, HIGH, LOW); Serial.println("Box 0 set to blue");}
+  if(_trialSequence[_currentTrial]==11) {setBoardColor(11, LOW, HIGH, LOW); Serial.println("Box 1 set to blue");}
+  if(_trialSequence[_currentTrial]==12) {setBoardColor(12, LOW, HIGH, LOW); Serial.println("Box 2 set to blue");}
+}
+
+void MoveMe_Correct()
+{
+  if(_trialSequence == nullptr) {return;}
+
+  if(_trialSequence[_currentTrial]==1)  {setBoardColor(1,  LOW, LOW, HIGH); Serial.println("Box 1 set to Green");}
+  if(_trialSequence[_currentTrial]==2)  {setBoardColor(2,  LOW, LOW, HIGH); Serial.println("Box 2 set to Green");}
+  if(_trialSequence[_currentTrial]==3)  {setBoardColor(3,  LOW, LOW, HIGH); Serial.println("Box 3 set to Green");}
+  if(_trialSequence[_currentTrial]==4)  {setBoardColor(4,  LOW, LOW, HIGH); Serial.println("Box 4 set to Green");}
+  if(_trialSequence[_currentTrial]==5)  {setBoardColor(5,  LOW, LOW, HIGH); Serial.println("Box 5 set to Green");}
+  if(_trialSequence[_currentTrial]==6)  {setBoardColor(6,  LOW, LOW, HIGH); Serial.println("Box 6 set to Green");}
+  if(_trialSequence[_currentTrial]==7)  {setBoardColor(7,  LOW, LOW, HIGH); Serial.println("Box 7 set to Green");}
+  if(_trialSequence[_currentTrial]==8)  {setBoardColor(8,  LOW, LOW, HIGH); Serial.println("Box 8 set to Green");}
+  if(_trialSequence[_currentTrial]==9)  {setBoardColor(9,  LOW, LOW, HIGH); Serial.println("Box 9 set to Green");}
+  if(_trialSequence[_currentTrial]==10) {setBoardColor(10, LOW, LOW, HIGH); Serial.println("Box 0 set to Green");}
+  if(_trialSequence[_currentTrial]==11) {setBoardColor(11, LOW, LOW, HIGH); Serial.println("Box 1 set to Green");}
+  if(_trialSequence[_currentTrial]==12) {setBoardColor(12, LOW, LOW, HIGH); Serial.println("Box 2 set to Green");}
+}
+
+void MoveMe_WRONG()
+{
+  if(_trialSequence == nullptr) {return;}
+  
+  if(_trialSequence[_currentTrial]==1)  {setBoardColor(1,  HIGH, LOW, LOW); Serial.println("Box 1 set to RED");}
+  if(_trialSequence[_currentTrial]==2)  {setBoardColor(2,  HIGH, LOW, LOW); Serial.println("Box 2 set to RED");}
+  if(_trialSequence[_currentTrial]==3)  {setBoardColor(3,  HIGH, LOW, LOW); Serial.println("Box 3 set to RED");}
+  if(_trialSequence[_currentTrial]==4)  {setBoardColor(4,  HIGH, LOW, LOW); Serial.println("Box 4 set to RED");}
+  if(_trialSequence[_currentTrial]==5)  {setBoardColor(5,  HIGH, LOW, LOW); Serial.println("Box 5 set to RED");}
+  if(_trialSequence[_currentTrial]==6)  {setBoardColor(6,  HIGH, LOW, LOW); Serial.println("Box 6 set to RED");}
+  if(_trialSequence[_currentTrial]==7)  {setBoardColor(7,  HIGH, LOW, LOW); Serial.println("Box 7 set to RED");}
+  if(_trialSequence[_currentTrial]==8)  {setBoardColor(8,  HIGH, LOW, LOW); Serial.println("Box 8 set to RED");}
+  if(_trialSequence[_currentTrial]==9)  {setBoardColor(9,  HIGH, LOW, LOW); Serial.println("Box 9 set to RED");}
+  if(_trialSequence[_currentTrial]==10) {setBoardColor(10, HIGH, LOW, LOW); Serial.println("Box 0 set to RED");}
+  if(_trialSequence[_currentTrial]==11) {setBoardColor(11, HIGH, LOW, LOW); Serial.println("Box 1 set to RED");}
+  if(_trialSequence[_currentTrial]==12) {setBoardColor(12, HIGH, LOW, LOW); Serial.println("Box 2 set to RED");}
+}
+
+void setBoardColor(int board, int red, int blue, int green) 
+{
+  if (board == 1)  {aw1.digitalWrite(B1PR, red);  aw1.digitalWrite(B1PB, blue);  aw1.digitalWrite(B1PG, green);} 
+  if (board == 2)  {aw1.digitalWrite(B2PR, red);  aw1.digitalWrite(B2PB, blue);  aw1.digitalWrite(B2PG, green);} 
+  if (board == 3)  {aw1.digitalWrite(B3PR, red);  aw1.digitalWrite(B3PB, blue);  aw1.digitalWrite(B3PG, green);} 
+  if (board == 4)  {aw1.digitalWrite(B4PR, red);  aw1.digitalWrite(B4PB, blue);  aw1.digitalWrite(B4PG, green);} 
+  if (board == 5)  {aw1.digitalWrite(B5PR, red);  aw1.digitalWrite(B5PB, blue);  aw1.digitalWrite(B5PG, green);} 
+  if (board == 6)  {aw2.digitalWrite(B6PR, red);  aw2.digitalWrite(B6PB, blue);  aw2.digitalWrite(B6PG, green);} 
+  if (board == 7)  {aw2.digitalWrite(B7PR, red);  aw2.digitalWrite(B7PB, blue);  aw2.digitalWrite(B7PG, green);} 
+  if (board == 8)  {aw2.digitalWrite(B8PR, red);  aw2.digitalWrite(B8PB, blue);  aw2.digitalWrite(B8PG, green);} 
+  if (board == 9)  {aw2.digitalWrite(B9PR, red);  aw2.digitalWrite(B9PB, blue);  aw2.digitalWrite(B9PG, green);} 
+  if (board == 10) {aw2.digitalWrite(B10PR, red); aw2.digitalWrite(B10PB, blue); aw2.digitalWrite(B10PG, green);}
+  if (board == 11) {aw3.digitalWrite(B11PR, red); aw3.digitalWrite(B11PB, blue); aw3.digitalWrite(B11PG, green);}
+  if (board == 12) {aw3.digitalWrite(B12PR, red); aw3.digitalWrite(B12PB, blue); aw3.digitalWrite(B12PG, green);}
+  }
+void RGB_reset()
+{
+  aw1.digitalWrite(B1PR,  LOW); aw1.digitalWrite(B1PB,  LOW); aw1.digitalWrite(B1PG,  LOW);
+  aw1.digitalWrite(B2PR,  LOW); aw1.digitalWrite(B2PB,  LOW); aw1.digitalWrite(B2PG,  LOW);
+  aw1.digitalWrite(B3PR,  LOW); aw1.digitalWrite(B3PB,  LOW); aw1.digitalWrite(B3PG,  LOW);
+  aw1.digitalWrite(B4PR,  LOW); aw1.digitalWrite(B4PB,  LOW); aw1.digitalWrite(B4PG,  LOW);
+  aw2.digitalWrite(B5PR,  LOW); aw2.digitalWrite(B5PB,  LOW); aw2.digitalWrite(B5PG,  LOW);
+  aw2.digitalWrite(B6PR,  LOW); aw2.digitalWrite(B6PB,  LOW); aw2.digitalWrite(B6PG,  LOW);
+  aw2.digitalWrite(B7PR,  LOW); aw2.digitalWrite(B7PB,  LOW); aw2.digitalWrite(B7PG,  LOW);
+  aw2.digitalWrite(B8PR,  LOW); aw2.digitalWrite(B8PB,  LOW); aw2.digitalWrite(B8PG,  LOW);
+  aw3.digitalWrite(B9PR,  LOW); aw3.digitalWrite(B9PB,  LOW); aw3.digitalWrite(B9PG,  LOW);
+  aw3.digitalWrite(B10PR, LOW); aw3.digitalWrite(B10PB, LOW); aw3.digitalWrite(B10PG, LOW);
+  aw3.digitalWrite(B11PR, LOW); aw3.digitalWrite(B11PB, LOW); aw3.digitalWrite(B11PG, LOW);
+  aw3.digitalWrite(B12PR, LOW); aw3.digitalWrite(B12PB, LOW); aw3.digitalWrite(B12PG, LOW);
+}
+
+void CheckifChosenCorectly(int rnd,int var, int sequence[])
+{
+  if (rnd == sequence[var]) {MoveMe_Correct(); Serial.println("The correct one was moved"); delay(1000);}
+  if (rnd != sequence[var]) {MoveMe_WRONG(); Serial.println("That was the incorrect movement"); delay(1000);}
 }
