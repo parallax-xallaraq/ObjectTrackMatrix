@@ -661,9 +661,9 @@ void RGB_test()
   {
     for(int j=1; j<=3; j++)
     {
-    if(j=1){setBoardColor(i, HIGH, LOW, LOW); /*Serial.printf("Box %d is Red \n", i)  ;*/ delay(100); RGB_reset();}
-    if(j=2){setBoardColor(i, LOW, HIGH, LOW); /*Serial.printf("Box %d is Green \n", i);*/ delay(100); RGB_reset();}
-    if(j=3){setBoardColor(i, LOW, LOW, HIGH); /*Serial.printf("Box %d is Blue \n", i) ;*/ delay(100); RGB_reset();}
+      if(j=1){setBoardColor(i, HIGH, LOW, LOW); /*Serial.printf("Box %d is Red \n", i)  ;*/  delay(100); RGB_reset();}
+      if(j=2){setBoardColor(i, LOW,  LOW, HIGH); /*Serial.printf("Box %d is Green \n", i);*/ delay(100); RGB_reset();}
+      if(j=3){setBoardColor(i, LOW, HIGH, LOW); /*Serial.printf("Box %d is Blue \n", i) ;*/  delay(100); RGB_reset();}
     }
   }
 }
@@ -734,57 +734,57 @@ void MoveMe()
 {
   if(_trialSequence == nullptr) {return;}
 
-  if(_trialSequence[_currentTrial]==1)  {setBoardColor(1,  LOW, HIGH, LOW); /*Serial.println("Box 1 set to blue");*/}
-  if(_trialSequence[_currentTrial]==2)  {setBoardColor(2,  LOW, HIGH, LOW); /*Serial.println("Box 2 set to blue");*/}
-  if(_trialSequence[_currentTrial]==3)  {setBoardColor(3,  LOW, HIGH, LOW); /*Serial.println("Box 3 set to blue");*/}
-  if(_trialSequence[_currentTrial]==4)  {setBoardColor(4,  LOW, HIGH, LOW); /*Serial.println("Box 4 set to blue");*/}
-  if(_trialSequence[_currentTrial]==5)  {setBoardColor(5,  LOW, HIGH, LOW); /*Serial.println("Box 5 set to blue");*/}
-  if(_trialSequence[_currentTrial]==6)  {setBoardColor(6,  LOW, HIGH, LOW); /*Serial.println("Box 6 set to blue");*/}
-  if(_trialSequence[_currentTrial]==7)  {setBoardColor(7,  LOW, HIGH, LOW); /*Serial.println("Box 7 set to blue");*/}
-  if(_trialSequence[_currentTrial]==8)  {setBoardColor(8,  LOW, HIGH, LOW); /*Serial.println("Box 8 set to blue");*/}
-  if(_trialSequence[_currentTrial]==9)  {setBoardColor(9,  LOW, HIGH, LOW); /*Serial.println("Box 9 set to blue");*/}
-  if(_trialSequence[_currentTrial]==10) {setBoardColor(10, LOW, HIGH, LOW); /*Serial.println("Box 0 set to blue");*/}
-  if(_trialSequence[_currentTrial]==11) {setBoardColor(11, LOW, HIGH, LOW); /*Serial.println("Box 1 set to blue");*/}
-  if(_trialSequence[_currentTrial]==12) {setBoardColor(12, LOW, HIGH, LOW); /*Serial.println("Box 2 set to blue");*/}
+  if(_trialSequence[_currentTrial-1]==1)  {setBoardColor(1,  LOW, HIGH, LOW); /*Serial.println("Box 1 set to blue");*/}
+  if(_trialSequence[_currentTrial-1]==2)  {setBoardColor(2,  LOW, HIGH, LOW); /*Serial.println("Box 2 set to blue");*/}
+  if(_trialSequence[_currentTrial-1]==3)  {setBoardColor(3,  LOW, HIGH, LOW); /*Serial.println("Box 3 set to blue");*/}
+  if(_trialSequence[_currentTrial-1]==4)  {setBoardColor(4,  LOW, HIGH, LOW); /*Serial.println("Box 4 set to blue");*/}
+  if(_trialSequence[_currentTrial-1]==5)  {setBoardColor(5,  LOW, HIGH, LOW); /*Serial.println("Box 5 set to blue");*/}
+  if(_trialSequence[_currentTrial-1]==6)  {setBoardColor(6,  LOW, HIGH, LOW); /*Serial.println("Box 6 set to blue");*/}
+  if(_trialSequence[_currentTrial-1]==7)  {setBoardColor(7,  LOW, HIGH, LOW); /*Serial.println("Box 7 set to blue");*/}
+  if(_trialSequence[_currentTrial-1]==8)  {setBoardColor(8,  LOW, HIGH, LOW); /*Serial.println("Box 8 set to blue");*/}
+  if(_trialSequence[_currentTrial-1]==9)  {setBoardColor(9,  LOW, HIGH, LOW); /*Serial.println("Box 9 set to blue");*/}
+  if(_trialSequence[_currentTrial-1]==10) {setBoardColor(10, LOW, HIGH, LOW); /*Serial.println("Box 0 set to blue");*/}
+  if(_trialSequence[_currentTrial-1]==11) {setBoardColor(11, LOW, HIGH, LOW); /*Serial.println("Box 1 set to blue");*/}
+  if(_trialSequence[_currentTrial-1]==12) {setBoardColor(12, LOW, HIGH, LOW); /*Serial.println("Box 2 set to blue");*/}
 }
 
 void MoveMe_Correct()
 {
   if(_trialSequence == nullptr) {return;}
 
-  if(_trialSequence[_currentTrial]==1)  {setBoardColor(1,  LOW, LOW, HIGH); /*Serial.println("Box 1 set to Green")*/;}
-  if(_trialSequence[_currentTrial]==2)  {setBoardColor(2,  LOW, LOW, HIGH); /*Serial.println("Box 2 set to Green")*/;}
-  if(_trialSequence[_currentTrial]==3)  {setBoardColor(3,  LOW, LOW, HIGH); /*Serial.println("Box 3 set to Green")*/;}
-  if(_trialSequence[_currentTrial]==4)  {setBoardColor(4,  LOW, LOW, HIGH); /*Serial.println("Box 4 set to Green")*/;}
-  if(_trialSequence[_currentTrial]==5)  {setBoardColor(5,  LOW, LOW, HIGH); /*Serial.println("Box 5 set to Green")*/;}
-  if(_trialSequence[_currentTrial]==6)  {setBoardColor(6,  LOW, LOW, HIGH); /*Serial.println("Box 6 set to Green")*/;}
-  if(_trialSequence[_currentTrial]==7)  {setBoardColor(7,  LOW, LOW, HIGH); /*Serial.println("Box 7 set to Green")*/;}
-  if(_trialSequence[_currentTrial]==8)  {setBoardColor(8,  LOW, LOW, HIGH); /*Serial.println("Box 8 set to Green")*/;}
-  if(_trialSequence[_currentTrial]==9)  {setBoardColor(9,  LOW, LOW, HIGH); /*Serial.println("Box 9 set to Green")*/;}
-  if(_trialSequence[_currentTrial]==10) {setBoardColor(10, LOW, LOW, HIGH); /*Serial.println("Box 0 set to Green")*/;}
-  if(_trialSequence[_currentTrial]==11) {setBoardColor(11, LOW, LOW, HIGH); /*Serial.println("Box 1 set to Green")*/;}
-  if(_trialSequence[_currentTrial]==12) {setBoardColor(12, LOW, LOW, HIGH); /*Serial.println("Box 2 set to Green")*/;}
+  if(_trialSequence[_currentTrial-1]==1)  {setBoardColor(1,  LOW, LOW, HIGH); /*Serial.println("Box 1 set to Green")*/;}
+  if(_trialSequence[_currentTrial-1]==2)  {setBoardColor(2,  LOW, LOW, HIGH); /*Serial.println("Box 2 set to Green")*/;}
+  if(_trialSequence[_currentTrial-1]==3)  {setBoardColor(3,  LOW, LOW, HIGH); /*Serial.println("Box 3 set to Green")*/;}
+  if(_trialSequence[_currentTrial-1]==4)  {setBoardColor(4,  LOW, LOW, HIGH); /*Serial.println("Box 4 set to Green")*/;}
+  if(_trialSequence[_currentTrial-1]==5)  {setBoardColor(5,  LOW, LOW, HIGH); /*Serial.println("Box 5 set to Green")*/;}
+  if(_trialSequence[_currentTrial-1]==6)  {setBoardColor(6,  LOW, LOW, HIGH); /*Serial.println("Box 6 set to Green")*/;}
+  if(_trialSequence[_currentTrial-1]==7)  {setBoardColor(7,  LOW, LOW, HIGH); /*Serial.println("Box 7 set to Green")*/;}
+  if(_trialSequence[_currentTrial-1]==8)  {setBoardColor(8,  LOW, LOW, HIGH); /*Serial.println("Box 8 set to Green")*/;}
+  if(_trialSequence[_currentTrial-1]==9)  {setBoardColor(9,  LOW, LOW, HIGH); /*Serial.println("Box 9 set to Green")*/;}
+  if(_trialSequence[_currentTrial-1]==10) {setBoardColor(10, LOW, LOW, HIGH); /*Serial.println("Box 0 set to Green")*/;}
+  if(_trialSequence[_currentTrial-1]==11) {setBoardColor(11, LOW, LOW, HIGH); /*Serial.println("Box 1 set to Green")*/;}
+  if(_trialSequence[_currentTrial-1]==12) {setBoardColor(12, LOW, LOW, HIGH); /*Serial.println("Box 2 set to Green")*/;}
 }
 
 void MoveMe_WRONG()
 {
   if(_trialSequence == nullptr) {return;}
   
-  if(_trialSequence[_currentTrial]==1)  {setBoardColor(1,  HIGH, LOW, LOW); /*Serial.println("Box 1 set to RED");*/}
-  if(_trialSequence[_currentTrial]==2)  {setBoardColor(2,  HIGH, LOW, LOW); /*Serial.println("Box 2 set to RED");*/}
-  if(_trialSequence[_currentTrial]==3)  {setBoardColor(3,  HIGH, LOW, LOW); /*Serial.println("Box 3 set to RED");*/}
-  if(_trialSequence[_currentTrial]==4)  {setBoardColor(4,  HIGH, LOW, LOW); /*Serial.println("Box 4 set to RED");*/}
-  if(_trialSequence[_currentTrial]==5)  {setBoardColor(5,  HIGH, LOW, LOW); /*Serial.println("Box 5 set to RED");*/}
-  if(_trialSequence[_currentTrial]==6)  {setBoardColor(6,  HIGH, LOW, LOW); /*Serial.println("Box 6 set to RED");*/}
-  if(_trialSequence[_currentTrial]==7)  {setBoardColor(7,  HIGH, LOW, LOW); /*Serial.println("Box 7 set to RED");*/}
-  if(_trialSequence[_currentTrial]==8)  {setBoardColor(8,  HIGH, LOW, LOW); /*Serial.println("Box 8 set to RED");*/}
-  if(_trialSequence[_currentTrial]==9)  {setBoardColor(9,  HIGH, LOW, LOW); /*Serial.println("Box 9 set to RED");*/}
-  if(_trialSequence[_currentTrial]==10) {setBoardColor(10, HIGH, LOW, LOW); /*Serial.println("Box 0 set to RED");*/}
-  if(_trialSequence[_currentTrial]==11) {setBoardColor(11, HIGH, LOW, LOW); /*Serial.println("Box 1 set to RED");*/}
-  if(_trialSequence[_currentTrial]==12) {setBoardColor(12, HIGH, LOW, LOW); /*Serial.println("Box 2 set to RED");*/}
+  if(_trialSequence[_currentTrial-1]==1)  {setBoardColor(1,  HIGH, LOW, LOW); /*Serial.println("Box 1 set to RED");*/}
+  if(_trialSequence[_currentTrial-1]==2)  {setBoardColor(2,  HIGH, LOW, LOW); /*Serial.println("Box 2 set to RED");*/}
+  if(_trialSequence[_currentTrial-1]==3)  {setBoardColor(3,  HIGH, LOW, LOW); /*Serial.println("Box 3 set to RED");*/}
+  if(_trialSequence[_currentTrial-1]==4)  {setBoardColor(4,  HIGH, LOW, LOW); /*Serial.println("Box 4 set to RED");*/}
+  if(_trialSequence[_currentTrial-1]==5)  {setBoardColor(5,  HIGH, LOW, LOW); /*Serial.println("Box 5 set to RED");*/}
+  if(_trialSequence[_currentTrial-1]==6)  {setBoardColor(6,  HIGH, LOW, LOW); /*Serial.println("Box 6 set to RED");*/}
+  if(_trialSequence[_currentTrial-1]==7)  {setBoardColor(7,  HIGH, LOW, LOW); /*Serial.println("Box 7 set to RED");*/}
+  if(_trialSequence[_currentTrial-1]==8)  {setBoardColor(8,  HIGH, LOW, LOW); /*Serial.println("Box 8 set to RED");*/}
+  if(_trialSequence[_currentTrial-1]==9)  {setBoardColor(9,  HIGH, LOW, LOW); /*Serial.println("Box 9 set to RED");*/}
+  if(_trialSequence[_currentTrial-1]==10) {setBoardColor(10, HIGH, LOW, LOW); /*Serial.println("Box 0 set to RED");*/}
+  if(_trialSequence[_currentTrial-1]==11) {setBoardColor(11, HIGH, LOW, LOW); /*Serial.println("Box 1 set to RED");*/}
+  if(_trialSequence[_currentTrial-1]==12) {setBoardColor(12, HIGH, LOW, LOW); /*Serial.println("Box 2 set to RED");*/}
 }
 
-void setBoardColor(int board, int red, int green, int blue) //RGB
+void setBoardColor(int board, int red, int blue, int green) //RGB
 {
   if (board == 1)  {aw1.digitalWrite(B1PR, red);  aw1.digitalWrite(B1PG, green);  aw1.digitalWrite(B1PB, blue);  } 
   if (board == 2)  {aw1.digitalWrite(B2PR, red);  aw1.digitalWrite(B2PG, green);  aw1.digitalWrite(B2PB, blue);  } 
