@@ -12,7 +12,6 @@ SOURCES += \
     Commands.cpp \
     ExperimentSetup.cpp \
     GetUserInfo.cpp \
-    ObjectMatrix.cpp \
     MainWindow.cpp \
     SerialControl.cpp \
     main.cpp
@@ -23,14 +22,12 @@ HEADERS += \
     ExperimentSetup.h \
     GetUserInfo.h \
     MainWindow.h \
-    ObjectMatrix.h \
     SerialControl.h
 
 FORMS += \
     ExperimentSetup.ui \
     GetUserInfo.ui \
-    MainWindow.ui \
-    ObjectMatrix.ui
+    MainWindow.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
