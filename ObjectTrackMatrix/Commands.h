@@ -72,7 +72,7 @@ public:
 private:
 
     // number of objects on matrix
-    int _nObjects = 11;//12;
+    int _nObjects = 11; // !!! BUG: hardware resets/crashes when using 12;
 
     // number of bytes
     int _nBytes_STX  = 1;
