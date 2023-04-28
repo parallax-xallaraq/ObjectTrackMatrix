@@ -105,6 +105,9 @@ bool MainWindow::TestConnection()
 
 bool MainWindow::InitExperiment()
 {
+
+    qDebug() << "Initializing...";
+
     // status flags
     bool success = true;
     bool written = false;

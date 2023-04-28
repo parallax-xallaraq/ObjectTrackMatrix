@@ -30,7 +30,8 @@ public:
     QString GetExperimenterName();
     QString GetSubjectName();
     QString GetNotes();
-    QDate GetExperimentDate();
+    QString GetFilePath();
+    QDate   GetExperimentDate();
 
 private:
     Ui::GetUserInfo *ui;

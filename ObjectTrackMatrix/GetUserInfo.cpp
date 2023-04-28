@@ -22,6 +22,7 @@ GetUserInfo::GetUserInfo(QWidget *parent) :
     ui->label_errTitle->setVisible(false);
     ui->label_errName->setVisible(false);
     ui->label_errSubject->setVisible(false);
+    ui->label_errSaveFile->setVisible(false);
 }
 
 GetUserInfo::~GetUserInfo()
@@ -37,6 +38,7 @@ void GetUserInfo::EnableInputs(bool lock)
     ui->lineEdit_subjectName->setEnabled(lock);
     ui->dateEdit_experimentDate->setEnabled(lock);
     ui->plainTextEdit_notes->setEnabled(lock);
+    ui->lineEdit_saveFile->setEnabled(lock);
 }
 
 bool GetUserInfo::CheckRequiredInputs()
@@ -45,8 +47,9 @@ bool GetUserInfo::CheckRequiredInputs()
     bool isTitleGood   = CheckOneLineEdit(ui->lineEdit_title, ui->label_errTitle);
     bool isNameGood    = CheckOneLineEdit(ui->lineEdit_experimenterName, ui->label_errName);
     bool isSubjectGood = CheckOneLineEdit(ui->lineEdit_subjectName, ui->label_errSubject);
+    bool isFileGood    = CheckOneLineEdit(ui->lineEdit_saveFile, ui->label_errSaveFile);
     // returns true when all lines are good
-    return(isTitleGood && isNameGood && isSubjectGood);
+    return((isTitleGood && isNameGood) && (isSubjectGood && isFileGood));
 }
 
 QString GetUserInfo::GetExperimentTitle()
@@ -67,6 +70,11 @@ QString GetUserInfo::GetSubjectName()
 QString GetUserInfo::GetNotes()
 {
     return(ui->plainTextEdit_notes->toPlainText());
+}
+
+QString GetUserInfo::GetFilePath()
+{
+    return(ui->lineEdit_saveFile->text());
 }
 
 QDate GetUserInfo::GetExperimentDate()
