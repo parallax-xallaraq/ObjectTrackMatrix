@@ -567,23 +567,20 @@ bool NoCommand()
 
 //Box # Color ie B1PR is Box 1 Pin for Red is 1
 Adafruit_AW9523 aw1;
-uint8_t B1PR = 1;  uint8_t B1PB = 2;  uint8_t B1PG = 3;  // Board 1
-uint8_t B2PR = 4;  uint8_t B2PB = 5;  uint8_t B2PG = 6;  // Board 2
-uint8_t B3PR = 7;  uint8_t B3PB = 8;  uint8_t B3PG = 9;  // Board 3
-uint8_t B4PR = 10; uint8_t B4PB = 11; uint8_t B4PG = 12; // Board 4
-
-
+uint8_t B1PR = 1; uint8_t B1PG = 2; uint8_t B1PB = 3;   // Board 1
+uint8_t B2PR = 4; uint8_t B2PG =5; uint8_t B2PB = 6;   // Board 2
+uint8_t B3PR = 7; uint8_t B3PG = 8; uint8_t B3PB = 9;   // Board 3
+uint8_t B4PR = 10;uint8_t B4PG = 11; uint8_t B4PB = 12;  // Board 4
 Adafruit_AW9523 aw2;
-uint8_t B5PR = 13; uint8_t B5PB = 14; uint8_t B5PG = 15;    // Board 5
-uint8_t B6PR = 1;   uint8_t B6PB = 2;   uint8_t B6PG = 3;   // Board 6
-uint8_t B7PR = 4;   uint8_t B7PB = 5;   uint8_t B7PG = 6;   // Board 7
-uint8_t B8PR = 7;   uint8_t B8PB = 8;   uint8_t B8PG = 9;   // Board 8
+uint8_t B5PR = 0;   uint8_t B5PG = 1;   uint8_t B5PB = 2;   // Board 5
+uint8_t B6PR = 3;   uint8_t B6PG = 4;   uint8_t B6PB = 5;   // Board 6
+uint8_t B7PR = 6;   uint8_t B7PG = 7;   uint8_t B7PB = 8;   // Board 7
+uint8_t B8PR = 14;  uint8_t B8PG = 15;  uint8_t B8PB = 13;  // Board 8
 Adafruit_AW9523 aw3;
-uint8_t B9PR = 10;  uint8_t B9PB = 11;  uint8_t B9PG = 12;  // Board 9
-uint8_t B10PR = 13; uint8_t B10PB = 14; uint8_t B10PG = 15; // Board 10
-uint8_t B11PR = 1;  uint8_t B11PB = 2;  uint8_t B11PG = 3;  // Board 11
-uint8_t B12PR = 4;  uint8_t B12PB = 5;  uint8_t B12PG = 6;  // Board 12
-
+uint8_t B9PR =  0;   uint8_t B9PG =   1; uint8_t B9PB =   9;   // Board 9
+uint8_t B10PR = 3;   uint8_t B10PG =  4; uint8_t B10PB =  5;  // Board 10
+uint8_t B11PR = 6;   uint8_t B11PG =  7; uint8_t B11PB =  8;   // Board 11
+uint8_t B12PR = 15;   uint8_t B12PG = 13; uint8_t B12PB = 14;   // Board 12
 
 typedef struct struct_message 
 {
@@ -642,36 +639,44 @@ void SystemSetup()
   // Serial.println("Setup has been compleated ");
   
   //Initalizes the multiplexer I2C
-  //if (! aw1.begin(0x58)) { Serial.println("0x58 not found?");while (1) delay(10);} Serial.println("0x58 found!");//0x58 is default adress
-  //if (! aw1.begin(0x58)) { Serial.println("0x59 not found?");while (1) delay(10);} Serial.println("0x59 found!");//0x59 (A0 shorted)
-  //if (! aw1.begin(0x58)) { Serial.println("0x5A not found?");while (1) delay(10);} Serial.println("0x5A found!");//0x5A (A1 shorted)
+  if (! aw1.begin(0x58)) { /*Serial.println("0x58 not found?");*/while (1) delay(10);} /*Serial.println("0x58 found!");*///0x58 is default adress
+  if (! aw2.begin(0x59)) { /*Serial.println("0x59 not found?");*/while (1) delay(10);} /*Serial.println("0x59 found!");*///0x59 (A0 shorted)
+  if (! aw3.begin(0x5A)) { /*Serial.println("0x5A not found?");*/while (1) delay(10);} /*Serial.println("0x5A found!");*///0x5A (A1 shorted)
 
   //Defines pins on the multiplexer
-  aw1.pinMode(B1PR, OUTPUT);  aw1.pinMode(B1PB, OUTPUT);  aw1.pinMode(B1PG, OUTPUT);  // Board 1
-  aw1.pinMode(B2PR, OUTPUT);  aw1.pinMode(B2PB, OUTPUT);  aw1.pinMode(B2PG, OUTPUT);  // Board 2
-  aw1.pinMode(B3PR, OUTPUT);  aw1.pinMode(B3PB, OUTPUT);  aw1.pinMode(B3PG, OUTPUT);  // Board 3
-  aw1.pinMode(B4PR, OUTPUT);  aw1.pinMode(B4PB, OUTPUT);  aw1.pinMode(B4PG, OUTPUT);  // Board 4
-  aw2.pinMode(B5PR, OUTPUT);  aw2.pinMode(B5PB, OUTPUT);  aw2.pinMode(B5PG, OUTPUT);  // Board 5
-  aw2.pinMode(B6PR, OUTPUT);  aw2.pinMode(B6PB, OUTPUT);  aw2.pinMode(B6PG, OUTPUT);  // Board 6
-  aw2.pinMode(B7PR, OUTPUT);  aw2.pinMode(B7PB, OUTPUT);  aw2.pinMode(B7PG, OUTPUT);  // Board 7
-  aw2.pinMode(B8PR, OUTPUT);  aw2.pinMode(B8PB, OUTPUT);  aw2.pinMode(B8PG, OUTPUT);  // Board 8
-  aw3.pinMode(B9PR, OUTPUT);  aw3.pinMode(B9PB, OUTPUT);  aw3.pinMode(B9PG, OUTPUT);  // Board 9
-  aw3.pinMode(B10PR, OUTPUT); aw3.pinMode(B10PB, OUTPUT); aw3.pinMode(B10PG, OUTPUT); // Board 10
-  aw3.pinMode(B11PR, OUTPUT); aw3.pinMode(B11PB, OUTPUT); aw3.pinMode(B11PG, OUTPUT); // Board 11
-  aw3.pinMode(B12PR, OUTPUT); aw3.pinMode(B12PB, OUTPUT); aw3.pinMode(B12PG, OUTPUT); // Board 12
+  for(int i=0; i<=15; i++)
+  {
+    aw1.pinMode(i, OUTPUT);
+    aw2.pinMode(i, OUTPUT);
+    aw3.pinMode(i, OUTPUT);
+  }
+  
+  RGB_test();
 }
 
+void RGB_test()
+{
+  RGB_reset();
+  for(int i=0; i<=12; i++)
+  {
+    for(int j=1; j<=3; j++)
+    {
+    if(j=1){setBoardColor(i, HIGH, LOW, LOW); /*Serial.printf("Box %d is Red \n", i)  ;*/ delay(100); RGB_reset();}
+    if(j=2){setBoardColor(i, LOW, HIGH, LOW); /*Serial.printf("Box %d is Green \n", i);*/ delay(100); RGB_reset();}
+    if(j=3){setBoardColor(i, LOW, LOW, HIGH); /*Serial.printf("Box %d is Blue \n", i) ;*/ delay(100); RGB_reset();}
+    }
+  }
+}
 
-// // experiment parameters
-// int   _numberOfTrials  = NOVALUE;
-// int * _trialSequence   = nullptr;
-// int   _separation_ms   = NOVALUE;
-// int   _timeout_ms      = NOVALUE; 
-// int   _sampleRate_Hz   = NOVALUE;
-
-// // current experiment status
-// int   _currentTrial    = NOVALUE; // trial number (1 to _numberOfTrials)
-// int   _currentObject   = NOVALUE; // ID of object that was moved
+void RGB_reset()
+{
+  for(int i=0; i<=15; i++)
+  {
+    aw1.digitalWrite(i, LOW);
+    aw2.digitalWrite(i, LOW);
+    aw3.digitalWrite(i, LOW);
+  }
+}
 
 void TestSequence()
 {
@@ -779,35 +784,20 @@ void MoveMe_WRONG()
   if(_trialSequence[_currentTrial]==12) {setBoardColor(12, HIGH, LOW, LOW); /*Serial.println("Box 2 set to RED");*/}
 }
 
-void setBoardColor(int board, int red, int blue, int green) 
+void setBoardColor(int board, int red, int green, int blue) //RGB
 {
-  if (board == 1)  {aw1.digitalWrite(B1PR, red);  aw1.digitalWrite(B1PB, blue);  aw1.digitalWrite(B1PG, green);} 
-  if (board == 2)  {aw1.digitalWrite(B2PR, red);  aw1.digitalWrite(B2PB, blue);  aw1.digitalWrite(B2PG, green);} 
-  if (board == 3)  {aw1.digitalWrite(B3PR, red);  aw1.digitalWrite(B3PB, blue);  aw1.digitalWrite(B3PG, green);} 
-  if (board == 4)  {aw1.digitalWrite(B4PR, red);  aw1.digitalWrite(B4PB, blue);  aw1.digitalWrite(B4PG, green);} 
-  if (board == 5)  {aw1.digitalWrite(B5PR, red);  aw1.digitalWrite(B5PB, blue);  aw1.digitalWrite(B5PG, green);} 
-  if (board == 6)  {aw2.digitalWrite(B6PR, red);  aw2.digitalWrite(B6PB, blue);  aw2.digitalWrite(B6PG, green);} 
-  if (board == 7)  {aw2.digitalWrite(B7PR, red);  aw2.digitalWrite(B7PB, blue);  aw2.digitalWrite(B7PG, green);} 
-  if (board == 8)  {aw2.digitalWrite(B8PR, red);  aw2.digitalWrite(B8PB, blue);  aw2.digitalWrite(B8PG, green);} 
-  if (board == 9)  {aw2.digitalWrite(B9PR, red);  aw2.digitalWrite(B9PB, blue);  aw2.digitalWrite(B9PG, green);} 
-  if (board == 10) {aw2.digitalWrite(B10PR, red); aw2.digitalWrite(B10PB, blue); aw2.digitalWrite(B10PG, green);}
-  if (board == 11) {aw3.digitalWrite(B11PR, red); aw3.digitalWrite(B11PB, blue); aw3.digitalWrite(B11PG, green);}
-  if (board == 12) {aw3.digitalWrite(B12PR, red); aw3.digitalWrite(B12PB, blue); aw3.digitalWrite(B12PG, green);}
-  }
-void RGB_reset()
-{
-  aw1.digitalWrite(B1PR,  LOW); aw1.digitalWrite(B1PB,  LOW); aw1.digitalWrite(B1PG,  LOW);
-  aw1.digitalWrite(B2PR,  LOW); aw1.digitalWrite(B2PB,  LOW); aw1.digitalWrite(B2PG,  LOW);
-  aw1.digitalWrite(B3PR,  LOW); aw1.digitalWrite(B3PB,  LOW); aw1.digitalWrite(B3PG,  LOW);
-  aw1.digitalWrite(B4PR,  LOW); aw1.digitalWrite(B4PB,  LOW); aw1.digitalWrite(B4PG,  LOW);
-  aw2.digitalWrite(B5PR,  LOW); aw2.digitalWrite(B5PB,  LOW); aw2.digitalWrite(B5PG,  LOW);
-  aw2.digitalWrite(B6PR,  LOW); aw2.digitalWrite(B6PB,  LOW); aw2.digitalWrite(B6PG,  LOW);
-  aw2.digitalWrite(B7PR,  LOW); aw2.digitalWrite(B7PB,  LOW); aw2.digitalWrite(B7PG,  LOW);
-  aw2.digitalWrite(B8PR,  LOW); aw2.digitalWrite(B8PB,  LOW); aw2.digitalWrite(B8PG,  LOW);
-  aw3.digitalWrite(B9PR,  LOW); aw3.digitalWrite(B9PB,  LOW); aw3.digitalWrite(B9PG,  LOW);
-  aw3.digitalWrite(B10PR, LOW); aw3.digitalWrite(B10PB, LOW); aw3.digitalWrite(B10PG, LOW);
-  aw3.digitalWrite(B11PR, LOW); aw3.digitalWrite(B11PB, LOW); aw3.digitalWrite(B11PG, LOW);
-  aw3.digitalWrite(B12PR, LOW); aw3.digitalWrite(B12PB, LOW); aw3.digitalWrite(B12PG, LOW);
+  if (board == 1)  {aw1.digitalWrite(B1PR, red);  aw1.digitalWrite(B1PG, green);  aw1.digitalWrite(B1PB, blue);  } 
+  if (board == 2)  {aw1.digitalWrite(B2PR, red);  aw1.digitalWrite(B2PG, green);  aw1.digitalWrite(B2PB, blue);  } 
+  if (board == 3)  {aw1.digitalWrite(B3PR, red);  aw1.digitalWrite(B3PG, green);  aw1.digitalWrite(B3PB, blue);  } 
+  if (board == 4)  {aw1.digitalWrite(B4PR, red);  aw1.digitalWrite(B4PG, green);  aw1.digitalWrite(B4PB, blue);  } 
+  if (board == 5)  {aw2.digitalWrite(B5PR, red);  aw2.digitalWrite(B5PG, green);  aw2.digitalWrite(B5PB, blue);  } 
+  if (board == 6)  {aw2.digitalWrite(B6PR, red);  aw2.digitalWrite(B6PG, green);  aw2.digitalWrite(B6PB, blue);  } 
+  if (board == 7)  {aw2.digitalWrite(B7PR, red);  aw2.digitalWrite(B7PG, green);  aw2.digitalWrite(B7PB, blue);  } 
+  if (board == 8)  {aw2.digitalWrite(B8PR, red);  aw2.digitalWrite(B8PG, green);  aw2.digitalWrite(B8PB, blue);  } 
+  if (board == 9)  {aw3.digitalWrite(B9PR, red);  aw3.digitalWrite(B9PG, green);  aw3.digitalWrite(B9PB, blue);  } 
+  if (board == 10) {aw3.digitalWrite(B10PR, red); aw3.digitalWrite(B10PG, green); aw3.digitalWrite(B10PB, blue); }
+  if (board == 11) {aw3.digitalWrite(B11PR, red); aw3.digitalWrite(B11PG, green); aw3.digitalWrite(B11PB, blue); }
+  if (board == 12) {aw3.digitalWrite(B12PR, red); aw3.digitalWrite(B12PG, green); aw3.digitalWrite(B12PB, blue); }
 }
 
 void CheckifChosenCorectly(int rnd,int var, int sequence[])
