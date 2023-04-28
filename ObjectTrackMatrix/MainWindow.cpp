@@ -181,22 +181,26 @@ bool MainWindow::RunExperiment()
     while(readAgain){
         // read
         QList<uint> pkt = _port->ReadPacket();
+        int command  = pkt[Commands::CMD];
         int objectID = pkt[Commands::ID];
         int trial    = pkt[Commands::DATA];
+
         // TODO write to file
 
-        // update condition
-        readAgain = (trial > 0) && (trial <= ui->widget_experimentSetup->GetNumberOfTrials() );
-    }
+        // stop experiment
+        if((trial > 0) && (trial <= ui->widget_experimentSetup->GetNumberOfTrials() )){
+            // STREAM OFF
+            _port->WritePacket(
+                        Commands::STREAM,
+                        0,
+                        0
+                    );
+        }
 
-    // STREAM OFF
-    success =_port->WriteAndReadPacket_CheckMatch(
-                    Commands::STREAM,
-                    0,
-                    0
-                );
-    if(!success){
-        return(false);
+        // update condition -- stop when STREAM:0:0 is read
+        if(command == Commands::STREAM && objectID == 0 && trial == 0){
+            readAgain = false;
+        }
     }
 
     qDebug() << "Streaming finished.";
