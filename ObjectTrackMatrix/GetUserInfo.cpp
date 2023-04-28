@@ -2,12 +2,8 @@
 #include "ui_GetUserInfo.h"
 
 #include <QDate>
-
-// ====================================
-// Created by: Thresa Kelly
-// Email: ThresaKelly133@gmail.com
-// Date: 2/18/2023
-// ====================================
+#include <QFileDialog>
+#include <QDir>
 
 GetUserInfo::GetUserInfo(QWidget *parent) :
     QWidget(parent),
@@ -94,3 +90,21 @@ bool GetUserInfo::CheckOneLineEdit(QLineEdit *txt, QLabel *lbl)
     lbl->setVisible(false);
     return(true);
 }
+
+void GetUserInfo::BrowseFile()
+{
+    QString directory = QFileDialog::getExistingDirectory(this,tr("Find Files"), QDir::currentPath());
+
+//    if (!directory.isEmpty()) {
+//        if (directoryComboBox->findText(directory) == -1)
+//            directoryComboBox->addItem(directory);
+//        directoryComboBox->setCurrentIndex(directoryComboBox->findText(directory));
+//    }
+    // https://stackoverflow.com/questions/20794768/qt-add-a-file-selection-field-on-the-form-qlineedit-and-browse-button
+}
+
+void GetUserInfo::on_pushButton_saveFile_clicked()
+{
+
+}
+

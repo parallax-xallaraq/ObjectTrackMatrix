@@ -33,10 +33,14 @@ public:
     QString GetFilePath();
     QDate   GetExperimentDate();
 
+private slots:
+    void on_pushButton_saveFile_clicked();
+
 private:
     Ui::GetUserInfo *ui;
     // input validation
     bool CheckOneLineEdit(QLineEdit * txt, QLabel * lbl);
+    void BrowseFile();
 };
 
 #endif // GETUSERINFO_H

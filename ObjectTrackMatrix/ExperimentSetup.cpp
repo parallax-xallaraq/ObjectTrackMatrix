@@ -7,12 +7,6 @@
 #include <QRandomGenerator>
 #include <QDebug>
 
-// ====================================
-// Created by: Thresa Kelly
-// Email: ThresaKelly133@gmail.com
-// Date: 3/22/2023
-// ====================================
-
 ExperimentSetup::ExperimentSetup(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::ExperimentSetup)
