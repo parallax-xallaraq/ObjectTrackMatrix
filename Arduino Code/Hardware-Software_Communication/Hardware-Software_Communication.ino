@@ -604,7 +604,7 @@ struct_message boardsStruct[15] = {board1, board2,board3,board4,board5, board6,b
 
 void OnDataRecv(uint8_t * mac_addr, uint8_t *incomingData, uint8_t len)
 {
-  char macStr[18];
+  // char macStr[18];
   // Serial.print("Packet received from: ");
   // snprintf(macStr, sizeof(macStr), "%02x:%02x:%02x:%02x:%02x:%02x",mac_addr[0], mac_addr[1], mac_addr[2], mac_addr[3], mac_addr[4], mac_addr[5]);
   // Serial.println(macStr);
@@ -633,7 +633,7 @@ void SystemSetup()
   WiFi.mode(WIFI_STA);
   WiFi.disconnect();
   // Serial.println("Device set as a Wi-Fi Station");
-  // if (esp_now_init() != 0) {Serial.println("Error initializing ESP-NOW"); return; }
+  if (esp_now_init() != 0) {/*Serial.println("Error initializing ESP-NOW");*/ return; }
   esp_now_set_self_role(ESP_NOW_ROLE_SLAVE);
   esp_now_register_recv_cb(OnDataRecv);
   // Serial.println("Setup has been compleated ");
@@ -692,7 +692,7 @@ void TestSequence()
     bool OtherBoxMoving = false;
     while ((millis() - startTime) < _timeout_ms) //Timeout while checking, breaks if moved
     {
-      if (boardsStruct[_trialSequence[_currentTrial-1]].isMoving) {
+      if (boardsStruct[ _trialSequence[_currentTrial-1] ].isMoving) {
         isMoving = true; 
         _currentObject = _trialSequence[_currentTrial-1];
         break; 
