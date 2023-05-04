@@ -20,11 +20,14 @@ class GetUserInfo : public QWidget
     Q_OBJECT
 
 public:
+    // constructor and destructor
     explicit GetUserInfo(QWidget *parent = nullptr);
     ~GetUserInfo();
+
     // input validation
     void EnableInputs(bool lock);
     bool CheckRequiredInputs();
+
     // getters
     QString GetExperimentTitle();
     QString GetExperimenterName();
@@ -38,7 +41,7 @@ private slots:
 
 private:
     Ui::GetUserInfo *ui;
-    // input validation
+
     bool CheckOneLineEdit(QLineEdit * txt, QLabel * lbl);
     void BrowseFile();
 };

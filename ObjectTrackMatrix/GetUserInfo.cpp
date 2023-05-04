@@ -93,18 +93,16 @@ bool GetUserInfo::CheckOneLineEdit(QLineEdit *txt, QLabel *lbl)
 
 void GetUserInfo::BrowseFile()
 {
+    // get directory
     QString directory = QFileDialog::getExistingDirectory(this,tr("Find Files"), QDir::currentPath());
-
-//    if (!directory.isEmpty()) {
-//        if (directoryComboBox->findText(directory) == -1)
-//            directoryComboBox->addItem(directory);
-//        directoryComboBox->setCurrentIndex(directoryComboBox->findText(directory));
-//    }
-    // https://stackoverflow.com/questions/20794768/qt-add-a-file-selection-field-on-the-form-qlineedit-and-browse-button
+    // set text as directory
+    if (!directory.isEmpty()) {
+        ui->lineEdit_saveFile->setText(directory);
+    }
 }
 
 void GetUserInfo::on_pushButton_saveFile_clicked()
 {
-
+    BrowseFile();
 }
 
