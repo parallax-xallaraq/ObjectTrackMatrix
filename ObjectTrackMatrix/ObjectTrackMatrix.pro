@@ -10,6 +10,7 @@ CONFIG += c++11
 
 SOURCES += \
     Commands.cpp \
+    ExperimentFileControl.cpp \
     ExperimentSetup.cpp \
     GetUserInfo.cpp \
     MainWindow.cpp \
@@ -19,6 +20,7 @@ SOURCES += \
 
 HEADERS += \
     Commands.h \
+    ExperimentFileControl.h \
     ExperimentSetup.h \
     GetUserInfo.h \
     MainWindow.h \
