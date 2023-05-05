@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     // setup pointers
     _port    = new SerialControl();
+    _fileControl = new ExperimentFileControl();
 
     // hide
     ui->groupBox_experimentDetails->setVisible(false);
@@ -20,6 +21,9 @@ MainWindow::~MainWindow()
     _port->ClosePort();
     delete _port;
     _port = nullptr;
+
+    delete _fileControl;
+    _fileControl = nullptr;
 
     delete ui;
 }
@@ -56,7 +60,7 @@ void MainWindow::BeginNewExperiment()
 void MainWindow::SubmitExperimentInfo()
 {
     // check that all required inputs are valid
-    bool isUserGood = ui->widget_userInfo->CheckRequiredInputs();
+    bool isUserGood     = ui->widget_userInfo->CheckRequiredInputs();
     bool isSequenceGood = ui->widget_experimentSetup->CheckRequiredInputs();
 
     // if all inputs are valid...
@@ -89,6 +93,24 @@ void MainWindow::StartExperiment()
     // lock experiment details
     ui->groupBox_experimentDetails->setEnabled(false);
 
+    // set file directory path
+    _fileControl->setParentDirectorypath(ui->widget_userInfo->GetFilePath());
+    _fileControl->setExperimentDirectoryName(ui->widget_userInfo->GetExperimentTitle());
+
+    // write Experiment Info file
+    _fileControl->WriteExperiemtnInfoFile(
+                ui->widget_userInfo->GetExperimentTitle(),
+                ui->widget_userInfo->GetExperimenterName(),
+                ui->widget_userInfo->GetSubjectName(),
+                ui->widget_userInfo->GetExperimentDate(),
+                ui->widget_userInfo->GetNotes(),
+                ui->widget_experimentSetup->GetTimeBetweenTrials_ms(),
+                ui->widget_experimentSetup->GetTimeout_ms(),
+                ui->widget_experimentSetup->GetSampleRate_Hz(),
+                ui->widget_experimentSetup->GetNumberOfTrials(),
+                ui->widget_experimentSetup->GetTrialSequence()
+             );
+
     // open serial port
     OpenPort();
 
@@ -103,8 +125,12 @@ void MainWindow::StartExperiment()
         throw std::invalid_argument("Initialization failed.");
     }
 
+    // open experiment stream file
+    _fileControl->StartStreamDataFile(ui->widget_experimentSetup->GetSampleRate_Hz());
+
     // start reading data
     bool successRun = RunExperiment();
+    _fileControl->EndStreamDataFile();
     if(!successRun){
         throw std::invalid_argument("Streaming failed.");
     }

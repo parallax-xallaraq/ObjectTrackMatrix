@@ -1,5 +1,8 @@
 #include "ExperimentFileControl.h"
 
+#include <QDir>
+#include <QDebug>
+
 ExperimentFileControl::ExperimentFileControl()
 {
     // initialize member variables
@@ -64,7 +67,7 @@ void ExperimentFileControl::EndStreamDataFile()
     CloseFile(_streamData);
 }
 
-void ExperimentFileControl::WriteExperiemtnInfoFile(QString experimenterName, QString subjectName, QDate date, QString notes, int timeBetweenTrials_ms, int timeout_ms, int samplerate_Hz, int numberOfTrials, QList<int> trialSequence)
+void ExperimentFileControl::WriteExperiemtnInfoFile(QString experimentTitle, QString experimenterName, QString subjectName, QDate date, QString notes, int timeBetweenTrials_ms, int timeout_ms, int samplerate_Hz, int numberOfTrials, QList<int> trialSequence)
 {
     // remove existing file
     DeleteFileObject(_experimentInfo);
@@ -73,6 +76,7 @@ void ExperimentFileControl::WriteExperiemtnInfoFile(QString experimenterName, QS
     _experimentInfo = OpenFileInParentDirectory("Experiment_Information.csv");
 
     // write away!
+    WriteLine_TwoColCSV(_experimentInfo,    "Experimenter Title",       experimenterName );
     WriteLine_TwoColCSV(_experimentInfo,    "Experimenter Name",        experimenterName );
     WriteLine_TwoColCSV(_experimentInfo,    "Subject Name",             subjectName );
     WriteLine_TwoColCSV(_experimentInfo,    "Date",                     date.toString("dddd MMMM dd yyyy") );
@@ -82,8 +86,8 @@ void ExperimentFileControl::WriteExperiemtnInfoFile(QString experimenterName, QS
     WriteLine_TwoColCSV(_experimentInfo,    "Sample rate (Hz)",         samplerate_Hz );
     WriteLine_TwoColCSV(_experimentInfo,    "Number of trials",         numberOfTrials );
     WriteLine_TwoColCSV(_experimentInfo,    "Trial number:",            "Object:" );
-    for(int i=1; i<=numberOfTrials; i++){
-        WriteLine_TwoColCSV(_experimentInfo, i,                         trialSequence[i] );
+    for(int i=0; i<numberOfTrials; i++){
+        WriteLine_TwoColCSV(_experimentInfo, i+1,                       trialSequence[i] );
     }
 
     // close file
@@ -105,8 +109,8 @@ void ExperimentFileControl::WriteTrialStatusFile(QList<int> trialSequence, QList
 
     // write away!
     WriteLine_ThreeColCSV(_trialStatus, "Trial number", "Object", "Status");
-    for(int i=1; i<=trialSequence.length(); i++){
-        WriteLine_ThreeColCSV(_trialStatus, i, trialSequence[i], trialStatus[i]);
+    for(int i=0; i<trialSequence.length(); i++){
+        WriteLine_ThreeColCSV(_trialStatus, i+1, trialSequence[i], trialStatus[i]);
     }
 
     // close file
@@ -118,16 +122,28 @@ QFile *ExperimentFileControl::OpenFileInParentDirectory(QString fileName)
 {
     // build filename
     QString finishedFileName = "";
+
     if(!_parentDirectorypath.isEmpty()){
         // add directory path
         finishedFileName.append(_parentDirectorypath);
-        finishedFileName.append('/');
     }
+
     if(!_experimentDirectoryName.isEmpty()){
         // add experiment directory to path
+        finishedFileName.append('/');
         finishedFileName.append(_experimentDirectoryName);
+    }
+
+    // create directory if it doesnt exist
+    QDir dir(finishedFileName);
+    if (!dir.exists())
+        dir.mkpath(".");
+
+    // add backslash if path given
+    if(!finishedFileName.isEmpty()){
         finishedFileName.append('/');
     }
+
     // add file name
     finishedFileName.append(fileName);
 
@@ -168,15 +184,15 @@ void ExperimentFileControl::WriteLine_TwoColCSV(QFile *file, const char *left, i
 {
     file->write(left);
     file->write(",");
-    file->write(reinterpret_cast<const char*>(right));
+    file->write(QString::number(right).toUtf8());
     file->write("\n");
 }
 
 void ExperimentFileControl::WriteLine_TwoColCSV(QFile *file, int left, int right)
 {
-    file->write(reinterpret_cast<const char*>(left));
+    file->write(QString::number(left).toUtf8());
     file->write(",");
-    file->write(reinterpret_cast<const char*>(right));
+    file->write(QString::number(right).toUtf8());
     file->write("\n");
 }
 
@@ -192,11 +208,11 @@ void ExperimentFileControl::WriteLine_ThreeColCSV(QFile *file, const char *left,
 
 void ExperimentFileControl::WriteLine_ThreeColCSV(QFile *file, int left, int center, int right)
 {
-    file->write(reinterpret_cast<const char*>(left));
+    file->write(QString::number(left).toUtf8());
     file->write(",");
-    file->write(reinterpret_cast<const char*>(center));
+    file->write(QString::number(center).toUtf8());
     file->write(",");
-    file->write(reinterpret_cast<const char*>(right));
+    file->write(QString::number(right).toUtf8());
     file->write("\n");
 }
 

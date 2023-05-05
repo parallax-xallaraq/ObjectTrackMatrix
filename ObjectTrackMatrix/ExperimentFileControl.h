@@ -23,10 +23,10 @@ public:
     void WriteStreamDataline(int trialNumber, int objectId);
     void EndStreamDataFile();
     // other files
-    void WriteExperiemtnInfoFile(QString experimenterName, QString subjectName, QDate date, QString notes, int timeBetweenTrials_ms, int timeout_ms, int samplerate_Hz, int numberOfTrials, QList<int> trialSequence);
+    void WriteExperiemtnInfoFile(QString experimentTitle, QString experimenterName, QString subjectName, QDate date, QString notes, int timeBetweenTrials_ms, int timeout_ms, int samplerate_Hz, int numberOfTrials, QList<int> trialSequence);
     void WriteTrialStatusFile(QList<int> trialSequence, QList<int> trialStatus);
 
-    // setters
+    // setters (call these first!)
     void setParentDirectorypath(const QString &newParentDirectorypath);
     void setExperimentDirectoryName(const QString &newExperimentDirectory);
 

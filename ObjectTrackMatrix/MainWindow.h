@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 
+#include "ExperimentFileControl.h"
 #include "SerialControl.h"
 
 // ====================================
@@ -31,16 +32,19 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
+    // class objects
     SerialControl * _port;
+    ExperimentFileControl * _fileControl;
 
     // experiment setup
     void BeginNewExperiment();
     void SubmitExperimentInfo();
     void EditExperimentInfo();
+    void EnableExperimentInputs(bool en);
 
+    // run experiment
     void StartExperiment();
 
-    void EnableExperimentInputs(bool en);
     void OpenPort();
     bool TestConnection();
     bool InitExperiment();

@@ -55,11 +55,11 @@ bool ExperimentSetup::CheckRequiredInputs()
         ui->label_sequenceErr->setVisible(true);
         valid = false;
     }
-    if(!IsPortValid())
-    {
-        ui->label_portErr->setVisible(true);
-        valid = false;
-    }
+//    if(!IsPortValid())
+//    {
+//        ui->label_portErr->setVisible(true);
+//        valid = false;
+//    } // TODO uncomment, temporary
 
     return(valid);
 }
