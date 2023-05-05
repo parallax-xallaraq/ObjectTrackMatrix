@@ -37,7 +37,7 @@ private:
 
     // time tracking
     int _currentTime_ms;
-    int _samplingPeriod_ms; // 1/sampleRate[Hz] = period [s]
+    int _samplingPeriod_ms;
 
     // files
     QFile * _streamData;

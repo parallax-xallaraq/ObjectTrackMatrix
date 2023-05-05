@@ -26,6 +26,26 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_newExperiment_clicked()
 {
+    BeginNewExperiment();
+}
+
+void MainWindow::on_pushButton_experimentSubmit_clicked()
+{
+    SubmitExperimentInfo();
+}
+
+void MainWindow::on_pushButton_experimentEdit_clicked()
+{
+    EditExperimentInfo();
+}
+
+void MainWindow::on_pushButton_startExperiment_clicked()
+{
+    StartExperiment();
+}
+
+void MainWindow::BeginNewExperiment()
+{
     // allow user input
     EnableExperimentInputs(true);
     // toggle visible groupboxes
@@ -33,28 +53,38 @@ void MainWindow::on_pushButton_newExperiment_clicked()
     ui->groupBox_experimentDetails->setVisible(true);
 }
 
-void MainWindow::on_pushButton_experimentSubmit_clicked()
+void MainWindow::SubmitExperimentInfo()
 {
     // check that all required inputs are valid
     bool isUserGood = ui->widget_userInfo->CheckRequiredInputs();
     bool isSequenceGood = ui->widget_experimentSetup->CheckRequiredInputs();
 
     // if all inputs are valid...
-    if(isUserGood && isSequenceGood)
-    {
+    if(isUserGood && isSequenceGood){
         // submit info
         EnableExperimentInputs(false);
         ui->groupBox_objectMatrix->setVisible(true);
     }
 }
 
-void MainWindow::on_pushButton_experimentEdit_clicked()
+void MainWindow::EditExperimentInfo()
 {
-    // allow input
     EnableExperimentInputs(true);
 }
 
-void MainWindow::on_pushButton_startExperiment_clicked()
+void MainWindow::EnableExperimentInputs(bool en)
+{
+    // enable user input fields
+    ui->widget_userInfo->EnableInputs(en);
+    ui->widget_experimentSetup->EnableInputs(en);
+    // toggle button visibility
+    ui->pushButton_experimentSubmit->setVisible(en);
+    ui->pushButton_experimentEdit->setVisible(!en);
+    // un-enable the experiment window
+    ui->groupBox_objectMatrix->setEnabled(!en);
+}
+
+void MainWindow::StartExperiment()
 {
     // lock experiment details
     ui->groupBox_experimentDetails->setEnabled(false);
@@ -80,18 +110,6 @@ void MainWindow::on_pushButton_startExperiment_clicked()
     }
 }
 
-void MainWindow::EnableExperimentInputs(bool en)
-{
-    // enable user input fields
-    ui->widget_userInfo->EnableInputs(en);
-    ui->widget_experimentSetup->EnableInputs(en);
-    // toggle button visibility
-    ui->pushButton_experimentSubmit->setVisible(en);
-    ui->pushButton_experimentEdit->setVisible(!en);
-    // un-enable the experiment window
-    ui->groupBox_objectMatrix->setEnabled(!en);
-}
-
 void MainWindow::OpenPort()
 {
     _port->OpenPort(ui->widget_experimentSetup->GetPortName());
@@ -105,7 +123,6 @@ bool MainWindow::TestConnection()
 
 bool MainWindow::InitExperiment()
 {
-
     qDebug() << "Initializing...";
 
     // status flags

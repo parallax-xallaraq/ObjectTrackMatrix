@@ -33,6 +33,13 @@ private:
 
     SerialControl * _port;
 
+    // experiment setup
+    void BeginNewExperiment();
+    void SubmitExperimentInfo();
+    void EditExperimentInfo();
+
+    void StartExperiment();
+
     void EnableExperimentInputs(bool en);
     void OpenPort();
     bool TestConnection();
