@@ -24,7 +24,7 @@ public:
     void EndStreamDataFile();
     // other files
     void WriteExperiemtnInfoFile(QString experimentTitle, QString experimenterName, QString subjectName, QDate date, QString notes, int timeBetweenTrials_ms, int timeout_ms, int samplerate_Hz, int numberOfTrials, QList<int> trialSequence);
-    void WriteTrialStatusFile(QList<int> trialSequence, QList<int> trialStatus);
+    void WriteTrialStatusFile(QList<int> trialSequence);
 
     // setters (call these first!)
     void setParentDirectorypath(const QString &newParentDirectorypath);

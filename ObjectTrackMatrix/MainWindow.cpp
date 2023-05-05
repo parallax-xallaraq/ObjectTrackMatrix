@@ -134,6 +134,9 @@ void MainWindow::StartExperiment()
     if(!successRun){
         throw std::invalid_argument("Streaming failed.");
     }
+
+    // analyze trials and write to file
+    _fileControl->WriteTrialStatusFile(ui->widget_experimentSetup->GetTrialSequence());
 }
 
 void MainWindow::OpenPort()
@@ -228,7 +231,8 @@ bool MainWindow::RunExperiment()
         int objectID = pkt[Commands::ID];
         int trial    = pkt[Commands::DATA];
 
-        // TODO write to file
+        // write to file
+        _fileControl->WriteStreamDataline(trial,objectID);
 
         // stop experiment
         if((trial > 0) && (trial <= ui->widget_experimentSetup->GetNumberOfTrials() )){

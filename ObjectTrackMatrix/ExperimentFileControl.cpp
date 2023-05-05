@@ -76,7 +76,7 @@ void ExperimentFileControl::WriteExperiemtnInfoFile(QString experimentTitle, QSt
     _experimentInfo = OpenFileInParentDirectory("Experiment_Information.csv");
 
     // write away!
-    WriteLine_TwoColCSV(_experimentInfo,    "Experimenter Title",       experimenterName );
+    WriteLine_TwoColCSV(_experimentInfo,    "Experimenter Title",       experimentTitle );
     WriteLine_TwoColCSV(_experimentInfo,    "Experimenter Name",        experimenterName );
     WriteLine_TwoColCSV(_experimentInfo,    "Subject Name",             subjectName );
     WriteLine_TwoColCSV(_experimentInfo,    "Date",                     date.toString("dddd MMMM dd yyyy") );
@@ -94,24 +94,25 @@ void ExperimentFileControl::WriteExperiemtnInfoFile(QString experimentTitle, QSt
     CloseFile(_experimentInfo);
 }
 
-void ExperimentFileControl::WriteTrialStatusFile(QList<int> trialSequence, QList<int> trialStatus)
+void ExperimentFileControl::WriteTrialStatusFile(QList<int> trialSequence)
 {
-    // check that lengths match
-    if(trialSequence.length() != trialStatus.length()){
-        return;
-    }
-
     // remove existing file
     DeleteFileObject(_trialStatus);
 
     // create new file
     _trialStatus = OpenFileInParentDirectory("Trial_Status.csv");
 
+    // TODO read Experiment_Data_Stream.csv
+    // 1. check if Experiment_Data_Stream.csv exists
+    // 2. read Experiment_Data_Stream.csv and put in some array/data structure
+    // 3. look at all rows for each trial, check that only the correct object was moved at any time
+    // 4. save true/false for success/fail trial into QList<int> matching trialSequence
+
     // write away!
     WriteLine_ThreeColCSV(_trialStatus, "Trial number", "Object", "Status");
-    for(int i=0; i<trialSequence.length(); i++){
-        WriteLine_ThreeColCSV(_trialStatus, i+1, trialSequence[i], trialStatus[i]);
-    }
+//    for(int i=0; i<trialSequence.length(); i++){
+//        WriteLine_ThreeColCSV(_trialStatus, i+1, trialSequence[i], STATUS HERE );
+//    }
 
     // close file
     CloseFile(_trialStatus);
