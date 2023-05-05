@@ -125,12 +125,8 @@ void MainWindow::StartExperiment()
         throw std::invalid_argument("Initialization failed.");
     }
 
-    // open experiment stream file
-    _fileControl->StartStreamDataFile(ui->widget_experimentSetup->GetSampleRate_Hz());
-
     // start reading data
     bool successRun = RunExperiment();
-    _fileControl->EndStreamDataFile();
     if(!successRun){
         throw std::invalid_argument("Streaming failed.");
     }
@@ -210,47 +206,51 @@ bool MainWindow::InitExperiment()
 
 bool MainWindow::RunExperiment()
 {
+    // open experiment stream file
+    _fileControl->StartStreamDataFile(ui->widget_experimentSetup->GetSampleRate_Hz());
+
+    qDebug() << "Streaming...";
+
     // STREAM ON
     bool success =_port->WriteAndReadPacket_CheckMatch(
                     Commands::STREAM,
                     0,
                     1
                 );
-    if(!success){
-        return(false);
-    }
 
-    qDebug() << "Streaming...";
+    if(success){
+        // read data
+        bool readAgain = true;
+        while(readAgain){
+            // read
+            QList<uint> pkt = _port->ReadPacket();
+            int command  = pkt[Commands::CMD];
+            int objectID = pkt[Commands::ID];
+            int trial    = pkt[Commands::DATA];
 
-    // read data
-    bool readAgain = true;
-    while(readAgain){
-        // read
-        QList<uint> pkt = _port->ReadPacket();
-        int command  = pkt[Commands::CMD];
-        int objectID = pkt[Commands::ID];
-        int trial    = pkt[Commands::DATA];
+            // write to file
+            _fileControl->WriteStreamDataline(trial,objectID);
 
-        // write to file
-        _fileControl->WriteStreamDataline(trial,objectID);
+            // stop experiment
+            if(trial == ui->widget_experimentSetup->GetNumberOfTrials() ){
+                // STREAM OFF
+                _port->WritePacket(
+                            Commands::STREAM,
+                            0,
+                            0
+                        );
+            }
 
-        // stop experiment
-        if((trial > 0) && (trial <= ui->widget_experimentSetup->GetNumberOfTrials() )){
-            // STREAM OFF
-            _port->WritePacket(
-                        Commands::STREAM,
-                        0,
-                        0
-                    );
-        }
-
-        // update condition -- stop when STREAM:0:0 is read
-        if(command == Commands::STREAM && objectID == 0 && trial == 0){
-            readAgain = false;
+            // update condition -- stop when STREAM:0:0 is read
+            if(command == Commands::STREAM && objectID == 0 && trial == 0){
+                readAgain = false;
+            }
         }
     }
 
     qDebug() << "Streaming finished.";
 
+    // close file
+    _fileControl->EndStreamDataFile();
     return(success);
 }
