@@ -5,6 +5,8 @@ ExperimentFileControl::ExperimentFileControl()
     // initialize member variables
     _parentDirectorypath     = "";
     _experimentDirectoryName = "";
+    _currentTime_ms    = 0;
+    _samplingPeriod_ms = 0;
     _streamData     = nullptr;
     _experimentInfo = nullptr;
     _trialStatus    = nullptr;
@@ -15,6 +17,9 @@ ExperimentFileControl::ExperimentFileControl(QString parentDirectorypath, QStrin
     // set strings
     setParentDirectorypath(parentDirectorypath);
     setExperimentDirectoryName(experimentDirectoryName);
+    // set times
+    _currentTime_ms    = 0;
+    _samplingPeriod_ms = 0;
     // set files to null
     _streamData     = nullptr;
     _experimentInfo = nullptr;
@@ -23,18 +28,49 @@ ExperimentFileControl::ExperimentFileControl(QString parentDirectorypath, QStrin
 
 ExperimentFileControl::~ExperimentFileControl()
 {
-    DeleteFile(_streamData);
-    DeleteFile(_experimentInfo);
-    DeleteFile(_trialStatus);
+    DeleteFileObject(_streamData);
+    DeleteFileObject(_experimentInfo);
+    DeleteFileObject(_trialStatus);
+}
+
+void ExperimentFileControl::StartStreamDataFile(int sampleRate_Hz)
+{
+    // remove existing file
+    DeleteFileObject(_streamData);
+
+    // create new file
+    _streamData = OpenFileInParentDirectory("Experiment_Data_Stream.csv");
+
+    // init times
+    _currentTime_ms = 0;
+    _samplingPeriod_ms = (1.0 / sampleRate_Hz) * 1000.0 ;
+
+    // write column names
+    WriteLine_ThreeColCSV(_streamData, "Time (ms)", "Trial", "Object");
+}
+
+void ExperimentFileControl::WriteStreamDataline(int trialNumber, int objectId)
+{
+    // write info
+    WriteLine_ThreeColCSV(_streamData, _currentTime_ms, trialNumber, objectId);
+
+    // increment timestamp
+    _currentTime_ms += _samplingPeriod_ms;
+}
+
+void ExperimentFileControl::EndStreamDataFile()
+{
+    // close file
+    CloseFile(_streamData);
 }
 
 void ExperimentFileControl::WriteExperiemtnInfoFile(QString experimenterName, QString subjectName, QDate date, QString notes, int timeBetweenTrials_ms, int timeout_ms, int samplerate_Hz, int numberOfTrials, QList<int> trialSequence)
 {
     // remove existing file
-    DeleteFile(_experimentInfo);
+    DeleteFileObject(_experimentInfo);
 
     // create new file
-    _experimentInfo = OpenFileInParentDirectory("ExperimentInformation.csv");
+    _experimentInfo = OpenFileInParentDirectory("Experiment_Information.csv");
 
     // write away!
     WriteLine_TwoColCSV(_experimentInfo,    "Experimenter Name",        experimenterName );
@@ -52,6 +88,29 @@ void ExperimentFileControl::WriteExperiemtnInfoFile(QString experimenterName, QS
 
     // close file
     CloseFile(_experimentInfo);
+}
+
+void ExperimentFileControl::WriteTrialStatusFile(QList<int> trialSequence, QList<int> trialStatus)
+{
+    // check that lengths match
+    if(trialSequence.length() != trialStatus.length()){
+        return;
+    }
+
+    // remove existing file
+    DeleteFileObject(_trialStatus);
+
+    // create new file
+    _trialStatus = OpenFileInParentDirectory("Trial_Status.csv");
+
+    // write away!
+    WriteLine_ThreeColCSV(_trialStatus, "Trial number", "Object", "Status");
+    for(int i=1; i<=trialSequence.length(); i++){
+        WriteLine_ThreeColCSV(_trialStatus, i, trialSequence[i], trialStatus[i]);
+    }
+
+    // close file
+    CloseFile(_trialStatus);
 }
 
 
@@ -88,7 +147,7 @@ void ExperimentFileControl::CloseFile(QFile *file)
     }
 }
 
-void ExperimentFileControl::DeleteFile(QFile *file)
+void ExperimentFileControl::DeleteFileObject(QFile *file)
 {
     if(file != nullptr){
         CloseFile(file);
@@ -116,6 +175,26 @@ void ExperimentFileControl::WriteLine_TwoColCSV(QFile *file, const char *left, i
 void ExperimentFileControl::WriteLine_TwoColCSV(QFile *file, int left, int right)
 {
     file->write(reinterpret_cast<const char*>(left));
+    file->write(",");
+    file->write(reinterpret_cast<const char*>(right));
+    file->write("\n");
+}
+
+void ExperimentFileControl::WriteLine_ThreeColCSV(QFile *file, const char *left, const char *center, const char *right)
+{
+    file->write(left);
+    file->write(",");
+    file->write(center);
+    file->write(",");
+    file->write(right);
+    file->write("\n");
+}
+
+void ExperimentFileControl::WriteLine_ThreeColCSV(QFile *file, int left, int center, int right)
+{
+    file->write(reinterpret_cast<const char*>(left));
+    file->write(",");
+    file->write(reinterpret_cast<const char*>(center));
     file->write(",");
     file->write(reinterpret_cast<const char*>(right));
     file->write("\n");

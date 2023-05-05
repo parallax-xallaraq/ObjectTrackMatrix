@@ -19,13 +19,12 @@ public:
     ~ExperimentFileControl();
 
     // Stream Data file
-    void StartStreamDataFile();
-    void WriteStreamDataline();
+    void StartStreamDataFile(int sampleRate_Hz);
+    void WriteStreamDataline(int trialNumber, int objectId);
     void EndStreamDataFile();
     // other files
-    void WriteExperiemtnInfoFile(QString experimenterName, QString subjectName, QDate date, QString notes,
-                                 int timeBetweenTrials_ms, int timeout_ms, int samplerate_Hz, int numberOfTrials, QList<int> trialSequence);
-    void WriteTrialStatusFile();
+    void WriteExperiemtnInfoFile(QString experimenterName, QString subjectName, QDate date, QString notes, int timeBetweenTrials_ms, int timeout_ms, int samplerate_Hz, int numberOfTrials, QList<int> trialSequence);
+    void WriteTrialStatusFile(QList<int> trialSequence, QList<int> trialStatus);
 
     // setters
     void setParentDirectorypath(const QString &newParentDirectorypath);
@@ -36,6 +35,10 @@ private:
     QString _parentDirectorypath;
     QString _experimentDirectoryName;
 
+    // time tracking
+    int _currentTime_ms;
+    int _samplingPeriod_ms; // 1/sampleRate[Hz] = period [s]
+
     // files
     QFile * _streamData;
     QFile * _experimentInfo;
@@ -43,13 +46,15 @@ private:
 
     // file control
     QFile * OpenFileInParentDirectory(QString fileName);
-    void CloseFile(QFile * file);
-    void DeleteFile(QFile * file);
+    void    CloseFile(QFile * file);
+    void    DeleteFileObject(QFile * file);
 
     // file writing
-    void WriteLine_TwoColCSV(QFile * file, const char * left, QString right);
-    void WriteLine_TwoColCSV(QFile * file, const char * left, int right);
-    void WriteLine_TwoColCSV(QFile * file, int left, int right);
+    void WriteLine_TwoColCSV(   QFile * file, const char * left,       QString right );
+    void WriteLine_TwoColCSV(   QFile * file, const char * left,       int     right );
+    void WriteLine_TwoColCSV(   QFile * file,       int    left,       int     right );
+    void WriteLine_ThreeColCSV( QFile * file, const char * left, const char *  center, const char * right );
+    void WriteLine_ThreeColCSV( QFile * file,       int    left,       int     center,       int    right );
 };
 
 #endif // EXPERIMENTFILECONTROL_H
