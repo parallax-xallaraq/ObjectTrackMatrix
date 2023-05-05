@@ -2,6 +2,7 @@
 
 #include <QDir>
 #include <QDebug>
+#include <QTextStream>
 
 ExperimentFileControl::ExperimentFileControl()
 {
@@ -96,17 +97,29 @@ void ExperimentFileControl::WriteExperiemtnInfoFile(QString experimentTitle, QSt
 
 void ExperimentFileControl::WriteTrialStatusFile(QList<int> trialSequence)
 {
+    /*
     // remove existing file
     DeleteFileObject(_trialStatus);
 
     // create new file
     _trialStatus = OpenFileInParentDirectory("Trial_Status.csv");
 
+    // read file
+    QList<QStringList> streamData = ReadCSV(_streamData);
+    int row = streamData.length();
+    int col = streamData[0].length();
+
+    QList<bool> trialStatus;
+    int currentTrial = 0;
+    for(int i=0; i<row; i++){
+        int trialInRow = streamData[i][StreamData::TRIAL];
+    }
+
     // TODO read Experiment_Data_Stream.csv
     // 1. check if Experiment_Data_Stream.csv exists
     // 2. read Experiment_Data_Stream.csv and put in some array/data structure
     // 3. look at all rows for each trial, check that only the correct object was moved at any time
-    // 4. save true/false for success/fail trial into QList<int> matching trialSequence
+    // 4. save true/false for success/fail trial into QList<bool> matching trialSequence
 
     // write away!
     WriteLine_ThreeColCSV(_trialStatus, "Trial number", "Object", "Status");
@@ -116,6 +129,26 @@ void ExperimentFileControl::WriteTrialStatusFile(QList<int> trialSequence)
 
     // close file
     CloseFile(_trialStatus);
+    */
+}
+
+QList<QStringList> ExperimentFileControl::ReadCSV(QFile *file) // SOURCE: https://iamantony.github.io/2015/11/05/working-with-csv-files-in-qt-qtcsv-library.html
+{
+    // Open csv-file
+    file->open(QIODevice::ReadOnly | QIODevice::Text);
+
+    // Read data from file
+    QTextStream stream(file);
+    QList<QStringList> data;
+    QString separator(",");
+    while (stream.atEnd() == false)
+    {
+        QString line = stream.readLine();
+        data << line.split(separator);
+    }
+
+    file->close();
+    return data;
 }
 
 

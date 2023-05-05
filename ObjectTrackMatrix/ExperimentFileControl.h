@@ -13,11 +13,19 @@
 class ExperimentFileControl
 {
 public:
+
+    enum StreamData {
+        TIME,
+        TRIAL,
+        OBJECT
+    };
+
     // constructors and destructor
     ExperimentFileControl();
     ExperimentFileControl(QString parentDirectorypath, QString experimentDirectoryName);
     ~ExperimentFileControl();
 
+    // WRITE
     // Stream Data file
     void StartStreamDataFile(int sampleRate_Hz);
     void WriteStreamDataline(int trialNumber, int objectId);
@@ -25,6 +33,9 @@ public:
     // other files
     void WriteExperiemtnInfoFile(QString experimentTitle, QString experimenterName, QString subjectName, QDate date, QString notes, int timeBetweenTrials_ms, int timeout_ms, int samplerate_Hz, int numberOfTrials, QList<int> trialSequence);
     void WriteTrialStatusFile(QList<int> trialSequence);
+
+    // READ
+    QList<QStringList> ReadCSV(QFile * file);
 
     // setters (call these first!)
     void setParentDirectorypath(const QString &newParentDirectorypath);
