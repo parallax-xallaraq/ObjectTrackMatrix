@@ -234,7 +234,7 @@ bool MainWindow::RunExperiment()
         int trial    = pkt[Commands::DATA];
 
         // stop experiment
-        if( trial >= ui->widget_experimentSetup->GetNumberOfTrials() ){
+        if( trial > ui->widget_experimentSetup->GetNumberOfTrials() ){
             if(!calledSTOP){
                 // STREAM OFF
                 _port->WritePacket(

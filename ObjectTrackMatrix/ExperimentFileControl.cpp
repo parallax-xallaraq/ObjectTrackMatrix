@@ -97,23 +97,26 @@ void ExperimentFileControl::WriteExperiemtnInfoFile(QString experimentTitle, QSt
 
 void ExperimentFileControl::WriteTrialStatusFile(QList<int> trialSequence)
 {
-    /*
+/*
     // remove existing file
     DeleteFileObject(_trialStatus);
 
     // create new file
     _trialStatus = OpenFileInParentDirectory("Trial_Status.csv");
 
-    // read file
+    // read stream data file
     QList<QStringList> streamData = ReadCSV(_streamData);
     int row = streamData.length();
     int col = streamData[0].length();
 
     QList<bool> trialStatus;
+
     int currentTrial = 0;
-    for(int i=0; i<row; i++){
-        int trialInRow = streamData[i][StreamData::TRIAL];
-    }
+
+
+//    for(int i=0; i<row; i++){
+//        int trialInRow = streamData[i][StreamData::TRIAL];
+//    }
 
     // TODO read Experiment_Data_Stream.csv
     // 1. check if Experiment_Data_Stream.csv exists
@@ -129,7 +132,7 @@ void ExperimentFileControl::WriteTrialStatusFile(QList<int> trialSequence)
 
     // close file
     CloseFile(_trialStatus);
-    */
+*/
 }
 
 QList<QStringList> ExperimentFileControl::ReadCSV(QFile *file) // SOURCE: https://iamantony.github.io/2015/11/05/working-with-csv-files-in-qt-qtcsv-library.html
