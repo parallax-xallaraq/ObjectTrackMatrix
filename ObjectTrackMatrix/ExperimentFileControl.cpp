@@ -97,60 +97,57 @@ void ExperimentFileControl::WriteExperiemtnInfoFile(QString experimentTitle, QSt
 
 void ExperimentFileControl::WriteTrialStatusFile(QList<int> trialSequence)
 {
-/*
-    // remove existing file
-    DeleteFileObject(_trialStatus);
+    // read stream data file
+    QList<QStringList> streamData = ReadCSV("Experiment_Data_Stream.csv");
+
+    // init as false
+    QList<bool> trialStatus;
+    for(int i=0; i<trialSequence.length(); i++){
+        trialStatus.append(false);
+    }
+
+    // iterate through each row in file
+    int currentTrial  = 0;
+    for(int i=1; i<streamData.length(); i++){
+        // get values
+        int trialInRow  = streamData[i][StreamData::TRIAL].toInt();
+        int objectInRow = streamData[i][StreamData::OBJECT].toInt();
+        // new trial
+        if(trialInRow != currentTrial){
+            currentTrial = trialInRow;
+        }
+        // correct object moved
+        if(objectInRow == trialSequence[currentTrial-1]){
+            trialStatus[currentTrial-1] = true;
+        }
+    }
 
     // create new file
+    DeleteFileObject(_trialStatus);
     _trialStatus = OpenFileInParentDirectory("Trial_Status.csv");
-
-    // read stream data file
-    QList<QStringList> streamData = ReadCSV(_streamData);
-    int row = streamData.length();
-    int col = streamData[0].length();
-
-    QList<bool> trialStatus;
-
-    int currentTrial = 0;
-
-
-//    for(int i=0; i<row; i++){
-//        int trialInRow = streamData[i][StreamData::TRIAL];
-//    }
-
-    // TODO read Experiment_Data_Stream.csv
-    // 1. check if Experiment_Data_Stream.csv exists
-    // 2. read Experiment_Data_Stream.csv and put in some array/data structure
-    // 3. look at all rows for each trial, check that only the correct object was moved at any time
-    // 4. save true/false for success/fail trial into QList<bool> matching trialSequence
 
     // write away!
     WriteLine_ThreeColCSV(_trialStatus, "Trial number", "Object", "Status");
-//    for(int i=0; i<trialSequence.length(); i++){
-//        WriteLine_ThreeColCSV(_trialStatus, i+1, trialSequence[i], STATUS HERE );
-//    }
+    for(int i=0; i<trialSequence.length(); i++){
+        WriteLine_ThreeColCSV(_trialStatus, i+1, trialSequence[i], trialStatus[i] );
+    }
 
     // close file
     CloseFile(_trialStatus);
-*/
 }
 
-QList<QStringList> ExperimentFileControl::ReadCSV(QFile *file) // SOURCE: https://iamantony.github.io/2015/11/05/working-with-csv-files-in-qt-qtcsv-library.html
+QList<QStringList> ExperimentFileControl::ReadCSV(QString fileName)
 {
     // Open csv-file
-    file->open(QIODevice::ReadOnly | QIODevice::Text);
-
-    // Read data from file
+    QFile * file = OpenFileInParentDirectory(fileName);
+    // read data from file
     QTextStream stream(file);
     QList<QStringList> data;
-    QString separator(",");
-    while (stream.atEnd() == false)
-    {
-        QString line = stream.readLine();
-        data << line.split(separator);
+    while (stream.atEnd() == false){
+        data << stream.readLine().split(",");
     }
-
-    file->close();
+    // finish
+    DeleteFileObject(file);
     return data;
 }
 

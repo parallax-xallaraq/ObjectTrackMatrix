@@ -35,7 +35,7 @@ public:
     void WriteTrialStatusFile(QList<int> trialSequence);
 
     // READ
-    QList<QStringList> ReadCSV(QFile * file);
+    QList<QStringList> ReadCSV(QString fileName);
 
     // setters (call these first!)
     void setParentDirectorypath(const QString &newParentDirectorypath);
