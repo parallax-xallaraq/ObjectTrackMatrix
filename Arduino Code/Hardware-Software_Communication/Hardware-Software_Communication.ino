@@ -2,8 +2,6 @@
 #include <Wire.h>
 #include <ESP8266WiFi.h> 
 #include <espnow.h>
-// #include <Adafruit_GFX.h>
-// #include <Adafruit_SSD1306.h>
 #include <Adafruit_AW9523.h> // for multiplexer
 #include <arduino-timer.h> // https://github.com/contrem/arduino-timer // Copyright (c) 2018, Michael Contreras
 
@@ -11,15 +9,6 @@
 // Created by:  Thresa Kelly
 // Email:       ThresaKelly133@gmail.com
 // ======================================
-
-////////////////////////////////////////////////////////////////////////////////////
-// vvv Display screen stuff vvv
-////////////////////////////////////////////////////////////////////////////////////
-// #define SCREEN_WIDTH 128 // OLED display width, in pixels
-// #define SCREEN_HEIGHT 64 // OLED display height, in pixels
-// // Declaration for an SSD1306 display connected to I2C (SDA, SCL pins)
-// #define OLED_RESET     -1 // Reset pin # (or -1 if sharing Arduino reset pin)
-// Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
 
 ////////////////////////////////////////////////////////////////////////////////////
 // vvv arduino-timer stuff vvv
@@ -93,17 +82,7 @@ int   _currentObject   = NOVALUE; // ID of object that was moved
 
 void setup() 
 {
-  
   SystemSetup();
-
-  
-  // // setup display
-  // if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { 
-  //   Serial.println("SSD1306 allocation failed");
-  //   for(;;);
-  // }
-  // delay(500);
-
   // TestDisplay();
   delay(500);
 }
@@ -142,63 +121,6 @@ bool TimerEvent_WriteSTREAM(void *)
 
   return keepTimerActive;
 }
-
-// ////////////////////////////////////////////////////////////////////////////////////
-// // vvv screen control vvv
-// ////////////////////////////////////////////////////////////////////////////////////
-
-// void ClearScreen()
-// {
-//   display.clearDisplay();
-//   display.setCursor(0,20);
-//   display.display();    
-// }
-
-// void TestDisplay()
-// {
-//   display.clearDisplay();
-//   display.setTextSize(1);             
-//   display.setTextColor(WHITE);        
-//   display.setCursor(0,20);             
-//   display.println("Hello, world!");
-//   display.display();
-// }
-
-// void DisplayPacket(int commandNumber, int objectID, int data)
-// {
-//   display.clearDisplay();
-//   display.setCursor(0,20);             
-//   display.println(commandNumber);
-//   display.println(objectID);
-//   display.println(data);
-//   display.display();
-// }
-
-// void DisplayPacket(char * commandNumber, char * objectID, char * data)
-// {
-//   display.clearDisplay();
-//   display.setCursor(0,20);             
-//   display.println(commandNumber);
-//   display.println(objectID);
-//   display.println(data);
-//   display.display();
-// }
-
-// void DisplayChar(char * pkt)
-// {
-//   display.clearDisplay();
-//   display.setCursor(0,20);             
-//   display.println(pkt);
-//   display.display();
-// }
-
-// void DisplayInt(int n)
-// {
-//   display.clearDisplay();
-//   display.setCursor(0,20);             
-//   display.println(n);
-//   display.display();  
-// }
 
 ////////////////////////////////////////////////////////////////////////////////////
 // vvv data packets vvv
