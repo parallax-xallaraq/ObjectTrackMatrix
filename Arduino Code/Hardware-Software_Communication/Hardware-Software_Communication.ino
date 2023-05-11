@@ -226,13 +226,13 @@ struct packet ReadCommand()
   }
 
   // read next bytes  
-  b1_cmd[0]   = Serial.read();
-  b2_id[0]    = Serial.read();
+  b1_cmd[0]     = Serial.read();
+  b2_id[0]      = Serial.read();
   b3456_data[0] = Serial.read();
   b3456_data[1] = Serial.read();
   b3456_data[2] = Serial.read();
   b3456_data[3] = Serial.read();
-  b7_etx[0]   = Serial.read();
+  b7_etx[0]     = Serial.read();
 
   // verify that last byte is ETX, which ends the packet
   if( b7_etx[0] != 0x03){
