@@ -35,6 +35,7 @@ void GetUserInfo::EnableInputs(bool lock)
     ui->dateEdit_experimentDate->setEnabled(lock);
     ui->plainTextEdit_notes->setEnabled(lock);
     ui->lineEdit_saveFile->setEnabled(lock);
+    ui->pushButton_saveFile->setEnabled(lock);
 }
 
 bool GetUserInfo::CheckRequiredInputs()
