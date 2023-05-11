@@ -93,7 +93,9 @@ int   _currentObject   = NOVALUE; // ID of object that was moved
 
 void setup() 
 {
+  
   SystemSetup();
+
   
   // // setup display
   // if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) { 
@@ -652,20 +654,37 @@ void SystemSetup()
   }
   
   RGB_test();
+  sensor_test();
 }
 
 void RGB_test()
 {
   RGB_reset();
-  for(int i=0; i<=12; i++)
+  for(int i=1; i<=12; i++)
   {
     for(int j=1; j<=3; j++)
     {
-      if(j=1){setBoardColor(i, HIGH, LOW, LOW); /*Serial.printf("Box %d is Red \n", i)  ;*/  delay(100); RGB_reset();}
-      if(j=2){setBoardColor(i, LOW,  LOW, HIGH); /*Serial.printf("Box %d is Green \n", i);*/ delay(100); RGB_reset();}
-      if(j=3){setBoardColor(i, LOW, HIGH, LOW); /*Serial.printf("Box %d is Blue \n", i) ;*/  delay(100); RGB_reset();}
+      if(j=1){setBoardColor(i, HIGH, LOW, LOW);  delay(100); RGB_reset();} //red
+      if(j=2){setBoardColor(i, LOW,  LOW, HIGH); delay(100); RGB_reset();} //green
+      if(j=3){setBoardColor(i, LOW, HIGH, LOW);  delay(100); RGB_reset();} //blue
     }
   }
+}
+
+void sensor_test()
+{
+  RGB_reset(); 
+  
+  for(int i=1; i<=12; i++)
+    {
+      setBoardColor(i, LOW, HIGH, LOW); //b
+      while(!boardsStruct[i].isMoving)
+      {
+       delay(1);
+      }
+      setBoardColor(i, LOW,  LOW, HIGH); 
+      delay(500); RGB_reset(); //g
+    }
 }
 
 void RGB_reset()
@@ -683,9 +702,7 @@ void TestSequence()
   while (_currentTrial <= _numberOfTrials)
   {
     unsigned long startTime = millis(); // gets current time for timeout  
-
     timer.tick();
-
     MoveMe(); // indicates which box to move with a blue LEDs
     
     bool isMoving = false; // using to set values to allow breaking of loops
@@ -711,7 +728,6 @@ void TestSequence()
         }
       }
       if(OtherBoxMoving){break;}
-
       timer.tick();
     }
     
