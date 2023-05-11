@@ -232,32 +232,38 @@ bool MainWindow::RunExperiment()
 
     // read data
     while(readAgain){
-        // read
-        QList<uint> pkt = _port->ReadPacket();
-        int command  = pkt[Commands::CMD];
-        int objectID = pkt[Commands::ID];
-        int trial    = pkt[Commands::DATA];
+        try {
+            // read
+            QList<uint> pkt = _port->ReadPacket();
+            int command  = pkt[Commands::CMD];
+            int objectID = pkt[Commands::ID];
+            int trial    = pkt[Commands::DATA];
 
-        // stop experiment
-        if( trial > ui->widget_experimentSetup->GetNumberOfTrials() ){
-            if(!calledSTOP){
-                // STREAM OFF
-                _port->WritePacket(
-                   Commands::STREAM,
-                   0,
-                   0
-                );
-                calledSTOP = true;
+            // stop experiment
+            if( trial > ui->widget_experimentSetup->GetNumberOfTrials() ){
+                if(!calledSTOP){
+                    // STREAM OFF
+                    _port->WritePacket(
+                       Commands::STREAM,
+                       0,
+                       0
+                    );
+                    calledSTOP = true;
+                }
+            }
+
+            // update condition -- stop when STREAM:0:0 is read
+            if( command == Commands::STREAM && objectID == 0 && trial == 0 ){
+                readAgain = false;
+            }
+            else{
+                // write to file
+                _fileControl->WriteStreamDataline(trial,objectID);
             }
         }
-
-        // update condition -- stop when STREAM:0:0 is read
-        if( command == Commands::STREAM && objectID == 0 && trial == 0 ){
+        catch (QString msg) {
+            qDebug() << "A streaming error has occured: " << msg;
             readAgain = false;
-        }
-        else{
-            // write to file
-            _fileControl->WriteStreamDataline(trial,objectID);
         }
     }
 
