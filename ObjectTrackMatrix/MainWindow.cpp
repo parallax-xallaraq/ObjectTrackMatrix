@@ -281,6 +281,6 @@ QList<double> MainWindow::PingTimeDelay(int n)
         delayTimes.append(end - start);
     }
 
-    qDebug() << delayTimes;
+    qDebug() << "DELAY: " << delayTimes;
     return(delayTimes);
 }
