@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QList>
 
 #include "ExperimentFileControl.h"
 #include "SerialControl.h"
@@ -44,10 +45,12 @@ private:
 
     // run experiment
     void StartExperiment();
-
     void OpenPort();
     bool TestConnection();
     bool InitExperiment();
     bool RunExperiment();
+
+    // testing
+    QList<double> PingTimeDelay(int n);
 };
 #endif // MAINWINDOW_H

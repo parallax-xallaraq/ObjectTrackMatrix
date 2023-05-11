@@ -1,6 +1,8 @@
 #include "MainWindow.h"
 #include "ui_MainWindow.h"
 
+#include <QTime>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -118,6 +120,9 @@ void MainWindow::StartExperiment()
     if(!TestConnection()){
         throw std::invalid_argument("Connection failed.");
     }
+
+    // TEST delay time
+    PingTimeDelay(20);
 
     // write experiment setup settings to hardware
     bool successInit = InitExperiment();
@@ -261,4 +266,21 @@ bool MainWindow::RunExperiment()
     // close file
     _fileControl->EndStreamDataFile();
     return(success);
+}
+
+QList<double> MainWindow::PingTimeDelay(int n)
+{
+    // initialize list
+    QList<double> delayTimes;
+
+    // PING n times and save the time difference
+    for(int i=0; i<n; i++){
+        int start = QTime::currentTime().msec();
+        TestConnection();
+        int end = QTime::currentTime().msec();
+        delayTimes.append(end - start);
+    }
+
+    qDebug() << delayTimes;
+    return(delayTimes);
 }
